@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coormain"
     android:layout_height="match_parent"
@@ -501,29 +501,8 @@
         </RelativeLayout>
     </ScrollView>
 
-
-
-
-
-
-
-
-
-
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <!--<ImageView
-        android:id="@+id/love"
-        android:onClick="favAction"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:scaleType="fitXY"
-        android:layout_marginLeft="11dp"
-        android:src="@drawable/ic_action_favorite"
-        android:layout_alignTop="@+id/share"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="11dp" /> -->
 
     <ImageView
         android:id="@+id/menuicon"
@@ -607,15 +586,133 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/progress"
             android:text="Fetching weather"
+            android:textAlignment="center"
             android:textSize="15sp"
             android:layout_marginTop="20dp"
             android:textColor="#f5f5f5"/>
 
+
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/progress"
+        android:layout_marginTop="100dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:lottie_fileName="sun.json"
+            app:lottie_loop="false"
+            android:layout_centerInParent="true"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/moon_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/cloud_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/cloudmoon_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/fogday_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:lottie_fileName="moon.json"
+            android:layout_centerInParent="true"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/fognight_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/overcast_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="6dp"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/rainy_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/snowday_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/snownight_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/thunder_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            app:lottie_fileName="moon.json"
+            app:lottie_loop="false"
+            app:lottie_autoPlay="true" />
+
+    </RelativeLayout>
+
 
 
 
@@ -628,4 +725,4 @@
 
 
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

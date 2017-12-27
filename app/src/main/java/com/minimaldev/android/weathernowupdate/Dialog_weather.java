@@ -36,6 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -83,6 +84,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         double lat,lon;
         TextView tv;
         ActionBar actionBar;
+        LottieAnimationView animationView, moonView, cloudy,cloudymoon,fogday,fognight,snowday,snownight,thunder,rainy,overcast;
+
         public void onCreate(Bundle savedInstanceState)
         {
                 super.onCreate(savedInstanceState);
@@ -115,6 +118,71 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 {
                         setContentView(R.layout.dialog_mainnonavbar);
                 }
+
+
+                animationView= (LottieAnimationView) findViewById(R.id.animation_view);
+                moonView = (LottieAnimationView) findViewById(R.id.moon_view);
+                cloudy=(LottieAnimationView) findViewById(R.id.cloud_view);
+                cloudymoon=(LottieAnimationView) findViewById(R.id.cloudmoon_view);
+                fogday=(LottieAnimationView) findViewById(R.id.fogday_view);
+                fognight=(LottieAnimationView) findViewById(R.id.fognight_view);
+                overcast=(LottieAnimationView) findViewById(R.id.overcast_view);
+                rainy=(LottieAnimationView) findViewById(R.id.rainy_view);
+                snowday=(LottieAnimationView) findViewById(R.id.snowday_view);
+                snownight=(LottieAnimationView) findViewById(R.id.snownight_view);
+                thunder=(LottieAnimationView) findViewById(R.id.thunder_view);
+
+                animationView.setImageAssetsFolder("images/");
+                animationView.setAnimation("sun.json");
+                animationView.loop(false);
+
+                moonView.setImageAssetsFolder("moon/");
+                moonView.setAnimation("moon.json");
+                moonView.loop(false);
+
+                cloudy.setImageAssetsFolder("cloudy/");
+                cloudy.setAnimation("cloudy.json");
+                cloudy.loop(false);
+
+                cloudymoon.setImageAssetsFolder("cloudymoon/");
+                cloudymoon.setAnimation("cloudymoon.json");
+                cloudymoon.loop(false);
+
+                fogday.setImageAssetsFolder("fogday/");
+                fogday.setAnimation("fogday.json");
+                fogday.loop(false);
+
+                fognight.setImageAssetsFolder("fognight/");
+                fognight.setAnimation("fognight.json");
+                fognight.loop(false);
+
+                overcast.setImageAssetsFolder("overcast/");
+                overcast.setAnimation("overcast.json");
+                overcast.loop(false);
+
+                cloudy.setImageAssetsFolder("cloudy/");
+                cloudy.setAnimation("cloudy.json");
+                cloudy.loop(false);
+
+                cloudymoon.setImageAssetsFolder("cloudymoon/");
+                cloudymoon.setAnimation("cloudymoon.json");
+                cloudymoon.loop(false);
+
+                rainy.setImageAssetsFolder("rainy/");
+                rainy.setAnimation("rainy.json");
+                rainy.loop(false);
+
+                snowday.setImageAssetsFolder("snowday/");
+                snowday.setAnimation("snowday.json");
+                snowday.loop(false);
+
+                snownight.setImageAssetsFolder("snownight/");
+                snownight.setAnimation("snownight.json");
+                snownight.loop(false);
+
+                thunder.setImageAssetsFolder("thunder/");
+                thunder.setAnimation("thunder.json");
+                thunder.loop(false);
 
 
 
@@ -998,6 +1066,123 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         }
 
 
+        public void setanimation(String id)
+        {
+                int actualID=Integer.parseInt(id);
+                int ID=actualID/100;
+                switch (ID)
+                {
+                        case 2://for thunderstorm
+                                //view1.setImageResource(R.drawable.thunderstorm);
+                                this.thunder.playAnimation();
+                                //view11.setBackgroundResource(R.color.thunder);
+
+                                break;
+                        case 3://for drizzle
+                                //view1.setImageResource(R.drawable.drizzle);
+                                //view11.setBackgroundResource(R.color.drizzle);
+                                this.rainy.playAnimation();
+                                //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                break;
+                        case 5: //for rain
+                                //view1.setImageResource(R.drawable.rain);
+                                //view11.setBackgroundResource(R.color.rain);
+                                this.rainy.playAnimation();
+                                //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                break;
+                        case 6: //for snow
+
+                                if(hour>=6 && hour <18)
+                                {
+                                        this.snowday.playAnimation();
+                                }
+                                else
+                                        this.snownight.playAnimation();
+                                //view1.setImageResource(R.drawable.snow);
+                                //view11.setBackgroundResource(R.color.snow);
+
+                                //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                break;
+                        case 7: //for fog
+                                //view1.setImageResource(R.drawable.fog);
+                                //view11.setBackgroundResource(R.color.fog);
+                                if(hour>=6 && hour <18)
+                                {
+                                        this.fogday.playAnimation();
+                                }
+                                else
+                                        this.fognight.playAnimation();
+                                //linear.setBackgroundResource(R.drawable.fogat_day);
+                                break;
+                        case 8: //for clear and clouds
+
+                                if(actualID==800)
+                                {
+                                        //for clear
+                                        //  view1.setImageResource(R.drawable.clear);
+                                        //view11.setBackgroundResource(R.color.clear);
+                                        if(hour>=6 && hour<18)
+                                                this.animationView.playAnimation();
+                                        else
+                                                this.moonView.playAnimation();
+                                        // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                }
+                                if(actualID==801 || actualID==802 || actualID==803)
+                                {
+                                        //for scattered clouds
+                                        //view1.setImageResource(R.drawable.scattered_clouds);
+                                        //view11.setBackgroundResource(R.color.clouds);
+                                        if(hour>=6 && hour <18)
+                                        {
+                                                this.cloudy.playAnimation();
+                                        }
+                                        else
+                                                this.cloudymoon.playAnimation();
+                                        //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                }
+                                if(actualID==804)
+                                {
+                                        //for overcast
+                                        //view1.setImageResource(R.drawable.overcast);
+                                        //view11.setBackgroundResource(R.color.overcast);
+                                        this.overcast.playAnimation();
+                                        //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                }
+                                break;
+                        case 9://for extreme weather
+                                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                        this.thunder.playAnimation();
+                                        //view1.setImageResource(R.drawable.tornado);
+                                }
+                                else
+                                {
+                                        if(hour>=6 && hour <18)
+                                        {
+                                                this.fogday.playAnimation();
+                                        }
+                                        else
+                                                this.fognight.playAnimation();
+                                        // view1.setImageResource(R.drawable.breeze);
+                                }
+                                // view11.setBackgroundResource(R.color.extreme);
+
+                                //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                //linear.setBackgroundResource(R.drawable.);
+
+                                break;
+
+                }
+        }
+
+
         public void SetDay(String day, int dayNo)
 
         {
@@ -1814,6 +1999,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 //this.DialogWeather.SetHumidity(humidity);
                                 this.DialogWeather.SetLocation(locate,cntry);
                                 this.DialogWeather.SetTime(id);
+                                this.DialogWeather.setanimation(id);
                                 //this.DialogWeather.time(dateTime);
                                 this.DialogWeather.setcor(lat,lon);
 

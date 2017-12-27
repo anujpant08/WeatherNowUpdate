@@ -54,6 +54,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -125,12 +126,14 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
 
     double TEM;
+    LottieAnimationView animationView, moonView, cloudy,cloudymoon,fogday,fognight,snowday,snownight,thunder,rainy,overcast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+
 
 
         hasNavBar();
@@ -148,6 +151,71 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             setContentView(R.layout.activity_mainnonavbar);
 
         }
+
+
+        animationView= (LottieAnimationView) findViewById(R.id.animation_view);
+        moonView = (LottieAnimationView) findViewById(R.id.moon_view);
+        cloudy=(LottieAnimationView) findViewById(R.id.cloud_view);
+        cloudymoon=(LottieAnimationView) findViewById(R.id.cloudmoon_view);
+        fogday=(LottieAnimationView) findViewById(R.id.fogday_view);
+        fognight=(LottieAnimationView) findViewById(R.id.fognight_view);
+        overcast=(LottieAnimationView) findViewById(R.id.overcast_view);
+        rainy=(LottieAnimationView) findViewById(R.id.rainy_view);
+        snowday=(LottieAnimationView) findViewById(R.id.snowday_view);
+        snownight=(LottieAnimationView) findViewById(R.id.snownight_view);
+        thunder=(LottieAnimationView) findViewById(R.id.thunder_view);
+
+        animationView.setImageAssetsFolder("images/");
+        animationView.setAnimation("sun.json");
+        animationView.loop(false);
+
+        moonView.setImageAssetsFolder("moon/");
+        moonView.setAnimation("moon.json");
+        moonView.loop(false);
+
+        cloudy.setImageAssetsFolder("cloudy/");
+        cloudy.setAnimation("cloudy.json");
+        cloudy.loop(false);
+
+        cloudymoon.setImageAssetsFolder("cloudymoon/");
+        cloudymoon.setAnimation("cloudymoon.json");
+        cloudymoon.loop(false);
+
+        fogday.setImageAssetsFolder("fogday/");
+        fogday.setAnimation("fogday.json");
+        fogday.loop(false);
+
+        fognight.setImageAssetsFolder("fognight/");
+        fognight.setAnimation("fognight.json");
+        fognight.loop(false);
+
+        overcast.setImageAssetsFolder("overcast/");
+        overcast.setAnimation("overcast.json");
+        overcast.loop(false);
+
+        cloudy.setImageAssetsFolder("cloudy/");
+        cloudy.setAnimation("cloudy.json");
+        cloudy.loop(false);
+
+        cloudymoon.setImageAssetsFolder("cloudymoon/");
+        cloudymoon.setAnimation("cloudymoon.json");
+        cloudymoon.loop(false);
+
+        rainy.setImageAssetsFolder("rainy/");
+        rainy.setAnimation("rainy.json");
+        rainy.loop(false);
+
+        snowday.setImageAssetsFolder("snowday/");
+        snowday.setAnimation("snowday.json");
+        snowday.loop(false);
+
+        snownight.setImageAssetsFolder("snownight/");
+        snownight.setAnimation("snownight.json");
+        snownight.loop(false);
+
+        thunder.setImageAssetsFolder("thunder/");
+        thunder.setAnimation("thunder.json");
+        thunder.loop(false);
 
         snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
         snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
@@ -630,12 +698,88 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     }
 
-    public void des(String des)
+    /*public void des(String des)
     {
         description=des;
-    }
+    }*/
 
     public void SetDescription(String des) {
+
+        /*//animationView.setImageAssetsFolder("images/");
+        //animationView.setAnimation("sun.json");
+        //animationView.loop(true);
+        this.animationView.playAnimation();
+
+
+
+        //moonView.setImageAssetsFolder("moon/");
+        //moonView.setAnimation("moon.json");
+        //moonView.loop(true);
+        this.moonView.playAnimation();
+
+       // LottieAnimationView cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
+
+        //cloudy.setImageAssetsFolder("cloudy/");
+        //cloudy.setAnimation("cloudy.json");
+        //cloudy.loop(true);
+        this.cloudy.playAnimation();
+
+//        LottieAnimationView cloudymoon = (LottieAnimationView) findViewById(R.id.cloudmoon_view);
+
+        //cloudymoon.setImageAssetsFolder("cloudymoon/");
+        //cloudymoon.setAnimation("cloudymoon.json");
+        //cloudymoon.loop(true);
+        this.cloudymoon.playAnimation();
+
+//        LottieAnimationView fogday = (LottieAnimationView) findViewById(R.id.fogday_view);
+
+        //fogday.setImageAssetsFolder("fogday/");
+        //fogday.setAnimation("fogday.json");
+        //fogday.loop(true);
+        this.fogday.playAnimation();
+
+//        LottieAnimationView fognight = (LottieAnimationView) findViewById(R.id.fognight_view);
+
+        //fognight.setImageAssetsFolder("fognight/");
+        //fognight.setAnimation("fognight.json");
+        //fognight.loop(true);
+        this.fognight.playAnimation();
+
+//        LottieAnimationView overcast = (LottieAnimationView) findViewById(R.id.overcast_view);
+
+        //overcast.setImageAssetsFolder("overcast/");
+        //overcast.setAnimation("overcast.json");
+        //overcast.loop(true);
+        this.overcast.playAnimation();
+
+//        LottieAnimationView rainy = (LottieAnimationView) findViewById(R.id.rainy_view);
+
+        //rainy.setImageAssetsFolder("rainy/");
+        //rainy.setAnimation("rainy.json");
+        //rainy.loop(true);
+        this.rainy.playAnimation();
+
+//        LottieAnimationView snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
+
+        //snowday.setImageAssetsFolder("snowday/");
+        //snowday.setAnimation("snowday.json");
+        //snowday.loop(true);
+        this.snowday.playAnimation();
+
+//        LottieAnimationView snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
+
+        //snownight.setImageAssetsFolder("snownight/");
+        //snownight.setAnimation("snownight.json");
+        //snownight.loop(true);
+        this.snownight.playAnimation();
+
+//        LottieAnimationView thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
+
+        //thunder.setImageAssetsFolder("thunder/");
+        //thunder.setAnimation("thunder.json");
+        //thunder.loop(true);
+        this.thunder.playAnimation(); */
+
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
         TextView view = (TextView) this.findViewById(R.id.des_text);
         char c = des.charAt(0);
@@ -723,6 +867,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     public void SetWeatherIcon(String id) {
 
+
         //settings_menu.setId(actualID);
         //ImageView view = (ImageView) this.findViewById(R.id.icon);
         //ImageView linear = (ImageView) this.findViewById(R.id.back);
@@ -736,9 +881,126 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         llayout.setVisibility(View.INVISIBLE);
 
+
+
+
     }
 
+    public void setanimation(String id)
+    {
+        int actualID=Integer.parseInt(id);
+        int ID=actualID/100;
+        switch (ID)
+        {
+            case 2://for thunderstorm
+                //view1.setImageResource(R.drawable.thunderstorm);
+                this.thunder.playAnimation();
+                //view11.setBackgroundResource(R.color.thunder);
 
+                break;
+            case 3://for drizzle
+                //view1.setImageResource(R.drawable.drizzle);
+                //view11.setBackgroundResource(R.color.drizzle);
+                this.rainy.playAnimation();
+                //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                break;
+            case 5: //for rain
+                //view1.setImageResource(R.drawable.rain);
+                //view11.setBackgroundResource(R.color.rain);
+                this.rainy.playAnimation();
+                //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                break;
+            case 6: //for snow
+
+                if(hour>=6 && hour <18)
+                {
+                    this.snowday.playAnimation();
+                }
+                else
+                    this.snownight.playAnimation();
+                //view1.setImageResource(R.drawable.snow);
+                //view11.setBackgroundResource(R.color.snow);
+
+                //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                break;
+            case 7: //for fog
+                //view1.setImageResource(R.drawable.fog);
+                //view11.setBackgroundResource(R.color.fog);
+                if(hour>=6 && hour <18)
+                {
+                    this.fogday.playAnimation();
+                }
+                else
+                    this.fognight.playAnimation();
+                //linear.setBackgroundResource(R.drawable.fogat_day);
+                break;
+            case 8: //for clear and clouds
+
+                if(actualID==800)
+                {
+                    //for clear
+                    //  view1.setImageResource(R.drawable.clear);
+                    //view11.setBackgroundResource(R.color.clear);
+                    if(hour>=6 && hour<18)
+                    this.animationView.playAnimation();
+                    else
+                        this.moonView.playAnimation();
+                    // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                }
+                if(actualID==801 || actualID==802 || actualID==803)
+                {
+                    //for scattered clouds
+                    //view1.setImageResource(R.drawable.scattered_clouds);
+                    //view11.setBackgroundResource(R.color.clouds);
+                    if(hour>=6 && hour <18)
+                    {
+                        this.cloudy.playAnimation();
+                    }
+                    else
+                        this.cloudymoon.playAnimation();
+                    //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                }
+                if(actualID==804)
+                {
+                    //for overcast
+                    //view1.setImageResource(R.drawable.overcast);
+                    //view11.setBackgroundResource(R.color.overcast);
+                    this.overcast.playAnimation();
+                    //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                }
+                break;
+            case 9://for extreme weather
+                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                    this.thunder.playAnimation();
+                    //view1.setImageResource(R.drawable.tornado);
+                }
+                else
+                {
+                    if(hour>=6 && hour <18)
+                    {
+                        this.fogday.playAnimation();
+                    }
+                    else
+                        this.fognight.playAnimation();
+                    // view1.setImageResource(R.drawable.breeze);
+                }
+                // view11.setBackgroundResource(R.color.extreme);
+
+                //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                //linear.setBackgroundResource(R.drawable.);
+
+                break;
+
+        }
+    }
 
 
     public void actionSearch(View view) {
@@ -959,6 +1221,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             {
                 case 2://for thunderstorm
                     view1.setImageResource(R.drawable.thunderstorm);
+
                     //view11.setBackgroundResource(R.color.thunder);
 
                     break;
@@ -1744,7 +2007,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             this.WeatherActivity.SetDescription(description);
             this.WeatherActivity.SetTemperature(temperature,min,max);
                 this.WeatherActivity.SetLocation(locate,cntry);
-
+                this.WeatherActivity.setanimation(id);
             this.WeatherActivity.sendNotification(description,temperature,locate,id);
 
             }
