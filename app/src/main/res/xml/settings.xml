@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="checkBox"
+            android:summary="@string/pref_send_report_summary"
+            android:title="@string/notification_allow" >
+        </CheckBoxPreference>
+
+
+        <Preference
+            android:key="about_us"
+            android:summary="minimaldev4playstore@gmail.com"
+            android:title="Feedback">
+
+                <intent
+                    android:action="android.intent.action.SEND"
+                    android:data="minimaldev4playstore@gmail.com"
+                    android:targetClass="com.google.android.gm.ComposeActivityGmail"
+                    android:mimeType="text/plain">
+
+                </intent>
+
+
+        </Preference>
+
+        <Preference
+            android:key="rate_us"
+            android:title="Rate Us">
+
+                <intent
+                        android:action="android.intent.action.VIEW"
+                        android:data="market://details?id=com.minimaldev.android.weathernow">
+
+                </intent>
+
+        </Preference>
+
+
+        <Preference
+            android:key="about_us"
+            android:summary="Developed with love by MinimalDev\nVersion: 1.3"
+            android:title="About"
+            android:clickable="false"
+            android:selectable="false">
+
+               <!-- <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="market://details?id=com.minimaldev.android.weathernow">
+
+
+                </intent> -->
+
+        </Preference>
+
+
+
+
+
+</PreferenceScreen>

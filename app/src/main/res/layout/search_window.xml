@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/edit_text"
+    android:background="@drawable/curved">
+
+    <EditText
+        android:id="@+id/edit_places"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="#fd5e53"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentTop="true"
+        android:hint="Search location"
+        android:textColorHint="#fd5e53"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_places"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Search"
+        android:textColor="#fd5e53"
+        android:background="#ffffff"
+
+        android:id="@+id/button_search"
+        android:onClick="Click_method"/>
+
+
+
+</RelativeLayout>

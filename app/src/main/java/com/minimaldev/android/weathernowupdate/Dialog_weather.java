@@ -1,0 +1,1842 @@
+package com.minimaldev.android.weathernowupdate;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Created by ANUJ on 24/12/2016.
+ */
+public class Dialog_weather extends AppCompatActivity implements View.OnClickListener {
+
+        String url="",loc;
+        TextView textView;
+        String fullLocation;
+        LinearLayout linearLayout;
+        Set<String> set=new HashSet<String>();
+        int countfav=0;
+        public  static  DisplayFav displayFav=new DisplayFav();
+        public   ArrayAdapter<String> adapter;
+        ArrayList<String> array=new ArrayList<String>();
+        public static ArrayList<String> list =new ArrayList<String>();
+        String tim,wid;
+        String enc;
+        Snackbar snackbar;
+        String arr[]=new String[1000];
+        String cor_url;
+        //int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int hour;
+        String apikey="6024521-aa3caf3e11ed4bf5eead80356";
+        public boolean flag=false;
+        double lat,lon;
+        TextView tv;
+        ActionBar actionBar;
+        public void onCreate(Bundle savedInstanceState)
+        {
+                super.onCreate(savedInstanceState);
+
+                hasNavBar();
+               // LoadPreference(adapter);
+                //tim="";
+                url = getIntent().getStringExtra("URL");
+                loc = getIntent().getStringExtra("loc_desc");
+
+
+                //getCoordinates(loc);
+                /*supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+                actionBar=getSupportActionBar();
+                getSupportActionBar().setTitle(""); */
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        Window w = getWindow(); // in Activity's onCreate() for instance
+                        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                        //w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                }
+
+                if(hasNavBar()) {
+
+                        setContentView(R.layout.dialog_main);
+
+
+
+                }
+                else
+                {
+                        setContentView(R.layout.dialog_mainnonavbar);
+                }
+
+
+
+
+                linearLayout=(LinearLayout) findViewById(R.id.progressLayout);
+                ProgressBar progressBar=(ProgressBar)findViewById(R.id.progressDialog);
+                //progressBar.setBackgroundColor(Color.WHITE);
+                //progressBar.setProgressTintList(ColorStateList.valueOf(Color.MAGENTA));
+                linearLayout.setVisibility(View.VISIBLE);
+
+                //DisplayMetrics dm= new DisplayMetrics();
+               // getWindowManager().getDefaultDisplay().getMetrics(dm);
+                //WindowManager.LayoutParams wlp = getWindow().getAttributes();
+                ///wlp.gravity = Gravity.TOP ;
+
+               // wlp.y = 10;
+               /*if(Geocoder.isPresent())
+                {
+                       try
+                       {
+                               String location=loc;
+                               Geocoder gc=new Geocoder(this);
+                               List <Address> addresses=gc.getFromLocationName(location,1);
+                               Address address=addresses.get(0);
+                                lat=address.getLatitude();
+                                lon=address.getLongitude();
+                               //  List<LatLng> ll=new ArrayList<LatLng>(addresses.size());
+                               //for(Address a:addresses)
+                               //{
+                                   //  if(a.hasLatitude() && a.hasLongitude())
+                                    // {
+                                            // ll.add(new LatLng(a.getLatitude(),a.getLongitude()));
+                                    // }
+                              // }
+
+                              // Toast.makeText(this,"Lat= "+ll.get(0),Toast.LENGTH_SHORT).show();
+
+
+
+                       } catch (IOException e) {
+                               e.printStackTrace();
+                       }
+                }*/
+
+                //int width=dm.widthPixels;
+                //int height =dm.heightPixels;
+                //getWindow().setLayout((int)(width*0.9),(int) (height*0.9));
+               /// wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+               // getWindow().setAttributes(wlp);
+                RetrieveWeather(url);
+                RetrieveForecast(loc);
+                //LoadPreference();
+               // RetrieveTime(lat,lon);
+               // Widget_Async();
+        }
+
+        public void visible(View view)
+        {
+
+                Animation animslide,slidedown;
+                ImageView img= (ImageView) this.findViewById(R.id.foree);
+                if(flag) {
+                        HorizontalScrollView sc = (HorizontalScrollView) findViewById(R.id.scroll);
+                        sc.setVisibility(View.GONE);
+                        img.setImageResource(R.drawable.ic_action_collapse);
+                        slidedown= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.swipedown);
+                        sc.startAnimation(slidedown);
+                        flag=false;
+                }
+                else
+                {
+                        HorizontalScrollView sc = (HorizontalScrollView) findViewById(R.id.scroll);
+                        sc.setVisibility(View.VISIBLE);
+                        img.setImageResource(R.drawable.ic_action_expand);
+                        animslide= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.swipeup);
+                        sc.startAnimation(animslide);
+                        flag=true;
+                }
+        }
+
+        public boolean hasNavBar()
+        {
+                boolean hasSoftwareKeys=true;
+                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        Display d = ((WindowManager) this.getSystemService(this.WINDOW_SERVICE)).getDefaultDisplay();
+                        DisplayMetrics realDisplay = new DisplayMetrics();
+                        d.getRealMetrics(realDisplay);
+
+                        int realHeight=realDisplay.heightPixels;
+                        int realWidth=realDisplay.widthPixels;
+
+                        DisplayMetrics display=new DisplayMetrics();
+                        d.getMetrics(display);
+
+                        int Height=display.heightPixels;
+                        int Width=display.widthPixels;
+                        hasSoftwareKeys=(realWidth-Width)>0 || (realHeight-Height)>0;
+                }
+                else
+                {
+                        boolean hasMenuKey= ViewConfiguration.get(this).hasPermanentMenuKey();
+                        boolean hasBackKey= KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+                        hasSoftwareKeys=!hasMenuKey && !hasBackKey;
+                }
+                return hasSoftwareKeys;
+        }
+
+        public void setcor(String la, String lo)
+        {
+                lat=Double.parseDouble(la);
+                lon=Double.parseDouble(lo);
+                String add="http://api.timezonedb.com/v2/get-time-zone?key=WM0USFMFHGKX&format=json&by=position&lat="+la+"&lng="+lo;
+                Async_timezone task1=new Async_timezone(this,add);
+                task1.execute(add);
+        }
+
+        public void time(String t)
+        {
+               // timet=t;
+                String timev;
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latoitalic.ttf");
+                tv=(TextView)findViewById(R.id.time_text);
+                ImageView sc=(ImageView)this.findViewById(R.id.back);
+                //ImageView view=(ImageView)this.findViewById(R.id.back);
+              /*  for(int i=0;i<t.length();i++)
+                {
+                        if(t.charAt(i)==' ')
+                        {
+                                tim=tim+t.charAt(i+1);
+                                tim=tim+ t.charAt(i+2);
+                                break;
+                        }
+
+                }
+                       */
+
+                //Toast.makeText(this,t,Toast.LENGTH_SHORT).show();
+                timev=t.substring(11,16);
+                tim=t.substring(11,13);
+
+                hour=Integer.parseInt(tim);
+                tv.setText("Time: "+timev);
+                tv.setTypeface(face);
+                int actualID=Integer.parseInt(wid);
+                int ID=actualID/100;
+                /*switch (ID) {
+                        case 2://for thunderstorm
+
+                                if (hour > 6 && hour <= 18) {
+                                        //view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+
+                                        // sc.setImageResource(R.drawable.thunderday);
+                                        Glide.with(this)
+                                                .load(R.drawable.thunderday)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+
+
+
+                                } else {
+                                        //view.setImageResource(R.drawable.thunderstorm);
+                                        Glide.with(this)
+                                                .load(R.drawable.thundernight)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+
+
+                                        // linear.setImageResource(R.drawable.storm);
+                                        //sc.setImageResource(R.drawable.thundernight);
+                                }
+
+
+
+
+                                break;
+                        case 3://for drizzle
+                                //view.setImageResource(R.drawable.drizzle);
+                                // linear.setImageResource(R.drawable.storm);
+                                // sc.setImageResource(R.drawable.rainday);
+                                if (hour > 6 && hour <= 18) {
+                                        // view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+
+                                        Glide.with(this)
+                                                .load(R.drawable.rainday)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+
+                                        //sc.setImageResource(R.drawable.rainday);
+                                } else {
+                                        //view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        Glide.with(this)
+                                                .load(R.drawable.rainnight)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+
+                                }
+
+
+                                break;
+                        case 5: //for rain
+
+                                if (hour > 6 && hour <= 18) {
+                                        // view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        Glide.with(this)
+                                                .load(R.drawable.rainday)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+                                } else {
+                                        //view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        Glide.with(this)
+                                                .load(R.drawable.rainnight)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);                }
+
+
+                                break;
+                        case 6: //for snow
+
+                                if (hour > 6 && hour <= 18) {
+                                        //view.setImageResource(R.drawable.snow);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        Glide.with(this)
+                                                .load(R.drawable.snowday)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+                                } else {
+                                        //view.setImageResource(R.drawable.snow);
+                                        // linear.setImageResource(R.drawable.storm);
+
+                                        Glide.with(this)
+                                                .load(R.drawable.snownight)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+
+                                }
+
+                                break;
+                        case 7: //for fog
+
+                                // view.setImageResource(R.drawable.fog);
+                                // linear.setImageResource(R.drawable.storm);
+                                if (hour >= 6 && hour < 18) {
+                                        //for clear
+                                        //view.setImageResource(R.drawable.clear);
+                                        // linear.setImageResource(R.drawable.clearat_day);
+
+                                        Glide.with(this)
+                                                .load(R.drawable.fogday)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+                                } else {
+                                        //view.setImageResource(R.drawable.moon);
+
+                                        Glide.with(this)
+                                                .load(R.drawable.fognight)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                .crossFade()
+                                                .centerCrop()
+                                                .into(sc);
+
+                                }
+
+
+                                break;
+                        case 8: //for clear and clouds
+
+                                if (actualID == 800) {
+
+
+                                        if (hour >= 6 && hour < 18) {
+                                                //for clear
+                                                //view.setImageResource(R.drawable.clear);
+                                                // linear.setImageResource(R.drawable.clearat_day);
+                                                Glide.with(this)
+                                                        .load(R.drawable.clearday)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        } else {
+                                                //view.setImageResource(R.drawable.moon);
+                                                Glide.with(this)
+                                                        .load(R.drawable.clearnight)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        }
+
+                                }
+                                if (actualID == 801 || actualID == 802 || actualID == 803) {
+                                        //for scattered clouds
+                                        if (hour >= 6 && hour < 18) {
+                                                //for clear
+                                                //view.setImageResource(R.drawable.scattered_clouds);
+                                                // linear.setImageResource(R.drawable.clearat_day);
+                                                Glide.with(this)
+                                                        .load(R.drawable.overcastday)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        } else {
+                                                //view.setImageResource(R.drawable.scattered_clouds);
+                                                Glide.with(this)
+                                                        .load(R.drawable.overcastnight)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        }
+
+
+                                }
+                                if (actualID == 804) {
+
+
+                                        if (hour >= 6 && hour < 18) {
+                                                //for clear
+                                                //view.setImageResource(R.drawable.overcast);
+                                                // linear.setImageResource(R.drawable.clearat_day);
+                                                Glide.with(this)
+                                                        .load(R.drawable.overcastday)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        } else {
+                                                //view.setImageResource(R.drawable.overcast);
+                                                Glide.with(this)
+                                                        .load(R.drawable.overcastnight)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        }
+                                        //for overcast
+
+
+                                }
+                                break;
+                        case 9://for extreme weather
+
+                                if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                                        //view.setImageResource(R.drawable.tornado);
+                                        //linear.setImageResource(R.drawable.extreme_weather);
+                                        //sc.setImageResource(R.drawable.thunderday);
+
+                                        if (hour >= 6 && hour < 18) {
+                                                //for clear
+                                                //view.setImageResource(R.drawable.breeze);
+                                                Glide.with(this)
+                                                        .load(R.drawable.stormday)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        } else {
+                                                //view.setImageResource(R.drawable.breeze);
+                                                Glide.with(this)
+                                                        .load(R.drawable.stormnight)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        }
+
+                                } else {
+                                        if (hour >= 6 && hour < 18) {
+                                                //for clear
+                                                //view.setImageResource(R.drawable.breeze);
+                                                Glide.with(this)
+                                                        .load(R.drawable.clearday)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        } else {
+                                                //view.setImageResource(R.drawable.breeze);
+                                                Glide.with(this)
+                                                        .load(R.drawable.clearnight)
+                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                                        .crossFade()
+                                                        .centerCrop()
+                                                        .into(sc);
+                                        }
+
+                                }
+
+
+                                break;
+
+                }*/
+
+                linearLayout.setVisibility(View.INVISIBLE);
+
+                //Toast.makeText(this,tim, Toast.LENGTH_SHORT).show();
+        }
+
+        //private  void getCoordinates(String lo)
+       // {
+                // cor_url = "http://api.opencagedata.com/geocode/v1/json?q="+lo+"&key=4952e05e2efb2e4e52f7b0a3810641bf";
+        //}
+
+
+        private void RetrieveWeather(String addrs) {
+
+                Conditionsasync task = new Conditionsasync(this, addrs);
+                task.execute(addrs);
+        }
+       /* private  void RetrieveTime(String addrs)
+        {
+
+                ;
+
+
+                //Async_coordinates task2 = new Async_coordinates(this,cor_url);
+                //task2.execute(cor_url);
+        } */
+
+       @Override
+       public void onBackPressed()
+       {
+               finish();
+       }
+
+        public void RetrieveForecast(String locat)
+        {
+                String url="";
+                url="http://api.openweathermap.org/data/2.5/forecast/daily?q="+locat+"&appid=bcc6f8e44743e316e5120301ff1a5ad4";
+                ForecastDialogAsync task= new ForecastDialogAsync(this,url);
+                task.execute(url);
+        }
+
+        public void SetDescription(String des)
+        {
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
+                TextView view=(TextView)this.findViewById(R.id.condition);
+                char c=des.charAt(0);
+                c=Character.toUpperCase(c);
+                des=des.substring(1,des.length());
+                des=c+des;
+                view.setText(des);
+                view.setTypeface(face);
+
+                int pos=des.lastIndexOf(' ');
+            if(pos!=-1)
+                des=des.substring(pos,des.length());
+                try {
+                        enc = URLEncoder.encode(des, "utf-8");
+                for (int i = 0; i < enc.length(); i++) {
+                    if (enc.charAt(i) == ' ') {
+                        enc = enc.replace(enc.charAt(i), '+');
+                    }
+                }
+
+
+                } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+
+                }
+
+                //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
+                linearLayout=(LinearLayout) findViewById(R.id.progressLayout);
+                Async_weather task = new Async_weather(this, enc);
+
+                linearLayout.setVisibility(View.VISIBLE);
+                task.execute(enc);
+
+
+
+        }
+        public void SetTemperature(double temp,double min,double max)
+        {
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+                TextView view=(TextView)this.findViewById(R.id.temp_text);
+                //TextView view1=(TextView)this.findViewById(R.id.hilow_text);
+                DecimalFormat df=new DecimalFormat("###.#");
+                String formatTemp=df.format(temp);
+                String formatTemp1=df.format(min);
+                String formatTemp2=df.format(max);
+                view.setText(formatTemp+"\u00B0");
+               // view1.setText("Hi:"+formatTemp2+" Lo:"+formatTemp1);
+                view.setTypeface(face);
+
+                //view1.setTypeface(face);
+        }
+       /*public void SetPressure(double pres)
+        {
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
+                TextView view=(TextView)this.findViewById(R.id.press_text);
+                DecimalFormat df=new DecimalFormat("###.##");
+                String formatPres=df.format(pres);
+                view.setText("Pressure: "+formatPres+" hPa");
+                view.setTypeface(face);
+
+        }
+        public void SetHumidity(double hum)
+        {
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
+                TextView view=(TextView)this.findViewById(R.id.humid_text);
+                DecimalFormat df=new DecimalFormat("###.#");
+                String formatHum=df.format(hum);
+                view.setText("Humidity: "+formatHum+"%");
+                view.setTypeface(face);
+        } */
+
+
+        public void sharedialog(View view)
+        {
+                if(Build.VERSION.SDK_INT>=23)
+                {
+                        if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED)
+                        {
+                                takeScreenshot();
+                        }
+                        else
+                        {
+                                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+                                takeScreenshot();
+                        }
+                }
+                else
+                {
+                        takeScreenshot();
+                }
+        }
+
+
+        public void takeScreenshot()
+        {
+                String imagePath= Environment.getExternalStorageDirectory().toString()+"/Pictures/Screenshots/"+"screenshotwn.jpg";
+                View v1=getWindow().getDecorView().getRootView();
+                v1.setDrawingCacheEnabled(true);
+                Bitmap bitmap=v1.getDrawingCache();
+
+
+                File newFile=new File(imagePath);
+                FileOutputStream fos;
+                try
+                {
+                        fos=new FileOutputStream(newFile);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        fos.flush();
+                        fos.close();
+                        shareIt(imagePath);
+
+                }
+                catch (Throwable e)
+                {
+                        e.printStackTrace();
+                }
+        }
+
+        public void setHi(double h)
+        {
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+                double max=h-273;
+                DecimalFormat df=new DecimalFormat("###.#");
+                String formatTempMin=df.format(max);
+                TextView textView=(TextView)findViewById(R.id.hi);
+                textView.setText(formatTempMin+"\u2103"+" / ");
+                textView.setTypeface(face);
+
+        }
+
+        public void setLo(double l)
+        {
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+                double min=l-273;
+                DecimalFormat df=new DecimalFormat("###.#");
+                String formatTempMin=df.format(min);
+                TextView textView=(TextView)findViewById(R.id.lo);
+                textView.setText(formatTempMin+"\u2103");
+                textView.setTypeface(face);
+        }
+
+
+        public void shareIt(String imagePath)
+        {
+                Intent shareing=new Intent(Intent.ACTION_SEND);
+                shareing.setType("image/*");
+                //Uri uri= getUriForFile(getApplicationContext(), "com.minimaldev.android.weathernow",imagePath);
+                Uri uri=Uri.parse("file://"+imagePath);
+                String text="Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
+                shareing.putExtra(Intent.EXTRA_SUBJECT,"Check out WeatherNow by MinimalDev");
+                shareing.putExtra(Intent.EXTRA_TEXT, text);
+                shareing.putExtra(Intent.EXTRA_STREAM, uri);
+
+                startActivity(Intent.createChooser(shareing,"Share weather via"));
+        }
+
+
+
+
+        public void SetLocation(String name, String country)  {
+
+
+                //ImageView imageView =(ImageView)findViewById(R.id.favorite);
+               //ImageView imageView1 =(ImageView)findViewById(R.id.notfavorite);
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+                fullLocation=name+", "+country;
+                TextView view= (TextView)this.findViewById(R.id.location_text);
+                view.setText(fullLocation);
+                view.setTypeface(face);
+
+                /*String filename="WN_FAVPLACES";
+                String text="";
+                int flag=0;
+                int index=0;
+                try {
+                        FileReader fileReader=new FileReader(filename);
+                        BufferedReader br=new BufferedReader(fileReader);
+
+                        while ((text=br.readLine())!=null)
+                        {
+                                array.add(index,text);
+                                index++;
+                        }
+                        text="";
+
+                }
+                catch (java.io.IOException e)
+                {
+                        e.printStackTrace();
+                }
+
+
+                //Iterator<String> itr=arr.iterator();
+                for (int i=0;i<array.size();i++)
+                {
+                        if(fullLocation.equals(array.get(i)) )
+                        {
+                                flag=1;
+                                break;
+                        }
+
+                }
+
+
+
+                if (flag==1)
+                {
+                        imageView.setVisibility(View.VISIBLE);
+                        imageView1.setVisibility(View.INVISIBLE);
+                }
+                else {
+
+                        imageView.setVisibility(View.INVISIBLE);
+                        imageView1.setVisibility(View.VISIBLE);
+                }
+                flag=0;*/
+
+        }
+
+
+        public void SetTime(String id)
+        {
+
+                //int hour=Integer.parseInt(tim);
+                wid=id;
+                /*int actualID=Integer.parseInt(id);
+                int ID=actualID/100;
+                String h=tv.getText().toString();
+                String a=h.substring(16,18);
+                int hr=Integer.parseInt(a); */
+
+        }
+        public void SetWeatherIcon(String id)
+        {
+                //TextView tv=(TextView)findViewById(R.id.time_text);
+                //tv.setText(timet);
+
+               // ImageView view=(ImageView)this.findViewById(R.id.image_weather);
+
+                //ScrollView sc=(ScrollView) this.findViewById(R.id.second_linear);
+
+                ImageView sc = (ImageView) this.findViewById(R.id.back);
+
+                Glide.with(this)
+                        .load(id)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontTransform()
+                        .centerCrop()
+                        .into(sc);
+
+
+            linearLayout.setVisibility(View.INVISIBLE);
+
+                /*switch (ID)
+                {
+                        case 2://for thunderstorm
+                                if(hour>=0 && hour<=6) {
+                                        view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        sc.setBackgroundResource(R.drawable.atnightthundermin);
+                                }
+                                else if(hour>6 && hour<=18)
+                                {
+                                        view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        sc.setBackgroundResource(R.drawable.atdaythundermin);
+                                }
+                                else
+                                {
+                                        view.setImageResource(R.drawable.thunderstorm);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        sc.setBackgroundResource(R.drawable.atnightthundermin);
+                                }
+
+
+                                break;
+                        case 3://for drizzle
+                                view.setImageResource(R.drawable.drizzle);
+                                // linear.setImageResource(R.drawable.storm);
+                                sc.setBackgroundResource(R.drawable.atdrizzlemin);
+
+
+
+                                break;
+                        case 5: //for rain
+
+                                view.setImageResource(R.drawable.rain);
+                                // linear.setImageResource(R.drawable.storm);
+                                sc.setBackgroundResource(R.drawable.atrainmin);
+
+
+                                break;
+                        case 6: //for snow
+
+                                if(hour>=0 && hour<=6) {
+                                        view.setImageResource(R.drawable.snow);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        sc.setBackgroundResource(R.drawable.atnightsnowmin);
+                                }
+                                else if(hour>6 && hour<=18)
+                                {
+                                        view.setImageResource(R.drawable.snow);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        sc.setBackgroundResource(R.drawable.atsnowmin);
+                                }
+                                else
+                                {
+                                        view.setImageResource(R.drawable.snow);
+                                        // linear.setImageResource(R.drawable.storm);
+                                        sc.setBackgroundResource(R.drawable.atnightsnowmin);
+                                }
+
+                                break;
+                        case 7: //for fog
+
+                                view.setImageResource(R.drawable.fog);
+                                // linear.setImageResource(R.drawable.storm);
+                                sc.setBackgroundResource(R.drawable.atfogpotraitmin);
+
+
+                                break;
+                        case 8: //for clear and clouds
+
+                                if (actualID == 800) {
+
+                                        if(hour>=0 && hour <6)
+                                        {
+                                                view.setImageResource(R.drawable.moon);
+                                                sc.setBackgroundResource(R.drawable.atnightmin);
+                                        }
+
+                                        if(hour>=6 && hour<18) {
+                                                //for clear
+                                                view.setImageResource(R.drawable.clear);
+                                                // linear.setImageResource(R.drawable.clearat_day);
+                                                sc.setBackgroundResource(R.drawable.atdaymin);
+                                        }
+                                        else if(hour>=18 && hour <=24) {
+                                                view.setImageResource(R.drawable.moon);
+                                                sc.setBackgroundResource(R.drawable.atnightmin);
+                                        }
+
+                                }
+                                if (actualID == 801 || actualID == 802 || actualID == 803) {
+                                        //for scattered clouds
+                                        if(hour>=0 && hour <6)
+                                        {
+                                                view.setImageResource(R.drawable.scattered_clouds);
+                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
+                                        }
+
+                                        if(hour>=6 && hour<18) {
+                                                //for clear
+                                                view.setImageResource(R.drawable.scattered_clouds);
+                                                // linear.setImageResource(R.drawable.clearat_day);
+                                                sc.setBackgroundResource(R.drawable.atdaycloudsmin);
+                                        }
+                                        else if(hour>=18 && hour <=24) {
+                                                view.setImageResource(R.drawable.scattered_clouds);
+                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
+                                        }
+
+
+                                }
+                                if (actualID == 804) {
+
+                                        if(hour>=0 && hour <6)
+                                        {
+                                                view.setImageResource(R.drawable.overcast);
+                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
+                                        }
+
+                                        if(hour>=6 && hour<18) {
+                                                //for clear
+                                                view.setImageResource(R.drawable.overcast);
+                                                // linear.setImageResource(R.drawable.clearat_day);
+                                                sc.setBackgroundResource(R.drawable.atdaycloudsmin);
+                                        }
+                                        else if(hour>=18 && hour <=24) {
+                                                view.setImageResource(R.drawable.overcast);
+                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
+                                        }
+                                        //for overcast
+
+
+                                }
+                                break;
+                        case 9://for extreme weather
+
+                                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                                        view.setImageResource(R.drawable.tornado);
+                                        //linear.setImageResource(R.drawable.extreme_weather);
+                                        sc.setBackgroundResource(R.drawable.atnightextrememin);
+                                }
+                                else
+                                {
+                                        if(hour>=0 && hour<6)
+                                        {
+                                                view.setImageResource(R.drawable.breeze);
+                                                sc.setBackgroundResource(R.drawable.atbreezenightmin);
+                                        }
+                                        else if(hour>=6 && hour<18) {
+                                                //for clear
+                                                view.setImageResource(R.drawable.breeze);
+                                                sc.setBackgroundResource(R.drawable.atdaybreezemin);
+                                        }
+
+                                        if(hour>=18 && hour <=24){
+                                                view.setImageResource(R.drawable.breeze);
+                                                sc.setBackgroundResource(R.drawable.atbreezenightmin);
+                                        }
+
+                                }
+
+
+                                break;
+
+
+                } */
+                //tim="";
+
+        }
+
+
+        public void SetDay(String day, int dayNo)
+
+        {
+                String d=day.substring(0,3);
+                d=d.toUpperCase();
+                //d=d+",";
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+                TextView view1 = (TextView) findViewById(R.id.day11);
+                TextView view2 = (TextView) findViewById(R.id.day12);
+                TextView view3 = (TextView) findViewById(R.id.day13);
+                TextView view4 = (TextView) findViewById(R.id.day14);
+                TextView view5 = (TextView) findViewById(R.id.day15);
+                TextView view6 = (TextView) findViewById(R.id.day16);
+                //TextView view7=(TextView)findViewById(R.id.temptext_sun);
+                switch (dayNo) {
+                        case 1:
+                                view1.setText(d);
+                                view1.setTypeface(face);
+                                //view11.setText(t);
+                                break;
+                        case 2:
+                                view2.setText(d);
+                                view2.setTypeface(face);
+                                //view22.setText(t);
+                                break;
+                        case 3:
+                                view3.setText(d);
+                                view3.setTypeface(face);
+                                // view33.setText(t);
+                                break;
+                        case 4:
+                                view4.setText(d);
+                                view4.setTypeface(face);
+                                // view44.setText(t);
+                                break;
+                        case 5:
+                                view5.setText(d);
+                                view5.setTypeface(face);
+                                // view55.setText(t);
+                                break;
+                        case 6:
+                                view6.setText(d);
+                                view6.setTypeface(face);
+                                // view66.setText(t);
+                                break;
+                        //case 7: view7.setText(day);
+                        // break;}
+                }
+        }
+
+
+        public void SetDes(String des, int index)
+        {
+                int actualID=Integer.parseInt(des);
+                int ID=actualID/100;
+
+                ImageView view1=(ImageView)findViewById(R.id.icon11);
+                ImageView view2=(ImageView)findViewById(R.id.icon12);
+                ImageView view3=(ImageView)findViewById(R.id.icon13);
+                ImageView view4=(ImageView)findViewById(R.id.icon14);
+                ImageView view5=(ImageView)findViewById(R.id.icon15);
+                ImageView view6=(ImageView)findViewById(R.id.icon16);
+                //ImageView view7=(ImageView)findViewById(R.id.iconweather_sun);
+                if(index==0)
+                {
+                        switch (ID)
+                        {
+                                case 2://for thunderstorm
+                                        view1.setImageResource(R.drawable.thunderstorm);
+                                        //view11.setBackgroundResource(R.color.thunder);
+
+                                        break;
+                                case 3://for drizzle
+                                        view1.setImageResource(R.drawable.drizzle);
+                                        //view11.setBackgroundResource(R.color.drizzle);
+
+                                        //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                        break;
+                                case 5: //for rain
+                                        view1.setImageResource(R.drawable.rain);
+                                        //view11.setBackgroundResource(R.color.rain);
+
+                                        //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                        break;
+                                case 6: //for snow
+
+                                        view1.setImageResource(R.drawable.snow);
+                                        //view11.setBackgroundResource(R.color.snow);
+
+                                        //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                        break;
+                                case 7: //for fog
+                                        view1.setImageResource(R.drawable.fog);
+                                        //view11.setBackgroundResource(R.color.fog);
+
+                                        //linear.setBackgroundResource(R.drawable.fogat_day);
+                                        break;
+                                case 8: //for clear and clouds
+
+                                        if(actualID==800)
+                                        {
+                                                //for clear
+                                                view1.setImageResource(R.drawable.clear);
+                                                //view11.setBackgroundResource(R.color.clear);
+
+                                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                        }
+                                        if(actualID==801 || actualID==802 || actualID==803)
+                                        {
+                                                //for scattered clouds
+                                                view1.setImageResource(R.drawable.scattered_clouds);
+                                                //view11.setBackgroundResource(R.color.clouds);
+
+                                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                        }
+                                        if(actualID==804)
+                                        {
+                                                //for overcast
+                                                view1.setImageResource(R.drawable.overcast);
+                                                //view11.setBackgroundResource(R.color.overcast);
+
+                                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                        }
+                                        break;
+                                case 9://for extreme weather
+                                        if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                                view1.setImageResource(R.drawable.tornado);
+                                        }
+                                        else
+                                        {
+                                                view1.setImageResource(R.drawable.breeze);
+                                        }                                                           // view11.setBackgroundResource(R.color.extreme);
+
+                                        //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                        //linear.setBackgroundResource(R.drawable.);
+
+                                        break;
+
+                        }
+                }
+                else if(index==1)
+                {
+                        switch (ID)
+                        {
+                                case 2://for thunderstorm
+                                        view2.setImageResource(R.drawable.thunderstorm);
+                                        //view22.setBackgroundResource(R.color.thunder);
+
+                                        //linear.setBackgroundResource(R.drawable.thunder);
+
+                                        break;
+                                case 3://for drizzle
+                                        view2.setImageResource(R.drawable.drizzle);
+                                        //view22.setBackgroundResource(R.color.drizzle);
+
+                                        //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                        break;
+                                case 5: //for rain
+                                        view2.setImageResource(R.drawable.rain);
+                                        //view22.setBackgroundResource(R.color.rain);
+
+                                        //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                        break;
+                                case 6: //for snow
+
+                                        view2.setImageResource(R.drawable.snow);
+                                        //view22.setBackgroundResource(R.color.snow);
+
+                                        //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                        break;
+                                case 7: //for fog
+                                        view2.setImageResource(R.drawable.fog);
+                                        //view22.setBackgroundResource(R.color.fog);
+
+                                        //linear.setBackgroundResource(R.drawable.fogat_day);
+                                        break;
+                                case 8: //for clear and clouds
+
+                                        if(actualID==800)
+                                        {
+                                                //for clear
+                                                view2.setImageResource(R.drawable.clear);
+                                                //view22.setBackgroundResource(R.color.clear);
+
+                                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                        }
+                                        if(actualID==801 || actualID==802 || actualID==803)
+                                        {
+                                                //for scattered clouds
+                                                view2.setImageResource(R.drawable.scattered_clouds);
+                                                //view22.setBackgroundResource(R.color.clouds);
+
+                                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                        }
+                                        if(actualID==804)
+                                        {
+                                                //for overcast
+                                                view2.setImageResource(R.drawable.overcast);
+                                                //view22.setBackgroundResource(R.color.overcast);
+
+                                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                        }
+                                        break;
+                                case 9://for extreme weather
+                                        if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                                view2.setImageResource(R.drawable.tornado);
+                                        }
+                                        else
+                                        {
+                                                view2.setImageResource(R.drawable.breeze);
+                                        }                                                           //view22.setBackgroundResource(R.color.extreme);
+
+                                        //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                        //linear.setBackgroundResource(R.drawable.);
+
+                                        break;
+
+                        }
+                }
+                else if(index==2)
+                {
+                        switch (ID)
+                        {
+                                case 2://for thunderstorm
+                                        view3.setImageResource(R.drawable.thunderstorm);
+                                        //view33.setBackgroundResource(R.color.thunder);
+
+                                        //linear.setBackgroundResource(R.drawable.thunder);
+
+                                        break;
+                                case 3://for drizzle
+                                        view3.setImageResource(R.drawable.drizzle);
+                                        //view33.setBackgroundResource(R.color.drizzle);
+
+                                        //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                        break;
+                                case 5: //for rain
+                                        view3.setImageResource(R.drawable.rain);
+                                        //view33.setBackgroundResource(R.color.rain);
+
+                                        //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                        break;
+                                case 6: //for snow
+
+                                        view3.setImageResource(R.drawable.snow);
+                                        // view33.setBackgroundResource(R.color.snow);
+
+                                        //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                        break;
+                                case 7: //for fog
+                                        view3.setImageResource(R.drawable.fog);
+                                        //view33.setBackgroundResource(R.color.fog);
+
+                                        //linear.setBackgroundResource(R.drawable.fogat_day);
+                                        break;
+                                case 8: //for clear and clouds
+
+                                        if(actualID==800)
+                                        {
+                                                //for clear
+                                                view3.setImageResource(R.drawable.clear);
+                                                // view33.setBackgroundResource(R.color.clear);
+
+                                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                        }
+                                        if(actualID==801 || actualID==802 || actualID==803)
+                                        {
+                                                //for scattered clouds
+                                                view3.setImageResource(R.drawable.scattered_clouds);
+                                                //view33.setBackgroundResource(R.color.clouds);
+
+                                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                        }
+                                        if(actualID==804)
+                                        {
+                                                //for overcast
+                                                view3.setImageResource(R.drawable.overcast);
+                                                //view33.setBackgroundResource(R.color.overcast);
+
+                                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                        }
+                                        break;
+                                case 9://for extreme weather
+                                        if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                                view3.setImageResource(R.drawable.tornado);
+                                        }
+                                        else
+                                        {
+                                                view3.setImageResource(R.drawable.breeze);
+                                        }                                                           // view33.setBackgroundResource(R.color.extreme);
+
+                                        //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                        //linear.setBackgroundResource(R.drawable.);
+
+                                        break;
+
+                        }
+                }
+                else if(index==3)
+                {
+                        switch (ID)
+                        {
+                                case 2://for thunderstorm
+                                        view4.setImageResource(R.drawable.thunderstorm);
+                                        //view44.setBackgroundResource(R.color.thunder);
+
+                                        //linear.setBackgroundResource(R.drawable.thunder);
+
+                                        break;
+                                case 3://for drizzle
+                                        view4.setImageResource(R.drawable.drizzle);
+                                        //view44.setBackgroundResource(R.color.drizzle);
+
+                                        //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                        break;
+                                case 5: //for rain
+                                        view4.setImageResource(R.drawable.rain);
+                                        //view44.setBackgroundResource(R.color.rain);
+
+                                        //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                        break;
+                                case 6: //for snow
+
+                                        view4.setImageResource(R.drawable.snow);
+                                        //iew44.setBackgroundResource(R.color.snow);
+
+                                        //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                        break;
+                                case 7: //for fog
+                                        view4.setImageResource(R.drawable.fog);
+                                        //view44.setBackgroundResource(R.color.fog);
+
+                                        //linear.setBackgroundResource(R.drawable.fogat_day);
+                                        break;
+                                case 8: //for clear and clouds
+
+                                        if(actualID==800)
+                                        {
+                                                //for clear
+                                                view4.setImageResource(R.drawable.clear);
+                                                //view44.setBackgroundResource(R.color.clear);
+
+                                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                        }
+                                        if(actualID==801 || actualID==802 || actualID==803)
+                                        {
+                                                //for scattered clouds
+                                                view4.setImageResource(R.drawable.scattered_clouds);
+                                                //view44.setBackgroundResource(R.color.clouds);
+
+                                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                        }
+                                        if(actualID==804)
+                                        {
+                                                //for overcast
+                                                view4.setImageResource(R.drawable.overcast);
+                                                //view44.setBackgroundResource(R.color.overcast);
+
+                                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                        }
+                                        break;
+                                case 9://for extreme weather
+                                        if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                                view4.setImageResource(R.drawable.tornado);
+                                        }
+                                        else
+                                        {
+                                                view4.setImageResource(R.drawable.breeze);
+                                        }                                                           //view44.setBackgroundResource(R.color.extreme);
+
+                                        //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                        //linear.setBackgroundResource(R.drawable.);
+
+                                        break;
+
+                        }
+                }
+                else if(index==4)
+                {
+                        switch (ID)
+                        {
+                                case 2://for thunderstorm
+                                        view5.setImageResource(R.drawable.thunderstorm);
+                                        //view55.setBackgroundResource(R.color.thunder);
+
+                                        //linear.setBackgroundResource(R.drawable.thunder);
+
+                                        break;
+                                case 3://for drizzle
+                                        view5.setImageResource(R.drawable.drizzle);
+                                        // view55.setBackgroundResource(R.color.drizzle);
+
+                                        //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                        break;
+                                case 5: //for rain
+                                        view5.setImageResource(R.drawable.rain);
+                                        //view55.setBackgroundResource(R.color.rain);
+
+                                        //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                        break;
+                                case 6: //for snow
+
+                                        view5.setImageResource(R.drawable.snow);
+                                        //view55.setBackgroundResource(R.color.snow);
+
+                                        //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                        break;
+                                case 7: //for fog
+                                        view5.setImageResource(R.drawable.fog);
+                                        //view55.setBackgroundResource(R.color.fog);
+
+                                        //linear.setBackgroundResource(R.drawable.fogat_day);
+                                        break;
+                                case 8: //for clear and clouds
+
+                                        if(actualID==800)
+                                        {
+                                                //for clear
+                                                view5.setImageResource(R.drawable.clear);
+                                                //view55.setBackgroundResource(R.color.clear);
+
+                                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                        }
+                                        if(actualID==801 || actualID==802 || actualID==803)
+                                        {
+                                                //for scattered clouds
+                                                view5.setImageResource(R.drawable.scattered_clouds);
+                                                //view55.setBackgroundResource(R.color.clouds);
+
+                                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                        }
+                                        if(actualID==804)
+                                        {
+                                                //for overcast
+                                                view5.setImageResource(R.drawable.overcast);
+                                                //view55.setBackgroundResource(R.color.overcast);
+
+                                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                        }
+                                        break;
+                                case 9://for extreme weather
+                                        if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                                view5.setImageResource(R.drawable.tornado);
+                                        }
+                                        else
+                                        {
+                                                view5.setImageResource(R.drawable.breeze);
+                                        }                                                           //view55.setBackgroundResource(R.color.extreme);
+
+                                        //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                        //linear.setBackgroundResource(R.drawable.);
+
+                                        break;
+
+                        }
+                }
+                else
+                {
+                        switch (ID)
+                        {
+                                case 2://for thunderstorm
+                                        view6.setImageResource(R.drawable.thunderstorm);
+                                        //view66.setBackgroundResource(R.color.thunder);
+
+                                        //linear.setBackgroundResource(R.drawable.thunder);
+
+                                        break;
+                                case 3://for drizzle
+                                        view6.setImageResource(R.drawable.drizzle);
+                                        //view66.setBackgroundResource(R.color.drizzle);
+
+                                        //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                                        break;
+                                case 5: //for rain
+                                        view6.setImageResource(R.drawable.rain);
+                                        //view66.setBackgroundResource(R.color.rain);
+
+                                        //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                                        break;
+                                case 6: //for snow
+
+                                        view6.setImageResource(R.drawable.snow);
+                                        //view66.setBackgroundResource(R.color.snow);
+
+                                        //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                                        break;
+                                case 7: //for fog
+                                        view6.setImageResource(R.drawable.fog);
+                                        //view66.setBackgroundResource(R.color.fog);
+
+                                        //linear.setBackgroundResource(R.drawable.fogat_day);
+                                        break;
+                                case 8: //for clear and clouds
+
+                                        if(actualID==800)
+                                        {
+                                                //for clear
+                                                view6.setImageResource(R.drawable.clear);
+                                                //view66.setBackgroundResource(R.color.clear);
+
+                                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                                        }
+                                        if(actualID==801 || actualID==802 || actualID==803)
+                                        {
+                                                //for scattered clouds
+                                                view6.setImageResource(R.drawable.scattered_clouds);
+                                                //view66.setBackgroundResource(R.color.clouds);
+
+                                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                                        }
+                                        if(actualID==804)
+                                        {
+                                                //for overcast
+                                                view6.setImageResource(R.drawable.overcast);
+                                                // view66.setBackgroundResource(R.color.overcast);
+
+                                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                                        }
+                                        break;
+                                case 9://for extreme weather
+                                        if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                                view6.setImageResource(R.drawable.tornado);
+                                        }
+                                        else
+                                        {
+                                                view6.setImageResource(R.drawable.breeze);
+                                        }                                                           //view66.setBackgroundResource(R.color.extreme);
+
+                                        //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                        //linear.setBackgroundResource(R.drawable.);
+
+                                        break;
+
+                        }
+                }
+
+        }
+
+        public void SetTemp(double min,double max, int index)
+        {
+                min=min-273;
+                max=max-273;
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+
+                DecimalFormat df=new DecimalFormat("###.#");
+                String formatTempMin=df.format(min);
+                String formatTempMax=df.format(max);
+                formatTempMin=formatTempMin+"\u2103"+"/";
+                formatTempMax=formatTempMax+"\u2103";
+                String t=formatTempMin+formatTempMax;
+                TextView view1=(TextView)findViewById(R.id.temp11);
+                TextView view2=(TextView)findViewById(R.id.temp12);
+                TextView view3=(TextView)findViewById(R.id.temp13);
+                TextView view4=(TextView)findViewById(R.id.temp14);
+                TextView view5=(TextView)findViewById(R.id.temp15);
+                TextView view6=(TextView)findViewById(R.id.temp16);
+                switch (index)
+                {
+                        case 0: view1.setText(t);
+                                view1.setTypeface(face);
+                                // view11.setText(formatTempMax);
+                                break;
+                        case 1: view2.setText(t);
+                                view2.setTypeface(face);
+                                //view22.setText(formatTempMax);
+                                break;
+                        case 2: view3.setText(t);
+                                view3.setTypeface(face);
+                                // view33.setText(formatTempMax);
+                                break;
+                        case 3: view4.setText(t);
+                                view4.setTypeface(face);
+                                // view44.setText(formatTempMax);
+                                break;
+                        case 4: view5.setText(t);
+                                view5.setTypeface(face);
+                                // view55.setText(formatTempMax);
+                                break;
+                        case 5: view6.setText(t);
+                                view6.setTypeface(face);
+                                //view66.setText(formatTempMax);
+                                break;
+                        //case 6: view7.setText(formatTemp/);
+                        //  break;
+
+                }
+
+
+
+        }
+
+
+        public void favit(View view) {
+
+                //setContentView(R.layout.fav_display);
+
+                //this.addfav();
+
+                //Toast.makeText(this, fullLocation+" added to favorites !",Toast.LENGTH_SHORT).show();
+                snackbar=Snackbar.make(findViewById(R.id.coordialog),"Added to Favourites",Snackbar.LENGTH_LONG);
+                snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.thunder));
+                snackbar.setAction("View", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+
+                                Intent intent = new Intent(Dialog_weather.this, DisplayFav.class);
+                                intent.putExtra("LOCATION_NAME", fullLocation);
+                                intent.putExtra("COUNTER_VALUE", countfav);
+
+                                startActivity(intent);
+                                countfav++;
+                                //finish();
+
+                        }
+                });
+
+
+                textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+                textView.setTextSize(14);
+
+                snackbar.show();
+        }
+
+
+        public void onResume(ArrayAdapter adapter)
+        {
+                super.onResume();
+                SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
+                String prev=preferences.getString("label","");
+                if(!TextUtils.isEmpty(prev))
+                 list.add(fullLocation);
+                 this.adapter.notifyDataSetChanged();
+
+
+
+        }
+
+
+        @Override
+        public void onClick(View v) {
+                //null
+        }
+
+
+
+        public class Conditionsasync extends AsyncTask<String,Void,String> {
+
+                // private Context context;
+                String new_url;
+                String lat,lon;
+                String fullLocation;
+                private Dialog_weather DialogWeather;
+                private ProgressDialog dialog;
+
+                ArrayList<String> arr=new ArrayList<>();
+                String text="";
+
+                public  Conditionsasync(Dialog_weather dialogWeather, String url) {
+
+                        this.DialogWeather = dialogWeather;
+                        //dialog=new ProgressDialog(dialogWeather);
+                        new_url=url;
+                }
+
+                @Override
+                protected void onPreExecute()
+                {
+
+                }
+
+
+                @Override
+                protected String doInBackground(String ... urls)  {
+                        // this weather service method will be called after the service executes.
+                        // it will run as a seperate process, and will populate the activity in the onPostExecute
+                        // method below
+
+
+
+                        String response="";
+                        try {
+                                HttpURLConnection con = (HttpURLConnection) ( new URL(new_url)).openConnection();
+                                con.setRequestMethod("POST");
+                                con.setDoInput(true);
+                                con.setDoOutput(true);
+                                con.connect();
+                                //HttpResponse execute = client.execute(httpGet);
+                                InputStream content = (InputStream) con.getContent();
+                                BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                                String s = "";
+                                while ((s = buffer.readLine()) != null) {
+                                        response = response+s;
+                                }
+                                con.disconnect();
+                        }
+                        catch (Exception e) {
+                                e.printStackTrace();
+                        }
+                        return  response;
+                }
+
+
+
+                @Override
+                public void onPostExecute(String result)
+                {
+
+                        String test=result;
+
+                        if(test==null)
+                        {
+                                Toast.makeText(this.DialogWeather,"Error fetching weather",Toast.LENGTH_SHORT).show();
+                        }
+
+                        try {
+// parse the json result returned from the service
+                                JSONObject jsonResult = new JSONObject(test);
+//parse out the co-ordinates of location
+                                JSONObject coord= jsonResult.getJSONObject("coord");
+                                lat= coord.getString("lat");
+                                lon= coord.getString("lon");
+
+// parse out the temperature from the JSON result
+                                double temperature = jsonResult.getJSONObject("main").getDouble("temp");
+                                temperature = ConvertTemperatureToFarenheit(temperature);
+
+                                // parse out the pressure from the JSON Result
+                                double pressure = jsonResult.getJSONObject("main").getDouble("pressure");
+
+                                double min=jsonResult.getJSONObject("main").getDouble("temp_min");
+                                double max=jsonResult.getJSONObject("main").getDouble("temp_max");
+
+                                min= ConvertTemperatureToFarenheit(min);
+                                max= ConvertTemperatureToFarenheit(max);
+
+// parse out the humidity from the JSON result
+                                double humidity = jsonResult.getJSONObject("main").getDouble("humidity");
+
+// parse out the description from the JSON result
+                                String description = jsonResult.getJSONArray("weather").getJSONObject(0).getString("description");
+//parse out weather id
+                                String id=jsonResult.getJSONArray("weather").getJSONObject(0).getString("id");
+
+                                //parse out city name
+                                String locate=jsonResult.getString("name");
+                                //parse out country
+                                String cntry=jsonResult.getJSONObject("sys").getString("country");
+                                //get date and time
+                                //String dateTime=jsonResult.getString("dt");
+                                //long dy=Long.parseLong(dateTime);
+                                //Date date=new Date(dy*1000L);
+                                //SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HHMM");
+                                //String fdate=simpleDateFormat.format(date);
+
+
+
+
+
+// set all the fields in the activity from the parsed JSON
+                                this.DialogWeather.SetDescription(description);
+                                this.DialogWeather.SetTemperature(temperature,min,max);
+                                //this.DialogWeather.SetPressure(pressure);
+                                //this.DialogWeather.SetHumidity(humidity);
+                                this.DialogWeather.SetLocation(locate,cntry);
+                                this.DialogWeather.SetTime(id);
+                                //this.DialogWeather.time(dateTime);
+                                this.DialogWeather.setcor(lat,lon);
+
+
+
+                        }
+                        catch (JSONException e) {
+                                e.printStackTrace();
+                        }
+
+                }
+                private double ConvertTemperatureToFarenheit(double temperature) {
+                        return (temperature - 273);
+                }
+
+
+        }
+
+
+
+
+
+
+
+}
+

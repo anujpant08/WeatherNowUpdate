@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">@null</color>-->
+    <color name="colorPrimaryDark">#2196F3</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorBack">#2196f3</color>
+    <color name="colorActionBarText">#FFFFFF</color>
+    <color name="light_blue">#90CAF9</color>
+    <color name="thunder">#161b1d</color>
+    <color name="drizzle">#FF6B98BC</color>
+    <color name="rain">#FF5C6871</color>
+    <color name="snow">#f1f1f1</color>
+    <color name="fog">#acacac</color>
+    <color name="clear">#ead94f</color>
+    <color name="overcast">#FF7FA9CC</color>
+    <color name="extreme">#FFD20E28</color>
+    <color name="clouds">#1363a4</color>
+    <color name="Magenta">#fd5e53</color>
+
+</resources>

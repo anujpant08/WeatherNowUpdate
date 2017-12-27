@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.minimaldev.android.weathernowupdate">
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-feature android:name="android.hardware.location.gps"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+
+
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:name="android.support.multidex.MultiDexApplication"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true">
+
+        <provider
+            android:authorities="com.minimaldev.android.weathernowupdate.provider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths">
+
+            </meta-data>
+            <!--<meta-data
+                android:name="android.max_aspect"
+                android:value="ratio_float">
+
+            </meta-data> -->
+
+        </provider>
+
+
+
+        <activity android:name="com.minimaldev.android.weathernowupdate.Splash_back"
+
+            android:theme="@style/SplashTheme"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+            </activity>
+            
+
+        <activity android:name="com.minimaldev.android.weathernowupdate.WeatherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name">
+
+        </activity>
+
+
+        <activity
+
+            android:name="com.minimaldev.android.weathernowupdate.Places"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.minimaldev.android.weathernowupdate.WeatherActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/SettingsTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.minimaldev.android.weathernowupdate.Places" >
+
+            </meta-data>
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT"></action>
+            </intent-filter>
+        </activity>
+        <activity android:name="com.minimaldev.android.weathernowupdate.Settings_menu"
+            android:theme="@style/SettingsTheme"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
+
+        </activity>
+
+
+        <activity android:name="com.minimaldev.android.weathernowupdate.Dialog_weather"
+            android:parentActivityName="com.minimaldev.android.weathernowupdate.WeatherActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/CustomTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT"></action>
+            </intent-filter>
+            </activity>
+
+        <activity android:name="com.minimaldev.android.weathernowupdate.DisplayFav"
+
+            android:screenOrientation="portrait"
+            android:label="Favourites"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/SettingsTheme">
+
+        </activity>
+
+
+
+        <!--<activity android:name=".FavActivity"
+            android:parentActivityName=".WeatherActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/SettingsTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.DEFAULT"></action>
+            </intent-filter>
+        </activity> -->
+
+
+
+    </application>
+
+</manifest>
