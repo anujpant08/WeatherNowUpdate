@@ -83,6 +83,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         public boolean flag=false;
         double lat,lon;
         TextView tv;
+        String weatherid="";
         ActionBar actionBar;
         LottieAnimationView animationView, moonView, cloudy,cloudymoon,fogday,fognight,snowday,snownight,thunder,rainy,overcast;
 
@@ -226,7 +227,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                e.printStackTrace();
                        }
                 }*/
-
                 //int width=dm.widthPixels;
                 //int height =dm.heightPixels;
                 //getWindow().setLayout((int)(width*0.9),(int) (height*0.9));
@@ -297,6 +297,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 String add="http://api.timezonedb.com/v2/get-time-zone?key=WM0USFMFHGKX&format=json&by=position&lat="+la+"&lng="+lo;
                 Async_timezone task1=new Async_timezone(this,add);
                 task1.execute(add);
+
+
         }
 
         public void time(String t)
@@ -306,18 +308,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latoitalic.ttf");
                 tv=(TextView)findViewById(R.id.time_text);
                 ImageView sc=(ImageView)this.findViewById(R.id.back);
-                //ImageView view=(ImageView)this.findViewById(R.id.back);
-              /*  for(int i=0;i<t.length();i++)
-                {
-                        if(t.charAt(i)==' ')
-                        {
-                                tim=tim+t.charAt(i+1);
-                                tim=tim+ t.charAt(i+2);
-                                break;
-                        }
-
-                }
-                       */
 
                 //Toast.makeText(this,t,Toast.LENGTH_SHORT).show();
                 timev=t.substring(11,16);
@@ -328,277 +318,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 tv.setTypeface(face);
                 int actualID=Integer.parseInt(wid);
                 int ID=actualID/100;
-                /*switch (ID) {
-                        case 2://for thunderstorm
 
-                                if (hour > 6 && hour <= 18) {
-                                        //view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-
-                                        // sc.setImageResource(R.drawable.thunderday);
-                                        Glide.with(this)
-                                                .load(R.drawable.thunderday)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-
-
-
-                                } else {
-                                        //view.setImageResource(R.drawable.thunderstorm);
-                                        Glide.with(this)
-                                                .load(R.drawable.thundernight)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-
-
-                                        // linear.setImageResource(R.drawable.storm);
-                                        //sc.setImageResource(R.drawable.thundernight);
-                                }
-
-
-
-
-                                break;
-                        case 3://for drizzle
-                                //view.setImageResource(R.drawable.drizzle);
-                                // linear.setImageResource(R.drawable.storm);
-                                // sc.setImageResource(R.drawable.rainday);
-                                if (hour > 6 && hour <= 18) {
-                                        // view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-
-                                        Glide.with(this)
-                                                .load(R.drawable.rainday)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-
-                                        //sc.setImageResource(R.drawable.rainday);
-                                } else {
-                                        //view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        Glide.with(this)
-                                                .load(R.drawable.rainnight)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-
-                                }
-
-
-                                break;
-                        case 5: //for rain
-
-                                if (hour > 6 && hour <= 18) {
-                                        // view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        Glide.with(this)
-                                                .load(R.drawable.rainday)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-                                } else {
-                                        //view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        Glide.with(this)
-                                                .load(R.drawable.rainnight)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);                }
-
-
-                                break;
-                        case 6: //for snow
-
-                                if (hour > 6 && hour <= 18) {
-                                        //view.setImageResource(R.drawable.snow);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        Glide.with(this)
-                                                .load(R.drawable.snowday)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-                                } else {
-                                        //view.setImageResource(R.drawable.snow);
-                                        // linear.setImageResource(R.drawable.storm);
-
-                                        Glide.with(this)
-                                                .load(R.drawable.snownight)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-
-                                }
-
-                                break;
-                        case 7: //for fog
-
-                                // view.setImageResource(R.drawable.fog);
-                                // linear.setImageResource(R.drawable.storm);
-                                if (hour >= 6 && hour < 18) {
-                                        //for clear
-                                        //view.setImageResource(R.drawable.clear);
-                                        // linear.setImageResource(R.drawable.clearat_day);
-
-                                        Glide.with(this)
-                                                .load(R.drawable.fogday)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-                                } else {
-                                        //view.setImageResource(R.drawable.moon);
-
-                                        Glide.with(this)
-                                                .load(R.drawable.fognight)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .crossFade()
-                                                .centerCrop()
-                                                .into(sc);
-
-                                }
-
-
-                                break;
-                        case 8: //for clear and clouds
-
-                                if (actualID == 800) {
-
-
-                                        if (hour >= 6 && hour < 18) {
-                                                //for clear
-                                                //view.setImageResource(R.drawable.clear);
-                                                // linear.setImageResource(R.drawable.clearat_day);
-                                                Glide.with(this)
-                                                        .load(R.drawable.clearday)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        } else {
-                                                //view.setImageResource(R.drawable.moon);
-                                                Glide.with(this)
-                                                        .load(R.drawable.clearnight)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        }
-
-                                }
-                                if (actualID == 801 || actualID == 802 || actualID == 803) {
-                                        //for scattered clouds
-                                        if (hour >= 6 && hour < 18) {
-                                                //for clear
-                                                //view.setImageResource(R.drawable.scattered_clouds);
-                                                // linear.setImageResource(R.drawable.clearat_day);
-                                                Glide.with(this)
-                                                        .load(R.drawable.overcastday)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        } else {
-                                                //view.setImageResource(R.drawable.scattered_clouds);
-                                                Glide.with(this)
-                                                        .load(R.drawable.overcastnight)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        }
-
-
-                                }
-                                if (actualID == 804) {
-
-
-                                        if (hour >= 6 && hour < 18) {
-                                                //for clear
-                                                //view.setImageResource(R.drawable.overcast);
-                                                // linear.setImageResource(R.drawable.clearat_day);
-                                                Glide.with(this)
-                                                        .load(R.drawable.overcastday)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        } else {
-                                                //view.setImageResource(R.drawable.overcast);
-                                                Glide.with(this)
-                                                        .load(R.drawable.overcastnight)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        }
-                                        //for overcast
-
-
-                                }
-                                break;
-                        case 9://for extreme weather
-
-                                if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
-                                        //view.setImageResource(R.drawable.tornado);
-                                        //linear.setImageResource(R.drawable.extreme_weather);
-                                        //sc.setImageResource(R.drawable.thunderday);
-
-                                        if (hour >= 6 && hour < 18) {
-                                                //for clear
-                                                //view.setImageResource(R.drawable.breeze);
-                                                Glide.with(this)
-                                                        .load(R.drawable.stormday)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        } else {
-                                                //view.setImageResource(R.drawable.breeze);
-                                                Glide.with(this)
-                                                        .load(R.drawable.stormnight)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        }
-
-                                } else {
-                                        if (hour >= 6 && hour < 18) {
-                                                //for clear
-                                                //view.setImageResource(R.drawable.breeze);
-                                                Glide.with(this)
-                                                        .load(R.drawable.clearday)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        } else {
-                                                //view.setImageResource(R.drawable.breeze);
-                                                Glide.with(this)
-                                                        .load(R.drawable.clearnight)
-                                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                        .crossFade()
-                                                        .centerCrop()
-                                                        .into(sc);
-                                        }
-
-                                }
-
-
-                                break;
-
-                }*/
+                setanimation(weatherid, hour);
 
                 linearLayout.setVisibility(View.INVISIBLE);
 
@@ -1066,10 +787,11 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         }
 
 
-        public void setanimation(String id)
+        public void setanimation(String id, int hr)
         {
                 int actualID=Integer.parseInt(id);
                 int ID=actualID/100;
+            System.out.println(hr);
                 switch (ID)
                 {
                         case 2://for thunderstorm
@@ -1094,7 +816,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 break;
                         case 6: //for snow
 
-                                if(hour>=6 && hour <18)
+                                if(hr >=6 && hr <18)
                                 {
                                         this.snowday.playAnimation();
                                 }
@@ -1109,7 +831,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         case 7: //for fog
                                 //view1.setImageResource(R.drawable.fog);
                                 //view11.setBackgroundResource(R.color.fog);
-                                if(hour>=6 && hour <18)
+                                if(hr >=6 && hr <18)
                                 {
                                         this.fogday.playAnimation();
                                 }
@@ -1124,7 +846,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //for clear
                                         //  view1.setImageResource(R.drawable.clear);
                                         //view11.setBackgroundResource(R.color.clear);
-                                        if(hour>=6 && hour<18)
+                                        if(hr >=6 && hr <18)
                                                 this.animationView.playAnimation();
                                         else
                                                 this.moonView.playAnimation();
@@ -1136,7 +858,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //for scattered clouds
                                         //view1.setImageResource(R.drawable.scattered_clouds);
                                         //view11.setBackgroundResource(R.color.clouds);
-                                        if(hour>=6 && hour <18)
+                                        if(hr >=6 && hr <18)
                                         {
                                                 this.cloudy.playAnimation();
                                         }
@@ -1163,7 +885,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 }
                                 else
                                 {
-                                        if(hour>=6 && hour <18)
+                                        if(hr >=6 && hr <18)
                                         {
                                                 this.fogday.playAnimation();
                                         }
@@ -1999,9 +1721,10 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 //this.DialogWeather.SetHumidity(humidity);
                                 this.DialogWeather.SetLocation(locate,cntry);
                                 this.DialogWeather.SetTime(id);
-                                this.DialogWeather.setanimation(id);
                                 //this.DialogWeather.time(dateTime);
                                 this.DialogWeather.setcor(lat,lon);
+                                DialogWeather.weatherid=id;
+                                //this.DialogWeather.setanimation(id);
 
 
 
