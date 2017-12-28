@@ -126,14 +126,13 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
 
     double TEM;
-    LottieAnimationView animationView, moonView, cloudy,cloudymoon,fogday,fognight,snowday,snownight,thunder,rainy,overcast;
+    LottieAnimationView animationView, moonView, cloudy, cloudymoon, fogday, fognight, snowday, snownight, thunder, rainy, overcast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-
 
 
         hasNavBar();
@@ -153,17 +152,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
 
 
-        animationView= (LottieAnimationView) findViewById(R.id.animation_view);
+        animationView = (LottieAnimationView) findViewById(R.id.animation_view);
         moonView = (LottieAnimationView) findViewById(R.id.moon_view);
-        cloudy=(LottieAnimationView) findViewById(R.id.cloud_view);
-        cloudymoon=(LottieAnimationView) findViewById(R.id.cloudmoon_view);
-        fogday=(LottieAnimationView) findViewById(R.id.fogday_view);
-        fognight=(LottieAnimationView) findViewById(R.id.fognight_view);
-        overcast=(LottieAnimationView) findViewById(R.id.overcast_view);
-        rainy=(LottieAnimationView) findViewById(R.id.rainy_view);
-        snowday=(LottieAnimationView) findViewById(R.id.snowday_view);
-        snownight=(LottieAnimationView) findViewById(R.id.snownight_view);
-        thunder=(LottieAnimationView) findViewById(R.id.thunder_view);
+        cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
+        cloudymoon = (LottieAnimationView) findViewById(R.id.cloudmoon_view);
+        fogday = (LottieAnimationView) findViewById(R.id.fogday_view);
+        fognight = (LottieAnimationView) findViewById(R.id.fognight_view);
+        overcast = (LottieAnimationView) findViewById(R.id.overcast_view);
+        rainy = (LottieAnimationView) findViewById(R.id.rainy_view);
+        snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
+        snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
+        thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
 
         animationView.setImageAssetsFolder("images/");
         animationView.setAnimation("sun.json");
@@ -292,6 +291,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         //dialog=new ProgressDialog(this);
 
+        setDefaultValues(this, R.xml.settings, false);
+
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
         swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
@@ -357,28 +359,42 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             toast.setView(layout);
             toast.show(); */
             snackbar.show();
+        } else {
+            showweather();
+
         }
-
-
-        setDefaultValues(this, R.xml.settings, false);
 
         //this.dialog.setTitle("Please wait");
         //this.dialog.setMessage("Fetching beautiful weather...");
         //this.dialog.show();
         //this.dialog.setCanceledOnTouchOutside(false);
 
+
+        //RetrieveWeather(LAT, LON);
+
+
+    }
+
+    public void showweather() {
         buildGoogleApiClient();
         createLocationRequest();
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Toast.makeText(this,"Permission not granted!",Toast.LENGTH_LONG).show();
+            return;
+        }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
         displayLocation();
-
-
-        //RetrieveWeather(LAT, LON);
-
 
     }
 

@@ -111,15 +111,11 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 if(hasNavBar()) {
 
                         setContentView(R.layout.dialog_main);
-
-
-
                 }
                 else
                 {
                         setContentView(R.layout.dialog_mainnonavbar);
                 }
-
 
                 animationView= (LottieAnimationView) findViewById(R.id.animation_view);
                 moonView = (LottieAnimationView) findViewById(R.id.moon_view);
@@ -194,44 +190,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 //progressBar.setProgressTintList(ColorStateList.valueOf(Color.MAGENTA));
                 linearLayout.setVisibility(View.VISIBLE);
 
-                //DisplayMetrics dm= new DisplayMetrics();
-               // getWindowManager().getDefaultDisplay().getMetrics(dm);
-                //WindowManager.LayoutParams wlp = getWindow().getAttributes();
-                ///wlp.gravity = Gravity.TOP ;
-
-               // wlp.y = 10;
-               /*if(Geocoder.isPresent())
-                {
-                       try
-                       {
-                               String location=loc;
-                               Geocoder gc=new Geocoder(this);
-                               List <Address> addresses=gc.getFromLocationName(location,1);
-                               Address address=addresses.get(0);
-                                lat=address.getLatitude();
-                                lon=address.getLongitude();
-                               //  List<LatLng> ll=new ArrayList<LatLng>(addresses.size());
-                               //for(Address a:addresses)
-                               //{
-                                   //  if(a.hasLatitude() && a.hasLongitude())
-                                    // {
-                                            // ll.add(new LatLng(a.getLatitude(),a.getLongitude()));
-                                    // }
-                              // }
-
-                              // Toast.makeText(this,"Lat= "+ll.get(0),Toast.LENGTH_SHORT).show();
-
-
-
-                       } catch (IOException e) {
-                               e.printStackTrace();
-                       }
-                }*/
-                //int width=dm.widthPixels;
-                //int height =dm.heightPixels;
-                //getWindow().setLayout((int)(width*0.9),(int) (height*0.9));
-               /// wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-               // getWindow().setAttributes(wlp);
                 RetrieveWeather(url);
                 RetrieveForecast(loc);
                 //LoadPreference();
