@@ -10,8 +10,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +25,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -90,7 +93,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     RelativeLayout llayout;
     Snackbar snackbar, snackbarnetwork, snackbarboth, snackrefresh;
     String la, lo, enc;
-
+    boolean shown;
     String apikey = "6024521-aa3caf3e11ed4bf5eead80356";
     //String secret="WHjf5GVFChvtUFsxYpBv4XbaYK7Mb5BNpYfN3t3FhQzKc";
     static String description;
@@ -109,6 +112,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private static final int RESULT_SETTINGS = 1;
     int count = 0;
     int indexed = 0;
+    SharedPreferences sharedPreferences;
     // Location updates intervals in sec
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
@@ -133,7 +137,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         super.onCreate(savedInstanceState);
 
         lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-
+        shown=false;
 
         hasNavBar();
 
@@ -150,6 +154,23 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             setContentView(R.layout.activity_mainnonavbar);
 
         }
+
+        boolean enabled = locationEnabled();
+
+        if (!enabled) {
+            /*LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toastview, (ViewGroup) findViewById(R.id.toast_layout));
+            TextView text = (TextView) layout.findViewById(R.id.text_toast);
+            text.setText("Your device location is not enabled! Enable location and restart the app");
+
+            Toast toast = new Toast(getApplicationContext());
+            toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 80);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show(); */
+            snackbar.show();
+        } else
+            showweather();
 
 
         animationView = (LottieAnimationView) findViewById(R.id.animation_view);
@@ -317,7 +338,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     } else if (!isNetworkAvailable()) {
                         snackbarnetwork.show();
                     } else {
-                        snackrefresh.show();
+                        //snackrefresh.show();
                         if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -345,24 +366,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
 
         //hasNavBar();
-        boolean enabled = locationEnabled();
 
-        if (!enabled) {
-            /*LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toastview, (ViewGroup) findViewById(R.id.toast_layout));
-            TextView text = (TextView) layout.findViewById(R.id.text_toast);
-            text.setText("Your device location is not enabled! Enable location and restart the app");
-
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 80);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show(); */
-            snackbar.show();
-        } else {
-            showweather();
-
-        }
 
         //this.dialog.setTitle("Please wait");
         //this.dialog.setMessage("Fetching beautiful weather...");
@@ -387,14 +391,24 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            Toast.makeText(this,"Permission not granted!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Permission not granted!", Toast.LENGTH_LONG).show();
             return;
         }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
+        final Handler handler=new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(!shown)
+                Toast.makeText(WeatherActivity.this,"Network Error! PLease swipe down to Refresh.",Toast.LENGTH_LONG).show();
+            }
+        },10000);
         displayLocation();
+
 
     }
 
@@ -452,9 +466,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     }
 
     @Override
-    public void onBackPressed()
-    {
-        AlertDialog.Builder alertDialog=new AlertDialog.Builder(WeatherActivity.this);
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(WeatherActivity.this);
         alertDialog.setTitle("Exit");
         alertDialog.setMessage("Are you sure you want to exit?");
         alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -473,28 +486,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         alertDialog.show();
     }
-
-   /* public void visible(View view) {
-
-        Animation animslide, slidedown;
-        ImageView img= (ImageView) this.findViewById(R.id.expand);
-        if (flag) {
-            HorizontalScrollView sc = (HorizontalScrollView) findViewById(R.id.scroll);
-            sc.setVisibility(View.GONE);
-            img.setImageResource(R.drawable.ic_action_collapse);
-            slidedown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.swipedown);
-            sc.startAnimation(slidedown);
-            flag = false;
-        } else {
-            HorizontalScrollView sc = (HorizontalScrollView) findViewById(R.id.scroll);
-            sc.setVisibility(View.VISIBLE);
-            img.setImageResource(R.drawable.ic_action_expand);
-            animslide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.swipeup);
-            sc.startAnimation(animslide);
-            flag = true;
-        }
-    } */
-
 
     /**
      * Creating google api client object
@@ -518,6 +509,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     @Override
     protected void onResume() {
         super.onResume();
+
         mGoogleApiClient.connect();
 
     }
@@ -609,10 +601,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             longitude = mLastLocation.getLongitude();
             la = Double.toString(latitude);
             lo = Double.toString(longitude);
+
+            sharedPreferences=this.getSharedPreferences("location",MODE_PRIVATE);
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putString("lati",la);
+            editor.putString("long",lo);
+            editor.apply();
+
             RetrieveWeather(la, lo, "a");
             RetrieveForecast(la, lo);
 
-
+            shown=true;
             lm.removeUpdates(locationListener);
 
 
@@ -889,11 +888,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //ImageView linear = (ImageView) this.findViewById(R.id.back);
         ImageView sc = (ImageView) this.findViewById(R.id.backgroundWeather);
 
-        Glide.with(this)
+        sc.setBackgroundColor(Color.parseColor("#1e88e5"));
+        /*Glide.with(this)
                 .load(id)
                 .dontTransform()
                 .centerCrop()
-                .into(sc);
+                .into(sc); */
 
         llayout.setVisibility(View.INVISIBLE);
 
@@ -957,11 +957,14 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 if(actualID==800)
                 {
+                    //System.out.println(hour);
                     //for clear
                     //  view1.setImageResource(R.drawable.clear);
                     //view11.setBackgroundResource(R.color.clear);
                     if(hour>=6 && hour<18)
+
                     this.animationView.playAnimation();
+
                     else
                         this.moonView.playAnimation();
                     // linear.setBackgroundResource(R.drawable.clearat_day);
@@ -1830,18 +1833,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         TextView textView=(TextView)findViewById(R.id.lo);
         textView.setText(formatTempMin+"\u2103");
         textView.setTypeface(face);
-        if(snackrefresh.isShown()) {
-            snackrefresh.dismiss();
-            Snackbar snackbar = Snackbar.make(findViewById(R.id.coormain), "Weather refreshed", Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
-            TextView textViewsnack;
-            textViewsnack = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-            textViewsnack.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
-            textViewsnack.setTextSize(14);
 
-
-            snackbar.show();
-        }
 
         if (swipeRefreshLayout.isEnabled()) {
             //snackrefresh.dismiss();

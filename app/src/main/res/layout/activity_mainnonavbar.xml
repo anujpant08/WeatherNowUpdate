@@ -616,6 +616,7 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/moon_view"
             android:layout_width="150dp"
+            android:scaleType="center"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             app:lottie_fileName="moon.json"
@@ -635,6 +636,7 @@
             android:id="@+id/cloudmoon_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:scaleType="center"
             android:layout_gravity="center"
             android:layout_centerInParent="true"
             app:lottie_fileName="moon.json"
@@ -645,6 +647,7 @@
             android:id="@+id/fogday_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:scaleType="center"
             android:layout_gravity="center"
             app:lottie_fileName="moon.json"
             android:layout_centerInParent="true"
@@ -658,6 +661,7 @@
             android:layout_centerInParent="true"
             app:lottie_fileName="moon.json"
             app:lottie_loop="false"
+            android:scaleType="center"
             app:lottie_autoPlay="true" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -666,6 +670,7 @@
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
+            android:scaleType="center"
             android:layout_marginBottom="12dp"
             android:layout_marginStart="6dp"
             app:lottie_autoPlay="true"
@@ -676,6 +681,7 @@
             android:id="@+id/rainy_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:scaleType="center"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             app:lottie_fileName="moon.json"
@@ -686,6 +692,7 @@
             android:id="@+id/snowday_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:scaleType="center"
             android:layout_centerInParent="true"
             app:lottie_fileName="moon.json"
             app:lottie_loop="false"
@@ -697,6 +704,7 @@
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
+            android:scaleType="center"
             app:lottie_fileName="moon.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
@@ -707,6 +715,7 @@
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
+            android:scaleType="center"
             app:lottie_fileName="moon.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
