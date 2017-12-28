@@ -33,6 +33,7 @@
                 android:resource="@xml/provider_paths">
 
             </meta-data>
+
             <!--<meta-data
                 android:name="android.max_aspect"
                 android:value="ratio_float">

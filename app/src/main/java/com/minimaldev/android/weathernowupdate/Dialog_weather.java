@@ -62,7 +62,7 @@ import java.util.Set;
  */
 public class Dialog_weather extends AppCompatActivity implements View.OnClickListener {
 
-        String url="",loc;
+        String url="",loc="";
         TextView textView;
         String fullLocation;
         LinearLayout linearLayout;
@@ -81,7 +81,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         int hour;
         String apikey="6024521-aa3caf3e11ed4bf5eead80356";
         public boolean flag=false;
-        double lat,lon;
+        double lat,lon,lt,ln;
         TextView tv;
         String weatherid="";
         ActionBar actionBar;
@@ -95,8 +95,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                // LoadPreference(adapter);
                 //tim="";
                 url = getIntent().getStringExtra("URL");
-                loc = getIntent().getStringExtra("loc_desc");
-
+                loc=getIntent().getStringExtra("loc_desc");
 
                 //getCoordinates(loc);
                 /*supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -295,15 +294,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 Conditionsasync task = new Conditionsasync(this, addrs);
                 task.execute(addrs);
         }
-       /* private  void RetrieveTime(String addrs)
-        {
-
-                ;
-
-
-                //Async_coordinates task2 = new Async_coordinates(this,cor_url);
-                //task2.execute(cor_url);
-        } */
 
        @Override
        public void onBackPressed()
@@ -311,11 +301,13 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                finish();
        }
 
-        public void RetrieveForecast(String locat)
+        public void RetrieveForecast(String loc)
         {
                 String url="";
-                url="http://api.openweathermap.org/data/2.5/forecast/daily?q="+locat+"&appid=bcc6f8e44743e316e5120301ff1a5ad4";
-                ForecastDialogAsync task= new ForecastDialogAsync(this,url);
+                System.out.println(loc);
+                url="http://api.openweathermap.org/data/2.5/forecast/daily?q="+loc+"&appid=bcc6f8e44743e316e5120301ff1a5ad4";
+
+            ForecastDialogAsync task= new ForecastDialogAsync(this,url);
                 task.execute(url);
         }
 
