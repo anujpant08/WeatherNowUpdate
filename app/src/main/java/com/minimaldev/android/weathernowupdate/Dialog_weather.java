@@ -363,26 +363,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 //view1.setTypeface(face);
         }
-       /*public void SetPressure(double pres)
-        {
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
-                TextView view=(TextView)this.findViewById(R.id.press_text);
-                DecimalFormat df=new DecimalFormat("###.##");
-                String formatPres=df.format(pres);
-                view.setText("Pressure: "+formatPres+" hPa");
-                view.setTypeface(face);
-
-        }
-        public void SetHumidity(double hum)
-        {
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
-                TextView view=(TextView)this.findViewById(R.id.humid_text);
-                DecimalFormat df=new DecimalFormat("###.#");
-                String formatHum=df.format(hum);
-                view.setText("Humidity: "+formatHum+"%");
-                view.setTypeface(face);
-        } */
-
 
         public void sharedialog(View view)
         {
@@ -1739,11 +1719,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
 
         }
-
-
-
-
-
 
 
 }

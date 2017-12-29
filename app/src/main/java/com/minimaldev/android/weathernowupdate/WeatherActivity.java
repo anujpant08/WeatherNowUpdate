@@ -1276,13 +1276,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     else
                         this.fognight.playAnimation();
-                    // view1.setImageResource(R.drawable.breeze);
+
                 }
-                // view11.setBackgroundResource(R.color.extreme);
 
-                //linear.setBackgroundResource(R.drawable.extreme_weather);
-
-                //linear.setBackgroundResource(R.drawable.);
 
                 break;
 

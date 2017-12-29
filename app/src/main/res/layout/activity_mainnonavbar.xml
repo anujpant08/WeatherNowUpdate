@@ -629,7 +629,6 @@
             android:id="@+id/cloudmoon_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:scaleType="center"
             android:layout_centerInParent="true"
             app:lottie_fileName="moon.json"
             app:lottie_loop="false"
@@ -639,7 +638,6 @@
             android:id="@+id/fogday_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:scaleType="center"
             app:lottie_fileName="moon.json"
             android:layout_centerInParent="true"
             app:lottie_loop="false"
@@ -652,7 +650,6 @@
             android:layout_centerInParent="true"
             app:lottie_fileName="moon.json"
             app:lottie_loop="false"
-            android:scaleType="center"
             app:lottie_autoPlay="true" />
 
         <com.airbnb.lottie.LottieAnimationView
