@@ -13,9 +13,10 @@
         android:id="@+id/placesauto"
         android:textColor="@color/Magenta"
         app:pacv_resultType="no_type"
-        android:hint="Address"
+        app:pacv_adapterClass="com.minimaldev.android.weathernowupdate.AutoCompleteTextViewAdapter"
         app:pacv_googleMapsApiKey="AIzaSyBuL39Vx4boQ7u4xOa2G4b8_mbYr_jh4aE">
 
+        <!--style="@style/Widget.AutoCompleteTextView.Styled" -->
     </com.seatgeek.placesautocomplete.PlacesAutocompleteTextView>
 
 </RelativeLayout>

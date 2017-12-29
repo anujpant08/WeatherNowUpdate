@@ -405,7 +405,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 if(!shown)
                 Toast.makeText(WeatherActivity.this,"Network Error! PLease swipe down to Refresh.",Toast.LENGTH_LONG).show();
             }
-        },10000);
+        },15000);
         displayLocation();
 
 

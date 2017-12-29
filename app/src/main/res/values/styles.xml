@@ -33,4 +33,13 @@
 
     </style>
 
+    <style
+        parent="PACV.Widget.PlacesAutoCompleteTextView"
+        name="Widget.AutoCompleteTextView.Styled">
+
+        <item name="android:background">@color/snow</item>
+        <item name="android:textAppearance">@color/Magenta</item>
+
+    </style>
+
 </resources>
