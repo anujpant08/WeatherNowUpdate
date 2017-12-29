@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -58,6 +57,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -154,88 +154,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         }
 
-        boolean enabled = locationEnabled();
-
-        if (!enabled) {
-            /*LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toastview, (ViewGroup) findViewById(R.id.toast_layout));
-            TextView text = (TextView) layout.findViewById(R.id.text_toast);
-            text.setText("Your device location is not enabled! Enable location and restart the app");
-
-            Toast toast = new Toast(getApplicationContext());
-            toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 80);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show(); */
-            snackbar.show();
-        } else
-            showweather();
-
-
-        animationView = (LottieAnimationView) findViewById(R.id.animation_view);
-        moonView = (LottieAnimationView) findViewById(R.id.moon_view);
-        cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
-        cloudymoon = (LottieAnimationView) findViewById(R.id.cloudmoon_view);
-        fogday = (LottieAnimationView) findViewById(R.id.fogday_view);
-        fognight = (LottieAnimationView) findViewById(R.id.fognight_view);
-        overcast = (LottieAnimationView) findViewById(R.id.overcast_view);
-        rainy = (LottieAnimationView) findViewById(R.id.rainy_view);
-        snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
-        snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
-        thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
-
-        animationView.setImageAssetsFolder("images/");
-        animationView.setAnimation("sun.json");
-        animationView.loop(false);
-
-        moonView.setImageAssetsFolder("moon/");
-        moonView.setAnimation("moon.json");
-        moonView.loop(false);
-
-        cloudy.setImageAssetsFolder("cloudy/");
-        cloudy.setAnimation("cloudy.json");
-        cloudy.loop(false);
-
-        cloudymoon.setImageAssetsFolder("cloudymoon/");
-        cloudymoon.setAnimation("cloudymoon.json");
-        cloudymoon.loop(false);
-
-        fogday.setImageAssetsFolder("fogday/");
-        fogday.setAnimation("fogday.json");
-        fogday.loop(false);
-
-        fognight.setImageAssetsFolder("fognight/");
-        fognight.setAnimation("fognight.json");
-        fognight.loop(false);
-
-        overcast.setImageAssetsFolder("overcast/");
-        overcast.setAnimation("overcast.json");
-        overcast.loop(false);
-
-        cloudy.setImageAssetsFolder("cloudy/");
-        cloudy.setAnimation("cloudy.json");
-        cloudy.loop(false);
-
-        cloudymoon.setImageAssetsFolder("cloudymoon/");
-        cloudymoon.setAnimation("cloudymoon.json");
-        cloudymoon.loop(false);
-
-        rainy.setImageAssetsFolder("rainy/");
-        rainy.setAnimation("rainy.json");
-        rainy.loop(false);
-
-        snowday.setImageAssetsFolder("snowday/");
-        snowday.setAnimation("snowday.json");
-        snowday.loop(false);
-
-        snownight.setImageAssetsFolder("snownight/");
-        snownight.setAnimation("snownight.json");
-        snownight.loop(false);
-
-        thunder.setImageAssetsFolder("thunder/");
-        thunder.setAnimation("thunder.json");
-        thunder.loop(false);
-
         snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
         snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
         snackbarboth = Snackbar.make(findViewById(R.id.coormain), "Location and Network not available", Snackbar.LENGTH_LONG);
@@ -304,6 +222,87 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
         });
 
+        boolean enabled = locationEnabled();
+
+
+        if (!enabled) {
+
+            snackbar.show();
+        }
+        else if(!isNetworkAvailable())
+        {
+            snackbarnetwork.show();
+        }
+        else
+            showweather();
+
+
+        animationView = (LottieAnimationView) findViewById(R.id.animation_view);
+        moonView = (LottieAnimationView) findViewById(R.id.moon_view);
+        cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
+        cloudymoon = (LottieAnimationView) findViewById(R.id.cloudmoon_view);
+        fogday = (LottieAnimationView) findViewById(R.id.fogday_view);
+        fognight = (LottieAnimationView) findViewById(R.id.fognight_view);
+        overcast = (LottieAnimationView) findViewById(R.id.overcast_view);
+        rainy = (LottieAnimationView) findViewById(R.id.rainy_view);
+        snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
+        snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
+        thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
+
+        animationView.setImageAssetsFolder("images/");
+        animationView.setAnimation("sun.json");
+        animationView.loop(false);
+
+        moonView.setImageAssetsFolder("moon/");
+        moonView.setAnimation("moon.json");
+        moonView.loop(false);
+
+        cloudy.setImageAssetsFolder("cloudy/");
+        cloudy.setAnimation("cloudy.json");
+        cloudy.loop(false);
+
+        cloudymoon.setImageAssetsFolder("cloudymoon/");
+        cloudymoon.setAnimation("cloudymoon.json");
+        cloudymoon.loop(false);
+
+        fogday.setImageAssetsFolder("fogday/");
+        fogday.setAnimation("fogday.json");
+        fogday.loop(false);
+
+        fognight.setImageAssetsFolder("fognight/");
+        fognight.setAnimation("fognight.json");
+        fognight.loop(false);
+
+        overcast.setImageAssetsFolder("overcast/");
+        overcast.setAnimation("overcast.json");
+        overcast.loop(false);
+
+        cloudy.setImageAssetsFolder("cloudy/");
+        cloudy.setAnimation("cloudy.json");
+        cloudy.loop(false);
+
+        cloudymoon.setImageAssetsFolder("cloudymoon/");
+        cloudymoon.setAnimation("cloudymoon.json");
+        cloudymoon.loop(false);
+
+        rainy.setImageAssetsFolder("rainy/");
+        rainy.setAnimation("rainy.json");
+        rainy.loop(false);
+
+        snowday.setImageAssetsFolder("snowday/");
+        snowday.setAnimation("snowday.json");
+        snowday.loop(false);
+
+        snownight.setImageAssetsFolder("snownight/");
+        snownight.setAnimation("snownight.json");
+        snownight.loop(false);
+
+        thunder.setImageAssetsFolder("thunder/");
+        thunder.setAnimation("thunder.json");
+        thunder.loop(false);
+
+
+
 
         llayout = (RelativeLayout) findViewById(R.id.progresslayout);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
@@ -326,16 +325,20 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 //createLocationRequest();
                 if (!isNetworkAvailable() && !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     snackbar.show();
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
                     if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !isNetworkAvailable()) {
 
                         snackbarboth.show();
+                        swipeRefreshLayout.setRefreshing(false);
 
                     } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
                         snackbar.show();
+                        swipeRefreshLayout.setRefreshing(false);
                     } else if (!isNetworkAvailable()) {
                         snackbarnetwork.show();
+                        swipeRefreshLayout.setRefreshing(false);
                     } else {
                         //snackrefresh.show();
                         if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -822,12 +825,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
 
            //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
-            WeatherAsync task = new WeatherAsync(this, enc);
+           // WeatherAsync task = new WeatherAsync(this, enc);
 
         llayout = (RelativeLayout) findViewById(R.id.progresslayout);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
         llayout.setVisibility(View.VISIBLE);
-            task.execute(enc);
+            //task.execute(enc);
 
 
 
@@ -879,7 +882,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //settings_menu.setLoc(name);
     }
 
-    public void SetWeatherIcon(String id) {
+    public void setWeatherIcon(String id) {
 
 
         //settings_menu.setId(actualID);
@@ -887,14 +890,281 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //ImageView linear = (ImageView) this.findViewById(R.id.back);
         ImageView sc = (ImageView) this.findViewById(R.id.backgroundWeather);
 
-        sc.setBackgroundColor(Color.parseColor("#1e88e5"));
-        /*Glide.with(this)
-                .load(id)
-                .dontTransform()
-                .centerCrop()
-                .into(sc); */
+        int actualID=Integer.parseInt(id);
+        int ID=actualID/100;
+        switch (ID)
+        {
+            case 2://for thunderstorm
 
-        llayout.setVisibility(View.INVISIBLE);
+                Glide.with(this)
+                        .load(this.getResources().getIdentifier("thunder","drawable",this.getPackageName()))
+                        //.load("")
+                        //.error(R.drawable.background_)
+                        .centerCrop()
+                        .dontTransform()
+                        .crossFade()
+                        .into(sc);
+
+                llayout.setVisibility(View.INVISIBLE);
+                //view11.setBackgroundResource(R.color.thunder);
+
+                break;
+            case 3://for drizzle
+                if(hour>=6 && hour <18)
+                Glide.with(this)
+                        .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
+                        //.load("")
+                        //.error(R.drawable.background_)
+                        .centerCrop()
+                        .dontTransform()
+                        .crossFade()
+                        .into(sc);
+                else
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+
+                llayout.setVisibility(View.INVISIBLE);
+
+                break;
+            case 5: //for rain
+                if(hour>=6 && hour <18)
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+                else
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+
+                llayout.setVisibility(View.INVISIBLE);
+                break;
+            case 6: //for snow
+
+                Glide.with(this)
+                        .load(this.getResources().getIdentifier("snowy","drawable",this.getPackageName()))
+                        //.load("")
+                        //.error(R.drawable.background_)
+                        .centerCrop()
+                        .dontTransform()
+                        .crossFade()
+                        .into(sc);
+
+                llayout.setVisibility(View.INVISIBLE);
+
+                break;
+            case 7: //for fog
+
+                if(hour>=6 && hour <18)
+                {
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("foggy","drawable",this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+
+                    llayout.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+
+                    llayout.setVisibility(View.INVISIBLE);
+                }
+                break;
+            case 8: //for clear and clouds
+
+                if(actualID==800)
+                {
+                    //System.out.println(hour);
+                    //for clear
+                    //  view1.setImageResource(R.drawable.clear);
+                    //view11.setBackgroundResource(R.color.clear);
+                    if(hour>=5 && hour<7) {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+                    else if(hour>=7 && hour<17) {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("sunnyday", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+                    else if(hour>=17 && hour<19)
+                    {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("sunset","drawable",this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+
+
+
+                    else {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("night", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+                    // linear.setBackgroundResource(R.drawable.at_day);
+
+                }
+                if(actualID==801 || actualID==802 || actualID==803)
+                {
+                    //for scattered clouds
+                    //view1.setImageResource(R.drawable.scattered_clouds);
+                    //view11.setBackgroundResource(R.color.clouds);
+                    if(hour>=6 && hour <18)
+                    {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("cloudy", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+                    else
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("cloudynight", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                    llayout.setVisibility(View.INVISIBLE);
+                    //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                }
+                if(actualID==804)
+                {
+                    //for overcast
+                    //view1.setImageResource(R.drawable.overcast);
+                    //view11.setBackgroundResource(R.color.overcast);
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+
+                    llayout.setVisibility(View.INVISIBLE);
+                    //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                }
+                break;
+            case 9://for extreme weather
+                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
+
+                    llayout.setVisibility(View.INVISIBLE);
+                    //view1.setImageResource(R.drawable.tornado);
+                }
+                else
+                {
+                    if(hour>=6 && hour <18)
+                    {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("foggy", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+                    else
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                    llayout.setVisibility(View.INVISIBLE);
+                    // view1.setImageResource(R.drawable.breeze);
+                }
+                // view11.setBackgroundResource(R.color.extreme);
+
+                //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                //linear.setBackgroundResource(R.drawable.);
+
+                break;
+
+        }
+
+        //sc.setBackgroundColor(Color.parseColor("#1e88e5"));
+
 
 
 
@@ -965,7 +1235,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     else
                         this.moonView.playAnimation();
-                    // linear.setBackgroundResource(R.drawable.clearat_day);
+                    // linear.setBackgroundResource(R.drawable.at_day);
 
                 }
                 if(actualID==801 || actualID==802 || actualID==803)
@@ -1278,7 +1548,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         view1.setImageResource(R.drawable.clear);
                         //view11.setBackgroundResource(R.color.clear);
 
-                        // linear.setBackgroundResource(R.drawable.clearat_day);
+                        // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
                     if(actualID==801 || actualID==802 || actualID==803)
@@ -1366,7 +1636,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         view2.setImageResource(R.drawable.clear);
                         //view22.setBackgroundResource(R.color.clear);
 
-                        // linear.setBackgroundResource(R.drawable.clearat_day);
+                        // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
                     if(actualID==801 || actualID==802 || actualID==803)
@@ -1453,7 +1723,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         view3.setImageResource(R.drawable.clear);
                        // view33.setBackgroundResource(R.color.clear);
 
-                        // linear.setBackgroundResource(R.drawable.clearat_day);
+                        // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
                     if(actualID==801 || actualID==802 || actualID==803)
@@ -1540,7 +1810,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         view4.setImageResource(R.drawable.clear);
                         //view44.setBackgroundResource(R.color.clear);
 
-                        // linear.setBackgroundResource(R.drawable.clearat_day);
+                        // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
                     if(actualID==801 || actualID==802 || actualID==803)
@@ -1627,7 +1897,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         view5.setImageResource(R.drawable.clear);
                         //view55.setBackgroundResource(R.color.clear);
 
-                        // linear.setBackgroundResource(R.drawable.clearat_day);
+                        // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
                     if(actualID==801 || actualID==802 || actualID==803)
@@ -1714,7 +1984,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         view6.setImageResource(R.drawable.clear);
                         //view66.setBackgroundResource(R.color.clear);
 
-                        // linear.setBackgroundResource(R.drawable.clearat_day);
+                        // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
                     if(actualID==801 || actualID==802 || actualID==803)
@@ -2013,6 +2283,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             this.WeatherActivity.SetDescription(description);
             this.WeatherActivity.SetTemperature(temperature,min,max);
                 this.WeatherActivity.SetLocation(locate,cntry);
+                this.WeatherActivity.setWeatherIcon(id);
                 this.WeatherActivity.setanimation(id);
             this.WeatherActivity.sendNotification(description,temperature,locate,id);
 

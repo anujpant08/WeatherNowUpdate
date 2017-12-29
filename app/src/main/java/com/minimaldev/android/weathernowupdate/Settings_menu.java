@@ -158,7 +158,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                     mNotificationManager.notify(1, mBuilder.build());
                     break;
-                case 6: //for snow
+                case 6: //for snowy
 
                     mBuilder =
                             (NotificationCompat.Builder) new NotificationCompat.Builder(this)
@@ -173,7 +173,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
                     mNotificationManager.notify(1, mBuilder.build());
 
                     break;
-                case 7: //for fog
+                case 7: //for foggy
                     mBuilder =
                             (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                                     .setSmallIcon(R.drawable.wnnot)
@@ -186,7 +186,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                     mNotificationManager.notify(1, mBuilder.build());
                     break;
-                case 8: //for clear and clouds
+                case 8: //for sunnyday and clouds
 
                     if (actualID == 800) {
                         if(hour>=6 && hour<18) {
@@ -254,7 +254,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                     }
                     if (actualID == 804) {
-                        //for overcast
+                        //for overcasttype
                         mBuilder =
                                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                                         .setSmallIcon(R.drawable.wnnot)
@@ -404,7 +404,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                     mNotificationManager.notify(1, mBuilder.build());
                     break;
-                case 6: //for snow
+                case 6: //for snowy
 
                     mBuilder =
                             (NotificationCompat.Builder) new NotificationCompat.Builder(this)
@@ -418,7 +418,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
                     mNotificationManager.notify(1, mBuilder.build());
 
                     break;
-                case 7: //for fog
+                case 7: //for foggy
                     mBuilder =
                             (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                                     .setSmallIcon(R.drawable.wnnot)
@@ -429,7 +429,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                     mNotificationManager.notify(1, mBuilder.build());
                     break;
-                case 8: //for clear and clouds
+                case 8: //for sunnyday and clouds
 
                     if (actualID == 800) {
                         if(hour>=6 && hour<18) {
@@ -498,7 +498,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                     }
                     if (actualID == 804) {
-                        //for overcast
+                        //for overcasttype
                         mBuilder =
                                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                                         .setSmallIcon(R.drawable.wnnot)

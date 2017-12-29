@@ -91,16 +91,7 @@
                 android:gravity="start"
                 android:textSize="22sp" />
 
-            <ImageView
-                android:id="@+id/expand"
-                android:layout_width="17dp"
-                android:layout_height="20dp"
-                android:visibility="invisible"
-                android:alpha="0.5"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@id/city_text"
-                android:src="@drawable/ic_action_collapse"/>
+
 
 
 
@@ -208,6 +199,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:id="@+id/scroll"
+
                    android:visibility="visible"
                    android:scrollbars="none"
                    android:layout_marginTop="10dp"
@@ -496,6 +488,8 @@
                 android:layout_toRightOf="@+id/temperature_text"
                 android:layout_alignLeft="@+id/city_text"
                 android:layout_alignStart="@+id/city_text" />
+
+
 
 
         </RelativeLayout>

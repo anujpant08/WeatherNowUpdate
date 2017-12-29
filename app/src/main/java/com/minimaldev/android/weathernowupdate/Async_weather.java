@@ -176,7 +176,7 @@ public class Async_weather extends AsyncTask<String,Void,String> {
             String u=s+"_960"+f; */
 
             System.out.println(uri);
-            this.DialogWeather.SetWeatherIcon(uri);
+            //this.DialogWeather.SetWeatherIcon(uri);
 
 
 

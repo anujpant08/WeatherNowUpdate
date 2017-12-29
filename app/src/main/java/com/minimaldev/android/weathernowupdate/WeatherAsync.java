@@ -198,7 +198,7 @@ public class WeatherAsync extends AsyncTask <String,Void,String> {
 
             System.out.println(uri);
 
-            this.WeatherActivity.SetWeatherIcon(uri);
+            //this.WeatherActivity.SetWeatherIcon(uri);
 
 
 

@@ -38,7 +38,6 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,7 +76,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         Snackbar snackbar;
         String arr[]=new String[1000];
         String cor_url;
-        //int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
         int hour;
         String apikey="6024521-aa3caf3e11ed4bf5eead80356";
         public boolean flag=false;
@@ -483,52 +482,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 view.setText(fullLocation);
                 view.setTypeface(face);
 
-                /*String filename="WN_FAVPLACES";
-                String text="";
-                int flag=0;
-                int index=0;
-                try {
-                        FileReader fileReader=new FileReader(filename);
-                        BufferedReader br=new BufferedReader(fileReader);
 
-                        while ((text=br.readLine())!=null)
-                        {
-                                array.add(index,text);
-                                index++;
-                        }
-                        text="";
-
-                }
-                catch (java.io.IOException e)
-                {
-                        e.printStackTrace();
-                }
-
-
-                //Iterator<String> itr=arr.iterator();
-                for (int i=0;i<array.size();i++)
-                {
-                        if(fullLocation.equals(array.get(i)) )
-                        {
-                                flag=1;
-                                break;
-                        }
-
-                }
-
-
-
-                if (flag==1)
-                {
-                        imageView.setVisibility(View.VISIBLE);
-                        imageView1.setVisibility(View.INVISIBLE);
-                }
-                else {
-
-                        imageView.setVisibility(View.INVISIBLE);
-                        imageView1.setVisibility(View.VISIBLE);
-                }
-                flag=0;*/
 
         }
 
@@ -545,194 +499,286 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 int hr=Integer.parseInt(a); */
 
         }
-        public void SetWeatherIcon(String id)
+        public void setWeatherIcon(String id)
         {
-                //TextView tv=(TextView)findViewById(R.id.time_text);
-                //tv.setText(timet);
 
-               // ImageView view=(ImageView)this.findViewById(R.id.image_weather);
-
-                //ScrollView sc=(ScrollView) this.findViewById(R.id.second_linear);
 
                 ImageView sc = (ImageView) this.findViewById(R.id.back);
 
-                Glide.with(this)
-                        .load(id)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontTransform()
-                        .centerCrop()
-                        .into(sc);
-
-
-            linearLayout.setVisibility(View.INVISIBLE);
-
-                /*switch (ID)
+                int actualID=Integer.parseInt(id);
+                int ID=actualID/100;
+                switch (ID)
                 {
                         case 2://for thunderstorm
-                                if(hour>=0 && hour<=6) {
-                                        view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        sc.setBackgroundResource(R.drawable.atnightthundermin);
-                                }
-                                else if(hour>6 && hour<=18)
-                                {
-                                        view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        sc.setBackgroundResource(R.drawable.atdaythundermin);
-                                }
-                                else
-                                {
-                                        view.setImageResource(R.drawable.thunderstorm);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        sc.setBackgroundResource(R.drawable.atnightthundermin);
-                                }
 
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("thunder","drawable",this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
+                                        .centerCrop()
+                                        .dontTransform()
+                                        .crossFade()
+                                        .into(sc);
+
+                                linearLayout.setVisibility(View.INVISIBLE);
+                                //view11.setBackgroundResource(R.color.thunder);
 
                                 break;
                         case 3://for drizzle
-                                view.setImageResource(R.drawable.drizzle);
-                                // linear.setImageResource(R.drawable.storm);
-                                sc.setBackgroundResource(R.drawable.atdrizzlemin);
+                                if(hour>=6 && hour <18)
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
+                                else
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
 
-
+                                linearLayout.setVisibility(View.INVISIBLE);
 
                                 break;
                         case 5: //for rain
+                                if(hour>=6 && hour <18)
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
+                                else
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
 
-                                view.setImageResource(R.drawable.rain);
-                                // linear.setImageResource(R.drawable.storm);
-                                sc.setBackgroundResource(R.drawable.atrainmin);
-
-
+                                linearLayout.setVisibility(View.INVISIBLE);
                                 break;
                         case 6: //for snow
 
-                                if(hour>=0 && hour<=6) {
-                                        view.setImageResource(R.drawable.snow);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        sc.setBackgroundResource(R.drawable.atnightsnowmin);
-                                }
-                                else if(hour>6 && hour<=18)
-                                {
-                                        view.setImageResource(R.drawable.snow);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        sc.setBackgroundResource(R.drawable.atsnowmin);
-                                }
-                                else
-                                {
-                                        view.setImageResource(R.drawable.snow);
-                                        // linear.setImageResource(R.drawable.storm);
-                                        sc.setBackgroundResource(R.drawable.atnightsnowmin);
-                                }
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("snowy","drawable",this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
+                                        .centerCrop()
+                                        .dontTransform()
+                                        .crossFade()
+                                        .into(sc);
+
+                                linearLayout.setVisibility(View.INVISIBLE);
 
                                 break;
                         case 7: //for fog
 
-                                view.setImageResource(R.drawable.fog);
-                                // linear.setImageResource(R.drawable.storm);
-                                sc.setBackgroundResource(R.drawable.atfogpotraitmin);
+                                if(hour>=6 && hour <18)
+                                {
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("foggy","drawable",this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
 
+                                        linearLayout.setVisibility(View.INVISIBLE);
+                                }
+                                else {
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
 
+                                        linearLayout.setVisibility(View.INVISIBLE);
+                                }
                                 break;
                         case 8: //for clear and clouds
 
-                                if (actualID == 800) {
+                                if(actualID==800)
+                                {
+                                        //System.out.println(hour);
+                                        //for clear
+                                        //  view1.setImageResource(R.drawable.clear);
+                                        //view11.setBackgroundResource(R.color.clear);
+                                        if(hour>=5 && hour<7) {
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
 
-                                        if(hour>=0 && hour <6)
+                                                linearLayout.setVisibility(View.INVISIBLE);
+                                        }
+                                        else if(hour>=7 && hour<17) {
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("sunnyday", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
+
+                                                linearLayout.setVisibility(View.INVISIBLE);
+                                        }
+                                        else if(hour>=17 && hour<19)
                                         {
-                                                view.setImageResource(R.drawable.moon);
-                                                sc.setBackgroundResource(R.drawable.atnightmin);
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("sunset","drawable",this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
+
+                                                linearLayout.setVisibility(View.INVISIBLE);
                                         }
 
-                                        if(hour>=6 && hour<18) {
-                                                //for clear
-                                                view.setImageResource(R.drawable.clear);
-                                                // linear.setImageResource(R.drawable.clearat_day);
-                                                sc.setBackgroundResource(R.drawable.atdaymin);
+
+
+                                        else {
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("night", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
+
+                                                linearLayout.setVisibility(View.INVISIBLE);
                                         }
-                                        else if(hour>=18 && hour <=24) {
-                                                view.setImageResource(R.drawable.moon);
-                                                sc.setBackgroundResource(R.drawable.atnightmin);
-                                        }
+                                        // linear.setBackgroundResource(R.drawable.at_day);
 
                                 }
-                                if (actualID == 801 || actualID == 802 || actualID == 803) {
+                                if(actualID==801 || actualID==802 || actualID==803)
+                                {
                                         //for scattered clouds
-                                        if(hour>=0 && hour <6)
+                                        //view1.setImageResource(R.drawable.scattered_clouds);
+                                        //view11.setBackgroundResource(R.color.clouds);
+                                        if(hour>=6 && hour <18)
                                         {
-                                                view.setImageResource(R.drawable.scattered_clouds);
-                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
-                                        }
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("cloudy", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
 
-                                        if(hour>=6 && hour<18) {
-                                                //for clear
-                                                view.setImageResource(R.drawable.scattered_clouds);
-                                                // linear.setImageResource(R.drawable.clearat_day);
-                                                sc.setBackgroundResource(R.drawable.atdaycloudsmin);
+                                                linearLayout.setVisibility(View.INVISIBLE);
                                         }
-                                        else if(hour>=18 && hour <=24) {
-                                                view.setImageResource(R.drawable.scattered_clouds);
-                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
-                                        }
+                                        else
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("cloudynight", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
 
+                                        linearLayout.setVisibility(View.INVISIBLE);
+                                        //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                                 }
-                                if (actualID == 804) {
-
-                                        if(hour>=0 && hour <6)
-                                        {
-                                                view.setImageResource(R.drawable.overcast);
-                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
-                                        }
-
-                                        if(hour>=6 && hour<18) {
-                                                //for clear
-                                                view.setImageResource(R.drawable.overcast);
-                                                // linear.setImageResource(R.drawable.clearat_day);
-                                                sc.setBackgroundResource(R.drawable.atdaycloudsmin);
-                                        }
-                                        else if(hour>=18 && hour <=24) {
-                                                view.setImageResource(R.drawable.overcast);
-                                                sc.setBackgroundResource(R.drawable.atcloudsnightmin);
-                                        }
+                                if(actualID==804)
+                                {
                                         //for overcast
+                                        //view1.setImageResource(R.drawable.overcast);
+                                        //view11.setBackgroundResource(R.color.overcast);
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
 
+                                        linearLayout.setVisibility(View.INVISIBLE);
+                                        //linear.setBackgroundResource(R.drawable.overcastat_day);
 
                                 }
                                 break;
                         case 9://for extreme weather
-
                                 if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
-                                        view.setImageResource(R.drawable.tornado);
-                                        //linear.setImageResource(R.drawable.extreme_weather);
-                                        sc.setBackgroundResource(R.drawable.atnightextrememin);
+
+                                        Glide.with(this)
+                                                .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
+                                                //.load("")
+                                                //.error(R.drawable.background_)
+                                                .centerCrop()
+                                                .dontTransform()
+                                                .crossFade()
+                                                .into(sc);
+
+                                        linearLayout.setVisibility(View.INVISIBLE);
+                                        //view1.setImageResource(R.drawable.tornado);
                                 }
                                 else
                                 {
-                                        if(hour>=0 && hour<6)
+                                        if(hour>=6 && hour <18)
                                         {
-                                                view.setImageResource(R.drawable.breeze);
-                                                sc.setBackgroundResource(R.drawable.atbreezenightmin);
-                                        }
-                                        else if(hour>=6 && hour<18) {
-                                                //for clear
-                                                view.setImageResource(R.drawable.breeze);
-                                                sc.setBackgroundResource(R.drawable.atdaybreezemin);
-                                        }
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("foggy", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
 
-                                        if(hour>=18 && hour <=24){
-                                                view.setImageResource(R.drawable.breeze);
-                                                sc.setBackgroundResource(R.drawable.atbreezenightmin);
+                                                linearLayout.setVisibility(View.INVISIBLE);
                                         }
+                                        else
+                                                Glide.with(this)
+                                                        .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                                                        //.load("")
+                                                        //.error(R.drawable.background_)
+                                                        .centerCrop()
+                                                        .dontTransform()
+                                                        .crossFade()
+                                                        .into(sc);
 
+                                        linearLayout.setVisibility(View.INVISIBLE);
+                                        // view1.setImageResource(R.drawable.breeze);
                                 }
+                                // view11.setBackgroundResource(R.color.extreme);
 
+                                //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                                //linear.setBackgroundResource(R.drawable.);
 
                                 break;
 
+                }
 
-                } */
-                //tim="";
+
 
         }
 
@@ -764,7 +810,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                 break;
-                        case 6: //for snow
+                        case 6: //for snowy
 
                                 if(hr >=6 && hr <18)
                                 {
@@ -772,15 +818,15 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 }
                                 else
                                         this.snownight.playAnimation();
-                                //view1.setImageResource(R.drawable.snow);
-                                //view11.setBackgroundResource(R.color.snow);
+                                //view1.setImageResource(R.drawable.snowy);
+                                //view11.setBackgroundResource(R.color.snowy);
 
                                 //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                 break;
-                        case 7: //for fog
-                                //view1.setImageResource(R.drawable.fog);
-                                //view11.setBackgroundResource(R.color.fog);
+                        case 7: //for foggy
+                                //view1.setImageResource(R.drawable.foggy);
+                                //view11.setBackgroundResource(R.color.foggy);
                                 if(hr >=6 && hr <18)
                                 {
                                         this.fogday.playAnimation();
@@ -789,13 +835,13 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         this.fognight.playAnimation();
                                 //linear.setBackgroundResource(R.drawable.fogat_day);
                                 break;
-                        case 8: //for clear and clouds
+                        case 8: //for sunnyday and clouds
 
                                 if(actualID==800)
                                 {
-                                        //for clear
-                                        //  view1.setImageResource(R.drawable.clear);
-                                        //view11.setBackgroundResource(R.color.clear);
+                                        //for sunnyday
+                                        //  view1.setImageResource(R.drawable.sunnyday);
+                                        //view11.setBackgroundResource(R.color.sunnyday);
                                         if(hr >=6 && hr <18)
                                                 this.animationView.playAnimation();
                                         else
@@ -819,9 +865,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 }
                                 if(actualID==804)
                                 {
-                                        //for overcast
-                                        //view1.setImageResource(R.drawable.overcast);
-                                        //view11.setBackgroundResource(R.color.overcast);
+                                        //for overcasttype
+                                        //view1.setImageResource(R.drawable.overcasttype);
+                                        //view11.setBackgroundResource(R.color.overcasttype);
                                         this.overcast.playAnimation();
                                         //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -941,27 +987,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                         break;
-                                case 6: //for snow
+                                case 6: //for snowy
 
                                         view1.setImageResource(R.drawable.snow);
-                                        //view11.setBackgroundResource(R.color.snow);
+                                        //view11.setBackgroundResource(R.color.snowy);
 
                                         //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                         break;
-                                case 7: //for fog
+                                case 7: //for foggy
                                         view1.setImageResource(R.drawable.fog);
-                                        //view11.setBackgroundResource(R.color.fog);
+                                        //view11.setBackgroundResource(R.color.foggy);
 
                                         //linear.setBackgroundResource(R.drawable.fogat_day);
                                         break;
-                                case 8: //for clear and clouds
+                                case 8: //for sunnyday and clouds
 
                                         if(actualID==800)
                                         {
-                                                //for clear
+                                                //for sunnyday
                                                 view1.setImageResource(R.drawable.clear);
-                                                //view11.setBackgroundResource(R.color.clear);
+                                                //view11.setBackgroundResource(R.color.sunnyday);
 
                                                 // linear.setBackgroundResource(R.drawable.clearat_day);
 
@@ -977,9 +1023,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         if(actualID==804)
                                         {
-                                                //for overcast
+                                                //for overcasttype
                                                 view1.setImageResource(R.drawable.overcast);
-                                                //view11.setBackgroundResource(R.color.overcast);
+                                                //view11.setBackgroundResource(R.color.overcasttype);
 
                                                 //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -1028,27 +1074,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                         break;
-                                case 6: //for snow
+                                case 6: //for snowy
 
                                         view2.setImageResource(R.drawable.snow);
-                                        //view22.setBackgroundResource(R.color.snow);
+                                        //view22.setBackgroundResource(R.color.snowy);
 
                                         //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                         break;
-                                case 7: //for fog
+                                case 7: //for foggy
                                         view2.setImageResource(R.drawable.fog);
-                                        //view22.setBackgroundResource(R.color.fog);
+                                        //view22.setBackgroundResource(R.color.foggy);
 
                                         //linear.setBackgroundResource(R.drawable.fogat_day);
                                         break;
-                                case 8: //for clear and clouds
+                                case 8: //for sunnyday and clouds
 
                                         if(actualID==800)
                                         {
-                                                //for clear
+                                                //for sunnyday
                                                 view2.setImageResource(R.drawable.clear);
-                                                //view22.setBackgroundResource(R.color.clear);
+                                                //view22.setBackgroundResource(R.color.sunnyday);
 
                                                 // linear.setBackgroundResource(R.drawable.clearat_day);
 
@@ -1064,9 +1110,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         if(actualID==804)
                                         {
-                                                //for overcast
+                                                //for overcasttype
                                                 view2.setImageResource(R.drawable.overcast);
-                                                //view22.setBackgroundResource(R.color.overcast);
+                                                //view22.setBackgroundResource(R.color.overcasttype);
 
                                                 //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -1115,27 +1161,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                         break;
-                                case 6: //for snow
+                                case 6: //for snowy
 
                                         view3.setImageResource(R.drawable.snow);
-                                        // view33.setBackgroundResource(R.color.snow);
+                                        // view33.setBackgroundResource(R.color.snowy);
 
                                         //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                         break;
-                                case 7: //for fog
+                                case 7: //for foggy
                                         view3.setImageResource(R.drawable.fog);
-                                        //view33.setBackgroundResource(R.color.fog);
+                                        //view33.setBackgroundResource(R.color.foggy);
 
                                         //linear.setBackgroundResource(R.drawable.fogat_day);
                                         break;
-                                case 8: //for clear and clouds
+                                case 8: //for sunnyday and clouds
 
                                         if(actualID==800)
                                         {
-                                                //for clear
+                                                //for sunnyday
                                                 view3.setImageResource(R.drawable.clear);
-                                                // view33.setBackgroundResource(R.color.clear);
+                                                // view33.setBackgroundResource(R.color.sunnyday);
 
                                                 // linear.setBackgroundResource(R.drawable.clearat_day);
 
@@ -1151,9 +1197,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         if(actualID==804)
                                         {
-                                                //for overcast
+                                                //for overcasttype
                                                 view3.setImageResource(R.drawable.overcast);
-                                                //view33.setBackgroundResource(R.color.overcast);
+                                                //view33.setBackgroundResource(R.color.overcasttype);
 
                                                 //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -1202,27 +1248,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                         break;
-                                case 6: //for snow
+                                case 6: //for snowy
 
                                         view4.setImageResource(R.drawable.snow);
-                                        //iew44.setBackgroundResource(R.color.snow);
+                                        //iew44.setBackgroundResource(R.color.snowy);
 
                                         //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                         break;
-                                case 7: //for fog
+                                case 7: //for foggy
                                         view4.setImageResource(R.drawable.fog);
-                                        //view44.setBackgroundResource(R.color.fog);
+                                        //view44.setBackgroundResource(R.color.foggy);
 
                                         //linear.setBackgroundResource(R.drawable.fogat_day);
                                         break;
-                                case 8: //for clear and clouds
+                                case 8: //for sunnyday and clouds
 
                                         if(actualID==800)
                                         {
-                                                //for clear
+                                                //for sunnyday
                                                 view4.setImageResource(R.drawable.clear);
-                                                //view44.setBackgroundResource(R.color.clear);
+                                                //view44.setBackgroundResource(R.color.sunnyday);
 
                                                 // linear.setBackgroundResource(R.drawable.clearat_day);
 
@@ -1238,9 +1284,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         if(actualID==804)
                                         {
-                                                //for overcast
+                                                //for overcasttype
                                                 view4.setImageResource(R.drawable.overcast);
-                                                //view44.setBackgroundResource(R.color.overcast);
+                                                //view44.setBackgroundResource(R.color.overcasttype);
 
                                                 //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -1289,27 +1335,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                         break;
-                                case 6: //for snow
+                                case 6: //for snowy
 
                                         view5.setImageResource(R.drawable.snow);
-                                        //view55.setBackgroundResource(R.color.snow);
+                                        //view55.setBackgroundResource(R.color.snowy);
 
                                         //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                         break;
-                                case 7: //for fog
+                                case 7: //for foggy
                                         view5.setImageResource(R.drawable.fog);
-                                        //view55.setBackgroundResource(R.color.fog);
+                                        //view55.setBackgroundResource(R.color.foggy);
 
                                         //linear.setBackgroundResource(R.drawable.fogat_day);
                                         break;
-                                case 8: //for clear and clouds
+                                case 8: //for sunnyday and clouds
 
                                         if(actualID==800)
                                         {
-                                                //for clear
+                                                //for sunnyday
                                                 view5.setImageResource(R.drawable.clear);
-                                                //view55.setBackgroundResource(R.color.clear);
+                                                //view55.setBackgroundResource(R.color.sunnyday);
 
                                                 // linear.setBackgroundResource(R.drawable.clearat_day);
 
@@ -1325,9 +1371,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         if(actualID==804)
                                         {
-                                                //for overcast
+                                                //for overcasttype
                                                 view5.setImageResource(R.drawable.overcast);
-                                                //view55.setBackgroundResource(R.color.overcast);
+                                                //view55.setBackgroundResource(R.color.overcasttype);
 
                                                 //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -1376,27 +1422,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         //linear.setBackgroundResource(R.drawable.rainat_night);
 
                                         break;
-                                case 6: //for snow
+                                case 6: //for snowy
 
                                         view6.setImageResource(R.drawable.snow);
-                                        //view66.setBackgroundResource(R.color.snow);
+                                        //view66.setBackgroundResource(R.color.snowy);
 
                                         //linear.setBackgroundResource(R.drawable.snowat_night);
 
                                         break;
-                                case 7: //for fog
+                                case 7: //for foggy
                                         view6.setImageResource(R.drawable.fog);
-                                        //view66.setBackgroundResource(R.color.fog);
+                                        //view66.setBackgroundResource(R.color.foggy);
 
                                         //linear.setBackgroundResource(R.drawable.fogat_day);
                                         break;
-                                case 8: //for clear and clouds
+                                case 8: //for sunnyday and clouds
 
                                         if(actualID==800)
                                         {
-                                                //for clear
+                                                //for sunnyday
                                                 view6.setImageResource(R.drawable.clear);
-                                                //view66.setBackgroundResource(R.color.clear);
+                                                //view66.setBackgroundResource(R.color.sunnyday);
 
                                                 // linear.setBackgroundResource(R.drawable.clearat_day);
 
@@ -1412,9 +1458,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         if(actualID==804)
                                         {
-                                                //for overcast
+                                                //for overcasttype
                                                 view6.setImageResource(R.drawable.overcast);
-                                                // view66.setBackgroundResource(R.color.overcast);
+                                                // view66.setBackgroundResource(R.color.overcasttype);
 
                                                 //linear.setBackgroundResource(R.drawable.overcastat_day);
 
@@ -1671,9 +1717,12 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 //this.DialogWeather.SetHumidity(humidity);
                                 this.DialogWeather.SetLocation(locate,cntry);
                                 this.DialogWeather.SetTime(id);
-                                //this.DialogWeather.time(dateTime);
                                 this.DialogWeather.setcor(lat,lon);
+                                this.DialogWeather.setWeatherIcon(id);
+                                //this.DialogWeather.time(dateTime);
+
                                 DialogWeather.weatherid=id;
+
                                 //this.DialogWeather.setanimation(id);
 
 
