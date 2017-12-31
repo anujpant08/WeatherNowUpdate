@@ -25,7 +25,7 @@
         <item name="android:windowActionBarOverlay">@null</item>
 
     </style>
-    <style name="SettingsTheme" parent="Theme.AppCompat">
+    <style name="SettingsTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#fd5e53</item>
         <item name="colorAccent">#fd5e53</item>
         <item name="colorPrimaryDark">#fd5e53</item>
