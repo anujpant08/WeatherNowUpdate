@@ -246,14 +246,13 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 return hasSoftwareKeys;
         }
 
-        public void setcor(String la, String lo)
+        public void setcor(String la, String lo, String id)
         {
                 lat=Double.parseDouble(la);
                 lon=Double.parseDouble(lo);
                 String add="http://api.timezonedb.com/v2/get-time-zone?key=WM0USFMFHGKX&format=json&by=position&lat="+la+"&lng="+lo;
                 Async_timezone task1=new Async_timezone(this,add);
                 task1.execute(add);
-
 
         }
 
@@ -275,6 +274,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 int actualID=Integer.parseInt(wid);
                 int ID=actualID/100;
 
+                setWeatherIcon(weatherid);
                 setanimation(weatherid, hour);
 
                 linearLayout.setVisibility(View.INVISIBLE);
@@ -568,7 +568,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 if(hour>=6 && hour <18)
                                 {
                                         Glide.with(this)
-                                                .load(this.getResources().getIdentifier("foggy","drawable",this.getPackageName()))
+                                                .load(this.getResources().getIdentifier("dayfog","drawable",this.getPackageName()))
                                                 //.load("")
                                                 //.error(R.drawable.background_)
                                                 .centerCrop()
@@ -580,7 +580,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 }
                                 else {
                                         Glide.with(this)
-                                                .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                                                .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
                                                 //.load("")
                                                 //.error(R.drawable.background_)
                                                 .centerCrop()
@@ -613,7 +613,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         else if(hour>=7 && hour<17) {
                                                 Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("sunnyday", "drawable", this.getPackageName()))
+                                                        .load(this.getResources().getIdentifier("sunday", "drawable", this.getPackageName()))
                                                         //.load("")
                                                         //.error(R.drawable.background_)
                                                         .centerCrop()
@@ -674,7 +674,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         else
                                                 Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("cloudynight", "drawable", this.getPackageName()))
+                                                        .load(this.getResources().getIdentifier("nightcloud", "drawable", this.getPackageName()))
                                                         //.load("")
                                                         //.error(R.drawable.background_)
                                                         .centerCrop()
@@ -725,7 +725,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         if(hour>=6 && hour <18)
                                         {
                                                 Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("foggy", "drawable", this.getPackageName()))
+                                                        .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
                                                         //.load("")
                                                         //.error(R.drawable.background_)
                                                         .centerCrop()
@@ -737,7 +737,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         }
                                         else
                                                 Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                                                        .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
                                                         //.load("")
                                                         //.error(R.drawable.background_)
                                                         .centerCrop()
@@ -1697,8 +1697,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 //this.DialogWeather.SetHumidity(humidity);
                                 this.DialogWeather.SetLocation(locate,cntry);
                                 this.DialogWeather.SetTime(id);
-                                this.DialogWeather.setcor(lat,lon);
-                                this.DialogWeather.setWeatherIcon(id);
+                                this.DialogWeather.setcor(lat,lon, id);
+                                //this.DialogWeather.setWeatherIcon(id);
                                 //this.DialogWeather.time(dateTime);
 
                                 DialogWeather.weatherid=id;

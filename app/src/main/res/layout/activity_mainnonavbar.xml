@@ -621,7 +621,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="cloudy.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 
@@ -630,7 +630,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="cloudymoon.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 
@@ -638,7 +638,7 @@
             android:id="@+id/fogday_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="fogday.json"
             android:layout_centerInParent="true"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
@@ -648,7 +648,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="fognight.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 
@@ -658,7 +658,7 @@
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             app:lottie_autoPlay="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="overcast.json"
             app:lottie_loop="false" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -666,7 +666,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="rainy.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 
@@ -675,7 +675,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="snowday.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 
@@ -684,7 +684,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="snownight.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 
@@ -694,7 +694,7 @@
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             android:scaleType="center"
-            app:lottie_fileName="moon.json"
+            app:lottie_fileName="thunder.json"
             app:lottie_loop="false"
             app:lottie_autoPlay="true" />
 

@@ -973,7 +973,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 if(hour>=6 && hour <18)
                 {
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("foggy","drawable",this.getPackageName()))
+                            .load(this.getResources().getIdentifier("dayfog","drawable",this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -985,7 +985,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 }
                 else {
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1018,7 +1018,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     else if(hour>=7 && hour<17) {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("sunnyday", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("sunday", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1079,7 +1079,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     else
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("cloudynight", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("nightcloud", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1130,7 +1130,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     if(hour>=6 && hour <18)
                     {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("foggy", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1142,7 +1142,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     else
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("fognight", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1268,7 +1268,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     this.thunder.playAnimation();
                     //view1.setImageResource(R.drawable.tornado);
                 }
-                else
+                else //for breeze
                 {
                     if(hour>=6 && hour <18)
                     {
