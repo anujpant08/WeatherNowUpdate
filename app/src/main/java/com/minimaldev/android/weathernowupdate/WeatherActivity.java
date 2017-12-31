@@ -1153,11 +1153,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     llayout.setVisibility(View.INVISIBLE);
                     // view1.setImageResource(R.drawable.breeze);
                 }
-                // view11.setBackgroundResource(R.color.extreme);
 
-                //linear.setBackgroundResource(R.drawable.extreme_weather);
-
-                //linear.setBackgroundResource(R.drawable.);
 
                 break;
 
@@ -1204,15 +1200,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 }
                 else
                     this.snownight.playAnimation();
-                //view1.setImageResource(R.drawable.snow);
-                //view11.setBackgroundResource(R.color.snow);
 
-                //linear.setBackgroundResource(R.drawable.snowat_night);
 
                 break;
             case 7: //for fog
-                //view1.setImageResource(R.drawable.fog);
-                //view11.setBackgroundResource(R.color.fog);
+
                 if(hour>=6 && hour <18)
                 {
                     this.fogday.playAnimation();

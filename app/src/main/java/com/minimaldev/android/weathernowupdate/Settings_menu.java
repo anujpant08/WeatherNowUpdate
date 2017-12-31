@@ -45,7 +45,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setTitle("Settings");
-        //checkValues();
+
 
          des=getIntent().getStringExtra("DES");
          loc=getIntent().getStringExtra("LOC");
