@@ -42,4 +42,15 @@
 
     </style>
 
+    <style
+        parent="Theme.AppCompat"
+        name="SettingsActivity">
+
+        <item name="android:background">#FF303030</item>
+        <item name="android:textAppearance">@color/Magenta</item>
+        <item name="colorAccent">@color/Magenta</item>
+        <item name="colorPrimary">@color/Magenta</item>
+
+    </style>
+
 </resources>

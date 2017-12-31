@@ -76,7 +76,9 @@ public  class DisplayFav extends AppCompatActivity {
 
     public void  perform() {
         setContentView(R.layout.fav_display);
-        getSupportActionBar().setElevation(0);
+
+        //getSupportActionBar().setElevation(0);
+
         snackbar = Snackbar.make(findViewById(R.id.coor), "Item removed", Snackbar.LENGTH_LONG);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.thunder));
         TextView textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -188,56 +190,10 @@ public  class DisplayFav extends AppCompatActivity {
         });
     }
 
-      /*  listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                String str = array_list.get(position);
-
-                array_list.remove(position);
-                adapter.notifyDataSetChanged();
-                int pos = 0;
-                try {
-                    FileOutputStream fileOutputStream;
-                    fileOutputStream = openFileOutput(filename, 0);
-                    fileOutputStream.write(n.getBytes());
-                    fileOutputStream.close();
-
-                    fileOutputStream = openFileOutput(filename, 0);
-                    while (pos < array_list.size()) {
-                        String newline = array_list.get(pos) + "\n";
-                        fileOutputStream.write(newline.getBytes());
-                        pos++;
-
-                    }
-
-                    pos = 0;
-
-                    fileOutputStream.close();
-
-                } catch (java.io.IOException e) {
-                    e.printStackTrace();
-                }
-
-                return true;
-
-            }
-
-
-        });
-
-
-
-    } */
-
-   /* public void action(String str) {
-
-        Toast.makeText(this, str+" removed from favorites !", Toast.LENGTH_SHORT).show();
-
-
-    } */
+    public void goback(View view)
+    {
+        finish();
+    }
 
 
     private void slideInView(View view) {

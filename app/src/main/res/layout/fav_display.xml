@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/coor"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,24 +7,51 @@
     android:layout_width="match_parent"
     >
 
+    <RelativeLayout
+        android:id="@+id/toolbarfav"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/Magenta">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:layout_marginStart="72dp"
+            android:text="Favorites"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:layout_marginTop="12dp"/>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_action_back"
+            android:onClick="goback"/>
+
+    </RelativeLayout>
+
 <LinearLayout
     android:id="@+id/layoutfav"
-
+    android:layout_below="@id/toolbarfav"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayFav"
-    android:background="#FFFFFF">
+    tools:context=".DisplayFav">
 
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#f7f7f7"
+        android:divider="#00000000"
         android:dividerHeight="1dp">
 
     </ListView>
 
 </LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -31,7 +32,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
     String des,loc,id;
     double temp;
 
-
+    Toolbar toolbar;
     int color=0xFF212121;
     Settings_menu settings_menu;
     NotificationManager mNotificationManager;
@@ -43,10 +44,8 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setTitle("Settings");
         //checkValues();
-
-
-
 
          des=getIntent().getStringExtra("DES");
          loc=getIntent().getStringExtra("LOC");
