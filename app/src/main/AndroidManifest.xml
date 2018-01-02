@@ -112,20 +112,6 @@
         </activity>
 
 
-
-        <!--<activity android:name=".FavActivity"
-            android:parentActivityName=".WeatherActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/SettingsTheme">
-
-            <intent-filter>
-                <action android:name="android.intent.action.DEFAULT"></action>
-            </intent-filter>
-        </activity> -->
-
-
-
     </application>
 
 </manifest>

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/coormain"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
 
-<RelativeLayout
-    android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/relativeBack"
-    android:background="#000000">
+    android:background="#000000"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <ImageView
@@ -595,7 +591,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/progress"
+        android:layout_above="@id/progresslayout"
         android:layout_marginTop="100dp">
 
         <com.airbnb.lottie.LottieAnimationView
@@ -699,13 +695,6 @@
             app:lottie_autoPlay="true" />
 
     </RelativeLayout>
-
-
-
-
-
-
-</RelativeLayout>
 
 
 
