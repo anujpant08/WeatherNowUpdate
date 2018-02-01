@@ -1,17 +1,20 @@
 package com.minimaldev.android.weathernowupdate;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +39,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
     int color=0xFF212121;
     Settings_menu settings_menu;
     NotificationManager mNotificationManager;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +86,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
@@ -113,108 +118,67 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
             String formatTemp = df.format(temp);
             formatTemp=formatTemp+"\u2103";
             des=des.toUpperCase();
+            NotificationChannel notificationChannel=new NotificationChannel("channel","WeatherNow",NotificationManager.IMPORTANCE_DEFAULT);
             switch (ID) {
                 case 2://for thunderstorm
 
-                        NotificationCompat.Builder mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp + " " + loc)
-                                        .setContentText(des)
-                                        .setContentIntent(pendingIntent)
-                                        .setOngoing(true)
-                                        ;
-
-
-                        mNotificationManager.notify(1, mBuilder.build());
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
 
 
 
                     break;
                 case 3://for drizzle
-                     mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+loc)
-                                    .setContentText(des)
-                                    .setContentIntent(pendingIntent)
-
-                                    .setOngoing(true);
-
-
-                    mNotificationManager.notify(1, mBuilder.build());
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
                     break;
                 case 5: //for rain
-                    mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+loc)
-                                    .setContentText(des)
-                                    .setContentIntent(pendingIntent)
-
-                                    .setOngoing(true);
-
-
-                    mNotificationManager.notify(1, mBuilder.build());
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
                     break;
                 case 6: //for snowy
 
-                    mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+loc)
-                                    .setContentText(des)
-                                    .setContentIntent(pendingIntent)
-
-                                    .setOngoing(true);
-
-
-                    mNotificationManager.notify(1, mBuilder.build());
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
 
                     break;
                 case 7: //for foggy
-                    mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+loc)
-                                    .setContentText(des)
-                                    .setContentIntent(pendingIntent)
-
-                                    .setOngoing(true);
-
-
-                    mNotificationManager.notify(1, mBuilder.build());
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
                     break;
                 case 8: //for sunnyday and clouds
 
                     if (actualID == 800) {
                         if(hour>=6 && hour<18) {
 
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + loc)
-                                            .setContentText(des)
-                                            .setContentIntent(pendingIntent)
-
-                                            .setOngoing(true);
-
-
-                            mNotificationManager.notify(1, mBuilder.build());
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
                         }
                         else
                         {
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + loc)
-                                            .setContentText(des)
-                                            .setContentIntent(pendingIntent)
-
-                                            .setOngoing(true);
-
-
-                            mNotificationManager.notify(1, mBuilder.build());
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
                         }
 
                     }
@@ -222,80 +186,49 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
                         //for scattered clouds
                         if(hour>=6 && hour<=18) {
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + loc)
-                                            .setContentText(des)
-                                            .setContentIntent(pendingIntent)
-
-                                            .setOngoing(true);
-
-
-                            mNotificationManager.notify(1, mBuilder.build());
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
                         }
                         else {
 
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + loc)
-                                            .setContentText(des)
-                                            .setContentIntent(pendingIntent)
-
-                                            .setOngoing(true);
-
-
-                            mNotificationManager.notify(1, mBuilder.build());
-
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
 
                         }
 
                     }
                     if (actualID == 804) {
                         //for overcasttype
-                        mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp+" "+loc)
-                                        .setContentText(des)
-                                        .setContentIntent(pendingIntent)
-
-                                        .setOngoing(true);
-
-
-                        mNotificationManager.notify(1, mBuilder.build());
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
 
                     }
                     break;
                 case 9://for extreme weather
 
                     if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
-                        mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp+" "+loc)
-                                        .setContentText(des)
-                                        .setContentIntent(pendingIntent)
-                                        .setColor(color)
-                                        .setOngoing(true);
-
-
-                        mNotificationManager.notify(1, mBuilder.build());
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
                     }
                     else
                     {
-                        mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp+" "+loc)
-                                        .setContentText(des)
-                                        .setContentIntent(pendingIntent)
-                                        .setColor(color)
-                                        .setOngoing(true);
-
-
-                        mNotificationManager.notify(1, mBuilder.build());
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
 
                     }
 
@@ -328,7 +261,8 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         }
     }
 
-    public void checkValues(String d,double t,String l, String iid)
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void checkValues(String d, double t, String l, String iid)
     {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Boolean update = sharedPrefs.getBoolean("checkBox",false);
@@ -358,106 +292,76 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
             int actualID = Integer.parseInt(iid);
             int ID = actualID / 100;
+            NotificationChannel notificationChannel=new NotificationChannel("channel2","WeatherNow",NotificationManager.IMPORTANCE_DEFAULT);
+
             switch (ID) {
+
 
                 case 2://for thunderstorm
 
-                        NotificationCompat.Builder mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp + " " + l)
-                                        .setContentText(d)
-                                        .setContentIntent(pendingIntent)
-                                        .setOngoing(true);
-                                        //.setColor(color);
-
-
-                        mNotificationManager.notify(1, mBuilder.build());
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
 
 
 
                     break;
                 case 3://for drizzle
-                     mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+l)
-                                    .setContentText(d)
-                                    .setContentIntent(pendingIntent)
-                                    .setOngoing(true)
-                                    ;
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                    mNotificationManager.notify(1, mBuilder.build());
                     break;
                 case 5: //for rain
-                    mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+l)
-                                    .setContentText(d)
-                                    .setContentIntent(pendingIntent)
-                                    .setOngoing(true)
-                                    ;
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                    mNotificationManager.notify(1, mBuilder.build());
                     break;
                 case 6: //for snowy
 
-                    mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+l)
-                                    .setContentText(d)
-                                    .setContentIntent(pendingIntent)
-                                    .setOngoing(true)
-                                    ;
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
 
-                    mNotificationManager.notify(1, mBuilder.build());
 
                     break;
                 case 7: //for foggy
-                    mBuilder =
-                            (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                    .setSmallIcon(R.drawable.wnnot)
-                                    .setContentTitle(formatTemp+" "+l)
-                                    .setContentText(d)
-                                    .setContentIntent(pendingIntent)
-                                    .setOngoing(true);
+                    notificationChannel.setDescription(des);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    mNotificationManager.createNotificationChannel(notificationChannel);
 
-                    mNotificationManager.notify(1, mBuilder.build());
                     break;
                 case 8: //for sunnyday and clouds
 
                     if (actualID == 800) {
                         if(hour>=6 && hour<18) {
 
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + l)
-                                            .setContentText(d)
-                                            .setContentIntent(pendingIntent)
-                                            .setOngoing(true)
-                                            ;
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                            mNotificationManager.notify(1, mBuilder.build());
                         }
                         else
                         {
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + l)
-                                            .setContentText(d)
-                                            .setContentIntent(pendingIntent)
-                                            .setOngoing(true)
-                                            ;
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                            mNotificationManager.notify(1, mBuilder.build());
                         }
 
                     }
@@ -467,79 +371,52 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
                         //for scattered clouds
                         if(hour>=6 && hour<=18) {
 
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
 
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + l)
-                                            .setContentText(d)
-                                            .setContentIntent(pendingIntent)
-                                            .setOngoing(true)
-                                            ;
-
-
-                            mNotificationManager.notify(1, mBuilder.build());
                         }
                         else {
 
-                            mBuilder =
-                                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                            .setSmallIcon(R.drawable.wnnot)
-                                            .setContentTitle(formatTemp + " " + l)
-                                            .setContentText(d)
-                                            .setContentIntent(pendingIntent)
-                                            .setOngoing(true)
-                                            ;
+                            notificationChannel.setDescription(des);
+                            notificationChannel.enableLights(true);
+                            notificationChannel.setLightColor(Color.RED);
+                            notificationChannel.enableVibration(true);
+                            mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                            mNotificationManager.notify(1, mBuilder.build());
                         }
 
                     }
                     if (actualID == 804) {
                         //for overcasttype
-                        mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp+" "+l)
-                                        .setContentText(d)
-                                        .setContentIntent(pendingIntent)
-                                        .setOngoing(true)
-                                        ;
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                        mNotificationManager.notify(1, mBuilder.build());
 
                     }
                     break;
                 case 9://for extreme weather
 
                     if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
-                        mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp+" "+l)
-                                        .setContentText(d)
-                                        .setContentIntent(pendingIntent)
-                                        .setOngoing(true)
-                                        ;
-
-
-                        mNotificationManager.notify(1, mBuilder.build());
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
                     }
                     else
                     {
-                        mBuilder =
-                                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                                        .setSmallIcon(R.drawable.wnnot)
-                                        .setContentTitle(formatTemp+" "+l)
-                                        .setContentText(d)
-                                        .setContentIntent(pendingIntent)
-                                        .setOngoing(true)
-                                        ;
+                        notificationChannel.setDescription(des);
+                        notificationChannel.enableLights(true);
+                        notificationChannel.setLightColor(Color.RED);
+                        notificationChannel.enableVibration(true);
+                        mNotificationManager.createNotificationChannel(notificationChannel);
 
-
-                        mNotificationManager.notify(1, mBuilder.build());
 
                     }
 
