@@ -135,8 +135,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-        shown=false;
+
 
         hasNavBar();
 
@@ -153,6 +152,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             setContentView(R.layout.activity_mainnonavbar);
 
         }
+
+        boolean enabled = locationEnabled();
+
+        lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        shown=false;
 
         snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
         snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
@@ -222,7 +226,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
         });
 
-        boolean enabled = locationEnabled();
+
 
 
         if (!enabled) {
@@ -504,20 +508,32 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        if(locationEnabled())
+        {
+            buildGoogleApiClient();
+            createLocationRequest();
+            mGoogleApiClient.connect();
+
+        }
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if(locationEnabled())
+        {
+            buildGoogleApiClient();
+            createLocationRequest();
+            mGoogleApiClient.connect();
 
-        mGoogleApiClient.connect();
+        }
 
     }
 
     protected void onStop() {
         super.onStop();
+        if(locationEnabled())
         if (mGoogleApiClient.isConnected())
             mGoogleApiClient.disconnect();
         //lm.removeUpdates(locationListener);
@@ -614,7 +630,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             RetrieveForecast(la, lo);
 
             shown=true;
-            lm.removeUpdates(locationListener);
+
 
 
             //lm=null;
@@ -2274,6 +2290,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 this.WeatherActivity.setWeatherIcon(id);
                 this.WeatherActivity.setanimation(id);
             this.WeatherActivity.sendNotification(description,temperature,locate,id);
+                WeatherActivity.this.lm.removeUpdates(locationListener);
 
             }
             catch (JSONException e) {
