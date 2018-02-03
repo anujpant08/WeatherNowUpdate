@@ -117,7 +117,7 @@ public class ForecastDialogAsync extends AsyncTask<String,Void,String> {
             double high=Double.parseDouble(hhl);
             this.Dialog_weather.setHi(high);
             this.Dialog_weather.setLo(low);
-
+            Dialog_weather.shown=true;
 
 
 // set all the fields in the activity from the parsed JSON

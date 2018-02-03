@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -60,8 +61,14 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,6 +116,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private static final String TAG = WeatherActivity.class.getSimpleName();
     int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
     private static final int RESULT_SETTINGS = 1;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    LocationRequest locationRequest;
+    LocationCallback locationCallback;
     int count = 0;
     int indexed = 0;
     SharedPreferences sharedPreferences;
@@ -136,7 +146,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         super.onCreate(savedInstanceState);
 
 
-
         hasNavBar();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -156,7 +165,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         boolean enabled = locationEnabled();
 
         lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-        shown=false;
+        shown = false;
 
         snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
         snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
@@ -227,17 +236,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         });
 
 
-
-
         if (!enabled) {
 
             snackbar.show();
-        }
-        else if(!isNetworkAvailable())
-        {
+        } else if (!isNetworkAvailable()) {
             snackbarnetwork.show();
-        }
-        else
+        } else
             showweather();
 
 
@@ -306,8 +310,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         thunder.loop(false);
 
 
-
-
         llayout = (RelativeLayout) findViewById(R.id.progresslayout);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
         llayout.setVisibility(View.VISIBLE);
@@ -355,9 +357,18 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                             // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
-                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                        displayLocation();
+                        showweather();
+                        final Handler handler=new Handler();
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(!shown)
+                                    Toast.makeText(WeatherActivity.this,"Network Error! PLease swipe down to Refresh.",Toast.LENGTH_LONG).show();
+                            }
+                        },15000);
+
+
                     }
 
 
@@ -386,8 +397,23 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     }
 
     public void showweather() {
-        buildGoogleApiClient();
-        createLocationRequest();
+
+
+        locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(120000);
+        //locationRequest.setFastestInterval(2000);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(locationRequest);
+
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -397,12 +423,72 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            Toast.makeText(this, "Permission not granted!", Toast.LENGTH_LONG).show();
             return;
         }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+        //fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                if(location!=null)
+                {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    la = Double.toString(latitude);
+                    lo = Double.toString(longitude);
+
+                    RetrieveWeather(la, lo, "a");
+                    RetrieveForecast(la, lo);
+
+                    shown=true;
+                }
+                else
+                    Toast.makeText(WeatherActivity.this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, new LocationCallback(){
+            @Override
+            public void onLocationResult(LocationResult locationResult)
+            {
+                onLocationChanged(locationResult.getLastLocation());
+            }
+        }, Looper.myLooper());
+
+
+        locationCallback=new LocationCallback(){
+            @Override
+            public void onLocationResult(LocationResult locationResult)
+            {
+                for(Location location:locationResult.getLocations())
+                {
+                    if(location!=null)
+                    {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        la = Double.toString(latitude);
+                        lo = Double.toString(longitude);
+
+
+                        RetrieveWeather(la, lo, "a");
+                        RetrieveForecast(la, lo);
+
+                        shown=true;
+                    }
+                    else
+                        Toast.makeText(WeatherActivity.this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        //lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+
 
         final Handler handler=new Handler();
 
@@ -413,7 +499,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 Toast.makeText(WeatherActivity.this,"Network Error! PLease swipe down to Refresh.",Toast.LENGTH_LONG).show();
             }
         },15000);
-        displayLocation();
+
 
 
     }
@@ -534,12 +620,23 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     protected void onStop() {
         super.onStop();
         if(locationEnabled())
-        if (mGoogleApiClient.isConnected())
-            mGoogleApiClient.disconnect();
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         //lm.removeUpdates(locationListener);
         //swipeRefreshLayout.setEnabled(false);
+        if(swipeRefreshLayout.isRefreshing())
         swipeRefreshLayout.setRefreshing(false);
 
+
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if(locationEnabled())
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        if(swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.setRefreshing(false);
 
     }
 
@@ -612,43 +709,29 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             return;
         }
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        if (mLastLocation != null) {
-            latitude = mLastLocation.getLatitude();
-            longitude = mLastLocation.getLongitude();
-            la = Double.toString(latitude);
-            lo = Double.toString(longitude);
-
-            sharedPreferences=this.getSharedPreferences("location",MODE_PRIVATE);
-            SharedPreferences.Editor editor=sharedPreferences.edit();
-            editor.putString("lati",la);
-            editor.putString("long",lo);
-            editor.apply();
-
-            RetrieveWeather(la, lo, "a");
-            RetrieveForecast(la, lo);
-
-            shown=true;
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location!=null)
+                {
 
 
+                }
+                else
+                    Toast.makeText(WeatherActivity.this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+            }
+        });
 
-            //lm=null;
-            //swipeRefreshLayout.setRefreshing(false);
 
-        } //else {
-
-        //Toast.makeText(getApplicationContext(), "Couldn't get the location. Make sure location is enabled on the device)", Toast.LENGTH_SHORT).show();
-        //}
     }
 
-    LocationListener locationListener = new LocationListener() {
+    /*LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
 
             mCurrentLocation = location;
 
-            /*LayoutInflater inflater=getLayoutInflater();
+            LayoutInflater inflater=getLayoutInflater();
             View layout=inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toast_layout));
             TextView text=(TextView)layout.findViewById(R.id.text_toast);
             text.setText("Location changed!");
@@ -657,7 +740,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             toast.setGravity(Gravity.BOTTOM|Gravity.CENTER,0,80);
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout);
-            toast.show(); */
+            toast.show();
 
 
             // Displaying the new location on UI
@@ -687,7 +770,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     };
 
 
-    /*public void onLocationChanged(Location location)
+    public void onLocationChanged(Location location)
     {
         latitude = location.getLatitude();
         longitude =location.getLongitude();
@@ -727,6 +810,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         url = "http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + lat + "&lon=" + lon + "&appid=bcc6f8e44743e316e5120301ff1a5ad4";
         ForecastAsync task = new ForecastAsync(this, url);
         task.execute(url);
+
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
 
 
     }
@@ -2084,27 +2169,28 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     }
 
-    public void setHi(double h)
+    public void setHi(double high)
     {
         Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
-        double max=h-273;
+        double max=high-273;
         DecimalFormat df=new DecimalFormat("###.#");
         String formatTempMin=df.format(max);
         TextView textView=(TextView)findViewById(R.id.hi);
-        textView.setText(formatTempMin+"\u2103"+" / ");
+        textView.setText("Day "+formatTempMin+" \u2103"+"  ");
         textView.setTypeface(face);
 
     }
 
-    public void setLo(double l)
+    public void setLo(double low)
     {
         Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
-        double min=l-273;
+        double min=low-273;
         DecimalFormat df=new DecimalFormat("###.#");
         String formatTempMin=df.format(min);
         TextView textView=(TextView)findViewById(R.id.lo);
-        textView.setText(formatTempMin+"\u2103");
+        textView.setText("Night "+formatTempMin+" \u2103");
         textView.setTypeface(face);
+
 
 
         if (swipeRefreshLayout.isEnabled()) {
@@ -2135,6 +2221,27 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     @Override
     public void onLocationChanged(Location location) {
+
+        if(location!=null)
+        {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            la = Double.toString(latitude);
+            lo = Double.toString(longitude);
+
+                    /*sharedPreferences=this.getSharedPreferences("location",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("lati",la);
+                    editor.putString("long",lo);
+                    editor.apply(); */
+
+
+        }
+        else
+            Toast.makeText(this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+
+        //this.fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
 
     }
 
@@ -2290,7 +2397,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 this.WeatherActivity.setWeatherIcon(id);
                 this.WeatherActivity.setanimation(id);
             this.WeatherActivity.sendNotification(description,temperature,locate,id);
-                WeatherActivity.this.lm.removeUpdates(locationListener);
+                //WeatherActivity.this.lm.removeUpdates(locationListener);
 
             }
             catch (JSONException e) {

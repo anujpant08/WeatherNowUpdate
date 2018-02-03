@@ -88,6 +88,8 @@ public class ForecastAsync extends AsyncTask<String, Void, String> {
                 JSONObject tobj=obj.getJSONObject("temp");
                 String tempmin=tobj.getString("min");
                 String tempmax=tobj.getString("max");
+
+
                 double min=Double.parseDouble(tempmin);
                 double max=Double.parseDouble(tempmax);
 
@@ -115,8 +117,12 @@ public class ForecastAsync extends AsyncTask<String, Void, String> {
             JSONObject tobj=hl.getJSONObject("temp");
             String mhl=tobj.getString("min");
             String hhl=tobj.getString("max");
+            //String d=tobj.getString("day");
+            //String n=tobj.getString("night");
             double low=Double.parseDouble(mhl);
             double high=Double.parseDouble(hhl);
+            //double day=Double.parseDouble(d);
+            //double night=Double.parseDouble(n);
             this.WeatherActivity.setHi(high);
             this.WeatherActivity.setLo(low);
 

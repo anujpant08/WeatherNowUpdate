@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -76,7 +77,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         Snackbar snackbar;
         String arr[]=new String[1000];
         String cor_url;
-
+        boolean shown;
         int hour;
         String apikey="6024521-aa3caf3e11ed4bf5eead80356";
         public boolean flag=false;
@@ -95,7 +96,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 //tim="";
                 url = getIntent().getStringExtra("URL");
                 loc=getIntent().getStringExtra("loc_desc");
-
+                shown=false;
                 //getCoordinates(loc);
                 /*supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
                 actionBar=getSupportActionBar();
@@ -190,6 +191,16 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 RetrieveWeather(url);
                 RetrieveForecast(loc);
+
+                final Handler handler=new Handler();
+
+                handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                                if(!shown)
+                                        Toast.makeText(Dialog_weather.this,"Network Error! PLease go back and search again..",Toast.LENGTH_LONG).show();
+                        }
+                },20000);
                 //LoadPreference();
                // RetrieveTime(lat,lon);
                // Widget_Async();
@@ -308,6 +319,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
             ForecastDialogAsync task= new ForecastDialogAsync(this,url);
                 task.execute(url);
+                shown=true;
+
         }
 
         public void SetDescription(String des)
@@ -417,7 +430,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 DecimalFormat df=new DecimalFormat("###.#");
                 String formatTempMin=df.format(max);
                 TextView textView=(TextView)findViewById(R.id.hi);
-                textView.setText(formatTempMin+"\u2103"+" / ");
+                textView.setText("Day "+formatTempMin+"\u2103"+"  ");
                 textView.setTypeface(face);
 
         }
@@ -429,7 +442,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 DecimalFormat df=new DecimalFormat("###.#");
                 String formatTempMin=df.format(min);
                 TextView textView=(TextView)findViewById(R.id.lo);
-                textView.setText(formatTempMin+"\u2103");
+                textView.setText("Night "+formatTempMin+"\u2103");
                 textView.setTypeface(face);
         }
 

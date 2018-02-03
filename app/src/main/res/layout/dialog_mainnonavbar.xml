@@ -28,6 +28,7 @@
         android:background="@drawable/gradient"
         android:scaleType="fitCenter"/>
 
+
     <LinearLayout
         android:id="@+id/progressLayout"
         android:layout_width="wrap_content"
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
+
             android:indeterminateDrawable="@drawable/progress"
             />
 
@@ -178,7 +180,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:layout_marginTop="10dp"
             android:layout_below="@id/hi"
             android:textColor="#FFFFFF"
             android:layout_marginLeft="10dp"
@@ -615,6 +616,8 @@
 
     </ScrollView>
 
+
+
     <ImageView
 
         android:id="@+id/sharebtn"
@@ -648,7 +651,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:scaleType="fitXY"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="#ffffff"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="5dp"
