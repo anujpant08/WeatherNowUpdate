@@ -5,8 +5,8 @@
        <CheckBoxPreference
             android:defaultValue="true"
             android:key="checkBox"
-            android:summary="Show temperature in Celcius"
-            android:title="Temperature" >
+            android:title="Temperature"
+            android:summary="Show temperature in Celcius">
         </CheckBoxPreference>
 
 

@@ -96,11 +96,12 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         Bitmap bm8= BitmapFactory.decodeResource(getResources(),R.drawable.sc_not);
         Bitmap bm9= BitmapFactory.decodeResource(getResources(),R.drawable.ov_not);
         Bitmap bm10= BitmapFactory.decodeResource(getResources(),R.drawable.ex_not);
-        Bitmap bm11= BitmapFactory.decodeResource(getResources(),R.drawable.br_not); */
+        Bitmap bm11= BitmapFactory.decodeResource(getResources(),R.drawable.br_not);
 
 
         if(val)
         {
+
 
             int actualID = Integer.parseInt(id);
             int ID = actualID / 100;
@@ -235,7 +236,7 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         {
             mNotificationManager.cancel(1);
 
-        }
+        }*/
 
 
     }
