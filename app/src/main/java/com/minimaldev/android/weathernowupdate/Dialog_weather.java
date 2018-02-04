@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -198,7 +199,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void run() {
                                 if(!shown)
-                                        Toast.makeText(Dialog_weather.this,"Network Error! PLease go back and search again..",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Dialog_weather.this,"Network Error! Please go back and search again..",Toast.LENGTH_LONG).show();
                         }
                 },20000);
                 //LoadPreference();
@@ -353,19 +354,27 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
                 linearLayout=(LinearLayout) findViewById(R.id.progressLayout);
-                Async_weather task = new Async_weather(this, enc);
+                //Async_weather task = new Async_weather(this, enc);
 
                 linearLayout.setVisibility(View.VISIBLE);
-                task.execute(enc);
+                //task.execute(enc);
 
 
 
         }
         public void SetTemperature(double temp,double min,double max)
         {
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+            SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+            boolean t=s.getBoolean("checkBox",false);
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
                 TextView view=(TextView)this.findViewById(R.id.temp_text);
                 //TextView view1=(TextView)this.findViewById(R.id.hilow_text);
+            //String deg="\u2103";
+            if(!t)
+            {
+                temp=(temp*9/5)+32;
+               // deg="\u2109";
+            }
                 DecimalFormat df=new DecimalFormat("###.#");
                 String formatTemp=df.format(temp);
                 String formatTemp1=df.format(min);
@@ -414,7 +423,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                         fos.flush();
                         fos.close();
-                        shareIt(imagePath);
+                        shareIt(newFile);
 
                 }
                 catch (Throwable e)
@@ -425,34 +434,50 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
         public void setHi(double h)
         {
+                SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+                boolean t=s.getBoolean("checkBox",false);
                 Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
                 double max=h-273;
+                String deg="\u2103";
+                if(!t)
+                {
+                    max=(max*9/5)+32;
+                    deg="\u2109";
+                }
                 DecimalFormat df=new DecimalFormat("###.#");
                 String formatTempMin=df.format(max);
                 TextView textView=(TextView)findViewById(R.id.hi);
-                textView.setText("Day "+formatTempMin+"\u2103"+"  ");
+                textView.setText("Day "+formatTempMin+deg+"  ");
                 textView.setTypeface(face);
 
         }
 
         public void setLo(double l)
         {
+                SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+                boolean t=s.getBoolean("checkBox",false);
                 Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
                 double min=l-273;
+            String deg="\u2103";
+            if(!t)
+            {
+                min=(min*9/5)+32;
+                deg="\u2109";
+            }
                 DecimalFormat df=new DecimalFormat("###.#");
                 String formatTempMin=df.format(min);
                 TextView textView=(TextView)findViewById(R.id.lo);
-                textView.setText("Night "+formatTempMin+"\u2103");
+                textView.setText("Night "+formatTempMin+deg);
                 textView.setTypeface(face);
         }
 
 
-        public void shareIt(String imagePath)
+        public void shareIt(File file)
         {
                 Intent shareing=new Intent(Intent.ACTION_SEND);
                 shareing.setType("image/*");
-                //Uri uri= getUriForFile(getApplicationContext(), "com.minimaldev.android.weathernow",imagePath);
-                Uri uri=Uri.parse("file://"+imagePath);
+                Uri uri= FileProvider.getUriForFile(getApplicationContext(), this.getApplicationContext().getPackageName()+".provider",file);
+                //Uri uri=Uri.parse("file://"+imagePath);
                 String text="Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
                 shareing.putExtra(Intent.EXTRA_SUBJECT,"Check out WeatherNow by MinimalDev");
                 shareing.putExtra(Intent.EXTRA_TEXT, text);
@@ -1485,12 +1510,23 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 min=min-273;
                 max=max-273;
                 Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+            SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+            boolean tmp=s.getBoolean("checkBox",false);
+
+            String deg="\u2103";
+
+            if(!tmp)
+            {
+                min=(min*9/5+32);
+                max=(max*9/5+32);
+                deg="\u2109";
+            }
 
                 DecimalFormat df=new DecimalFormat("###.#");
                 String formatTempMin=df.format(min);
                 String formatTempMax=df.format(max);
-                formatTempMin=formatTempMin+"\u2103"+"/";
-                formatTempMax=formatTempMax+"\u2103";
+                formatTempMin=formatTempMin+" "+deg+"/";
+                formatTempMax=formatTempMax+" "+deg;
                 String t=formatTempMin+formatTempMax;
                 TextView view1=(TextView)findViewById(R.id.temp11);
                 TextView view2=(TextView)findViewById(R.id.temp12);

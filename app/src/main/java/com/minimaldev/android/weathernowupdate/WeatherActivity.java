@@ -26,10 +26,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -142,7 +144,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     LottieAnimationView animationView, moonView, cloudy, cloudymoon, fogday, fognight, snowday, snownight, thunder, rainy, overcast;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
@@ -358,15 +360,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                             return;
                         }
                         showweather();
-                        final Handler handler=new Handler();
+                        final Handler handler = new Handler();
 
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if(!shown)
-                                    Toast.makeText(WeatherActivity.this,"Network Error! PLease swipe down to Refresh.",Toast.LENGTH_LONG).show();
+                                if (!shown) {
+                                    Toast.makeText(WeatherActivity.this, "Network Error! Please swipe down to Refresh.", Toast.LENGTH_LONG).show();
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
                             }
-                        },15000);
+                        }, 10000);
 
 
                     }
@@ -433,8 +437,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             @Override
             public void onSuccess(Location location) {
 
-                if(location!=null)
-                {
+                if (location != null) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                     la = Double.toString(latitude);
@@ -443,30 +446,18 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     RetrieveWeather(la, lo, "a");
                     RetrieveForecast(la, lo);
 
-                    shown=true;
-                }
-                else
-                    Toast.makeText(WeatherActivity.this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+                    shown = true;
+                } else
+                    Toast.makeText(WeatherActivity.this, "Error fetching location. Please swipe down to refresh.", Toast.LENGTH_LONG).show();
             }
         });
 
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, new LocationCallback(){
-            @Override
-            public void onLocationResult(LocationResult locationResult)
-            {
-                onLocationChanged(locationResult.getLastLocation());
-            }
-        }, Looper.myLooper());
 
-
-        locationCallback=new LocationCallback(){
+        locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult)
-            {
-                for(Location location:locationResult.getLocations())
-                {
-                    if(location!=null)
-                    {
+            public void onLocationResult(LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    if (location != null) {
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
                         la = Double.toString(latitude);
@@ -476,10 +467,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         RetrieveWeather(la, lo, "a");
                         RetrieveForecast(la, lo);
 
-                        shown=true;
-                    }
-                    else
-                        Toast.makeText(WeatherActivity.this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+                        shown = true;
+                    } else
+                        Toast.makeText(WeatherActivity.this, "Error fetching location. Please swipe down to refresh.", Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -489,17 +479,15 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 
-
-        final Handler handler=new Handler();
+        final Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(!shown)
-                Toast.makeText(WeatherActivity.this,"Network Error! PLease swipe down to Refresh.",Toast.LENGTH_LONG).show();
+                if (!shown)
+                    Toast.makeText(WeatherActivity.this, "Network Error! PLease swipe down to Refresh.", Toast.LENGTH_LONG).show();
             }
-        },15000);
-
+        }, 15000);
 
 
     }
@@ -594,8 +582,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     @Override
     protected void onStart() {
         super.onStart();
-        if(locationEnabled())
-        {
+        if (locationEnabled()) {
             buildGoogleApiClient();
             createLocationRequest();
             mGoogleApiClient.connect();
@@ -607,8 +594,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     @Override
     protected void onResume() {
         super.onResume();
-        if(locationEnabled())
-        {
+        if (locationEnabled()) {
             buildGoogleApiClient();
             createLocationRequest();
             mGoogleApiClient.connect();
@@ -619,23 +605,22 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     protected void onStop() {
         super.onStop();
-        if(locationEnabled())
+        if (locationEnabled() && isNetworkAvailable())
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         //lm.removeUpdates(locationListener);
         //swipeRefreshLayout.setEnabled(false);
-        if(swipeRefreshLayout.isRefreshing())
-        swipeRefreshLayout.setRefreshing(false);
+        if (swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.setRefreshing(false);
 
 
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
-        if(locationEnabled())
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-        if(swipeRefreshLayout.isRefreshing())
+        if (locationEnabled() && isNetworkAvailable())
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        if (swipeRefreshLayout.isRefreshing())
             swipeRefreshLayout.setRefreshing(false);
 
     }
@@ -658,7 +643,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //Toast.makeText(this, "Connection Error", Toast.LENGTH_SHORT).show();
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toastview, (ViewGroup) findViewById(R.id.toast_layout));
-        TextView text =  (TextView) findViewById(R.id.text_toast);
+        TextView text = (TextView) findViewById(R.id.text_toast);
         text.setText("Connection error!");
 
         Toast toast = new Toast(getApplicationContext());
@@ -688,7 +673,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
 
 
-
     }
 
     @Override
@@ -712,95 +696,32 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if(location!=null)
-                {
+                if (location != null) {
 
 
-                }
-                else
-                    Toast.makeText(WeatherActivity.this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(WeatherActivity.this, "Error fetching location. Please swipe down to refresh.", Toast.LENGTH_LONG).show();
             }
         });
 
 
     }
 
-    /*LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-
-            mCurrentLocation = location;
-
-            LayoutInflater inflater=getLayoutInflater();
-            View layout=inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toast_layout));
-            TextView text=(TextView)layout.findViewById(R.id.text_toast);
-            text.setText("Location changed!");
-
-            Toast toast=new Toast(getApplicationContext());
-            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER,0,80);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show();
-
-
-            // Displaying the new location on UI
-            la = String.valueOf(mCurrentLocation.getLatitude());
-            lo = String.valueOf(mCurrentLocation.getLongitude());
-            displayLocation();
-            swipeRefreshLayout.setRefreshing(false);
-            lm.removeUpdates(locationListener);
-
-
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
-    };
-
-
-    public void onLocationChanged(Location location)
-    {
-        latitude = location.getLatitude();
-        longitude =location.getLongitude();
-        if (latitude != 0 && longitude != 0){
-
-            LAT=Double.toString(location.getLatitude());
-            LON=Double.toString(location.getLongitude());
-            try {
-                RetrieveWeather(LAT,LON);
-                }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }*/
+  
+    
     public void RetrieveWeather(String lat, String lon, String addrs) {
         //Toast.makeText(getApplicationContext(),lat+" "+lon,Toast.LENGTH_SHORT).show();
         String url = "";
-       if (addrs.equals("a")) {
+        if (addrs.equals("a")) {
             url = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=bcc6f8e44743e316e5120301ff1a5ad4";
 
-           ConditionAsync task = new ConditionAsync(this, url);
-           task.execute(url);
-           // url="https://api.gettyimages.com/v3/images?phrase=Chennai "+"beautiful";
+            ConditionAsync task = new ConditionAsync(this, url);
+            task.execute(url);
+            // url="https://api.gettyimages.com/v3/images?phrase=Chennai "+"beautiful";
             // url="http://api.openweathermap.org/data/2.5/weather?q=NewYork,us&appid=bcc6f8e44743e316e5120301ff1a5ad4";
         } else {
             url = addrs;
         }
-
 
 
     }
@@ -904,46 +825,50 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         c = Character.toUpperCase(c);
         des = des.substring(1, des.length());
         des = c + des;
-        des=" "+des;
+        des = " " + des;
         view.setText(des);
         view.setTypeface(face);
         // settings_des(des);
         //System.out.println(des);
-        int pos=des.lastIndexOf(' ');
-        des=des.substring(pos,des.length());
-            try {
-                enc = URLEncoder.encode(des, "utf-8");
-                for (int i = 0; i < enc.length(); i++) {
-                    if (enc.charAt(i) == ' ') {
-                        enc = enc.replace(enc.charAt(i), '+');
-                    }
+        int pos = des.lastIndexOf(' ');
+        des = des.substring(pos, des.length());
+        try {
+            enc = URLEncoder.encode(des, "utf-8");
+            for (int i = 0; i < enc.length(); i++) {
+                if (enc.charAt(i) == ' ') {
+                    enc = enc.replace(enc.charAt(i), '+');
                 }
-
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-
             }
 
-           //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
-           // WeatherAsync task = new WeatherAsync(this, enc);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+
+        }
+
+        //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
+        // WeatherAsync task = new WeatherAsync(this, enc);
 
         llayout = (RelativeLayout) findViewById(R.id.progresslayout);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
         llayout.setVisibility(View.VISIBLE);
-            //task.execute(enc);
-
-
-
+        //task.execute(enc);
 
 
     }
 
     public void SetTemperature(double temp, double min, double max) {
-        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+
+        SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+        boolean t=s.getBoolean("checkBox",false);
+
+
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
         TextView view = (TextView) this.findViewById(R.id.temperature_text);
         //TextView view1 = (TextView) this.findViewById(R.id.hilowmain_text);
         DecimalFormat df = new DecimalFormat("###.#");
+        if (!t)
+            temp=(temp*9/5)+32;
         String formatTemp = df.format(temp);
         //String formatTemp1 = df.format(min);
         //String formatTemp2 = df.format(max);
@@ -955,7 +880,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     }
 
-    public void SetPressure(double pres) {
+    /*public void SetPressure(double pres) {
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         TextView view = (TextView) this.findViewById(R.id.pressure_text);
         DecimalFormat df = new DecimalFormat("###.##");
@@ -972,7 +897,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         view.setText("Humidity: " + formatHum + "%");
         view.setTypeface(face);
 
-    }
+    } */
 
     public void SetLocation(String name, String country) {
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
@@ -991,14 +916,13 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //ImageView linear = (ImageView) this.findViewById(R.id.back);
         ImageView sc = (ImageView) this.findViewById(R.id.backgroundWeather);
 
-        int actualID=Integer.parseInt(id);
-        int ID=actualID/100;
-        switch (ID)
-        {
+        int actualID = Integer.parseInt(id);
+        int ID = actualID / 100;
+        switch (ID) {
             case 2://for thunderstorm
 
                 Glide.with(this)
-                        .load(this.getResources().getIdentifier("thunder","drawable",this.getPackageName()))
+                        .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
                         //.load("")
                         //.error(R.drawable.background_)
                         .centerCrop()
@@ -1011,18 +935,18 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 break;
             case 3://for drizzle
-                if(hour>=6 && hour <18)
-                Glide.with(this)
-                        .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
-                        //.load("")
-                        //.error(R.drawable.background_)
-                        .centerCrop()
-                        .dontTransform()
-                        .crossFade()
-                        .into(sc);
+                if (hour >= 6 && hour < 18)
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
                 else
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1034,9 +958,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 break;
             case 5: //for rain
-                if(hour>=6 && hour <18)
+                if (hour >= 6 && hour < 18)
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1045,7 +969,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                             .into(sc);
                 else
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1058,7 +982,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             case 6: //for snow
 
                 Glide.with(this)
-                        .load(this.getResources().getIdentifier("snowy","drawable",this.getPackageName()))
+                        .load(this.getResources().getIdentifier("snowy", "drawable", this.getPackageName()))
                         //.load("")
                         //.error(R.drawable.background_)
                         .centerCrop()
@@ -1071,10 +995,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 break;
             case 7: //for fog
 
-                if(hour>=6 && hour <18)
-                {
+                if (hour >= 6 && hour < 18) {
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("dayfog","drawable",this.getPackageName()))
+                            .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1083,8 +1006,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                             .into(sc);
 
                     llayout.setVisibility(View.INVISIBLE);
-                }
-                else {
+                } else {
                     Glide.with(this)
                             .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
                             //.load("")
@@ -1099,13 +1021,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 break;
             case 8: //for clear and clouds
 
-                if(actualID==800)
-                {
+                if (actualID == 800) {
                     //System.out.println(hour);
                     //for clear
                     //  view1.setImageResource(R.drawable.clear);
                     //view11.setBackgroundResource(R.color.clear);
-                    if(hour>=5 && hour<7) {
+                    if (hour >= 5 && hour < 7) {
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1116,8 +1037,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
-                    }
-                    else if(hour>=7 && hour<17) {
+                    } else if (hour >= 7 && hour < 17) {
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("sunday", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1128,11 +1048,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
-                    }
-                    else if(hour>=17 && hour<19)
-                    {
+                    } else if (hour >= 17 && hour < 19) {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("sunset","drawable",this.getPackageName()))
+                                .load(this.getResources().getIdentifier("sunset", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1141,11 +1059,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
-                    }
-
-
-
-                    else {
+                    } else {
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("night", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1160,13 +1074,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     // linear.setBackgroundResource(R.drawable.at_day);
 
                 }
-                if(actualID==801 || actualID==802 || actualID==803)
-                {
+                if (actualID == 801 || actualID == 802 || actualID == 803) {
                     //for scattered clouds
                     //view1.setImageResource(R.drawable.scattered_clouds);
                     //view11.setBackgroundResource(R.color.clouds);
-                    if(hour>=6 && hour <18)
-                    {
+                    if (hour >= 6 && hour < 18) {
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("cloudy", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1177,8 +1089,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
-                    }
-                    else
+                    } else
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("nightcloud", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1192,8 +1103,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                 }
-                if(actualID==804)
-                {
+                if (actualID == 804) {
                     //for overcast
                     //view1.setImageResource(R.drawable.overcast);
                     //view11.setBackgroundResource(R.color.overcast);
@@ -1212,7 +1122,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 }
                 break;
             case 9://for extreme weather
-                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                     Glide.with(this)
                             .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
@@ -1225,11 +1135,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     llayout.setVisibility(View.INVISIBLE);
                     //view1.setImageResource(R.drawable.tornado);
-                }
-                else
-                {
-                    if(hour>=6 && hour <18)
-                    {
+                } else {
+                    if (hour >= 6 && hour < 18) {
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1240,8 +1147,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
-                    }
-                    else
+                    } else
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
                                 //.load("")
@@ -1263,16 +1169,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //sc.setBackgroundColor(Color.parseColor("#1e88e5"));
 
 
-
-
     }
 
-    public void setanimation(String id)
-    {
-        int actualID=Integer.parseInt(id);
-        int ID=actualID/100;
-        switch (ID)
-        {
+    public void setanimation(String id) {
+        int actualID = Integer.parseInt(id);
+        int ID = actualID / 100;
+        switch (ID) {
             case 2://for thunderstorm
                 //view1.setImageResource(R.drawable.thunderstorm);
                 this.thunder.playAnimation();
@@ -1295,58 +1197,49 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 break;
             case 6: //for snow
 
-                if(hour>=6 && hour <18)
-                {
+                if (hour >= 6 && hour < 18) {
                     this.snowday.playAnimation();
-                }
-                else
+                } else
                     this.snownight.playAnimation();
 
 
                 break;
             case 7: //for fog
 
-                if(hour>=6 && hour <18)
-                {
+                if (hour >= 6 && hour < 18) {
                     this.fogday.playAnimation();
-                }
-                else
+                } else
                     this.fognight.playAnimation();
                 //linear.setBackgroundResource(R.drawable.fogat_day);
                 break;
             case 8: //for clear and clouds
 
-                if(actualID==800)
-                {
+                if (actualID == 800) {
                     //System.out.println(hour);
                     //for clear
                     //  view1.setImageResource(R.drawable.clear);
                     //view11.setBackgroundResource(R.color.clear);
-                    if(hour>=6 && hour<18)
+                    if (hour >= 6 && hour < 18)
 
-                    this.animationView.playAnimation();
+                        this.animationView.playAnimation();
 
                     else
                         this.moonView.playAnimation();
                     // linear.setBackgroundResource(R.drawable.at_day);
 
                 }
-                if(actualID==801 || actualID==802 || actualID==803)
-                {
+                if (actualID == 801 || actualID == 802 || actualID == 803) {
                     //for scattered clouds
                     //view1.setImageResource(R.drawable.scattered_clouds);
                     //view11.setBackgroundResource(R.color.clouds);
-                    if(hour>=6 && hour <18)
-                    {
+                    if (hour >= 6 && hour < 18) {
                         this.cloudy.playAnimation();
-                    }
-                    else
+                    } else
                         this.cloudymoon.playAnimation();
                     //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                 }
-                if(actualID==804)
-                {
+                if (actualID == 804) {
                     //for overcast
                     //view1.setImageResource(R.drawable.overcast);
                     //view11.setBackgroundResource(R.color.overcast);
@@ -1356,18 +1249,15 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 }
                 break;
             case 9://for extreme weather
-                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                     this.thunder.playAnimation();
                     //view1.setImageResource(R.drawable.tornado);
-                }
-                else //for breeze
+                } else //for breeze
                 {
-                    if(hour>=6 && hour <18)
-                    {
+                    if (hour >= 6 && hour < 18) {
                         this.fogday.playAnimation();
-                    }
-                    else
+                    } else
                         this.fognight.playAnimation();
 
                 }
@@ -1385,27 +1275,26 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     }
 
-    public void actionMenu(View view)
-    {
+    public void actionMenu(View view) {
         Intent set = new Intent(this, Settings_menu.class);
-        set.putExtra("DES",DESCRIPTION);
-        set.putExtra("TEM",TEM);
-        set.putExtra("LOC",LOC);
-        set.putExtra("ID",W_ID);
+        /*set.putExtra("DES", DESCRIPTION);
+        set.putExtra("TEM", TEM);
+        set.putExtra("LOC", LOC);
+        set.putExtra("ID", W_ID); */
         startActivity(set);
     }
-     @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-
 
 
                 break;
             case R.id.action_search:
 
                 Intent in = new Intent(this, Places.class);
-                RelativeLayout rel=(RelativeLayout) findViewById(R.id.relativeBack);
+                RelativeLayout rel = (RelativeLayout) findViewById(R.id.relativeBack);
                 rel.getBackground().setAlpha(250);
                 startActivity(in);
                 break;
@@ -1413,10 +1302,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             case R.id.action_menu:
 
                 Intent set = new Intent(this, Settings_menu.class);
-                set.putExtra("DES",DESCRIPTION);
-                set.putExtra("TEM",TEM);
-                set.putExtra("LOC",LOC);
-                set.putExtra("ID",W_ID);
+                set.putExtra("DES", DESCRIPTION);
+                set.putExtra("TEM", TEM);
+                set.putExtra("LOC", LOC);
+                set.putExtra("ID", W_ID);
                 startActivity(set);
 
                 break;
@@ -1424,22 +1313,15 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         return true;
     }
 
-    public void share(View view)
-    {
-        if(Build.VERSION.SDK_INT>=23)
-        {
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
-            {
+    public void share(View view) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                takeScreenshot();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 takeScreenshot();
             }
-            else
-            {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-                takeScreenshot();
-            }
-        }
-        else
-        {
+        } else {
             takeScreenshot();
         }
         //takeScreenshot();
@@ -1447,30 +1329,26 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //shareIt();
     }
 
-    public void takeScreenshot()
-    {
+    public void takeScreenshot() {
 
         //View rootview=this.findViewById(android.R.id.content);
 
-        String imagePath=Environment.getExternalStorageDirectory().toString()+"/Pictures/Screenshots/"+"screenshotwn.jpg";
-        View v1=getWindow().getDecorView().getRootView();
+        String imagePath = Environment.getExternalStorageDirectory().toString() + "/Pictures/Screenshots/" + "screenshotwn.jpg";
+        View v1 = getWindow().getDecorView().getRootView();
         v1.setDrawingCacheEnabled(true);
-        Bitmap bitmap=v1.getDrawingCache();
+        Bitmap bitmap = v1.getDrawingCache();
 
 
-        File newFile=new File(imagePath);
+        File newFile = new File(imagePath);
         FileOutputStream fos;
-        try
-        {
-            fos=new FileOutputStream(newFile);
+        try {
+            fos = new FileOutputStream(newFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            shareIt(imagePath);
+            shareIt(newFile);
 
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
 
@@ -1499,30 +1377,27 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
     } */
 
-    public void shareIt(String imagePath)
-    {
+    public void shareIt(File file) {
 
-        Intent shareing=new Intent(Intent.ACTION_SEND);
+        Intent shareing = new Intent(Intent.ACTION_SEND);
         shareing.setType("image/*");
-        //Uri uri= getUriForFile(getApplicationContext(), "com.minimaldev.android.weathernow",imagePath);
-        Uri uri=Uri.parse("file://"+imagePath);
-        String text="Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
-        shareing.putExtra(Intent.EXTRA_SUBJECT,"Check out WeatherNow by MinimalDev");
+        Uri uri= FileProvider.getUriForFile(getApplicationContext(), this.getApplicationContext().getPackageName()+".provider",file);
+        //Uri uri = Uri.parse("file://" + imagePath);
+        String text = "Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
+        shareing.putExtra(Intent.EXTRA_SUBJECT, "Check out WeatherNow by MinimalDev");
         shareing.putExtra(Intent.EXTRA_TEXT, text);
         shareing.putExtra(Intent.EXTRA_STREAM, uri);
 
-        startActivity(Intent.createChooser(shareing,"Share via"));
+        startActivity(Intent.createChooser(shareing, "Share via"));
 
     }
-
-
 
 
     public void SetDay(String day, int dayNo)
 
     {
-        String d=day.substring(0,3);
-        d=d.toUpperCase();
+        String d = day.substring(0, 3);
+        d = d.toUpperCase();
         //d=d+",";
 
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
@@ -1554,22 +1429,22 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             case 3:
                 view3.setText(d);
                 view3.setTypeface(face);
-               // view33.setText(t);
+                // view33.setText(t);
                 break;
             case 4:
                 view4.setText(d);
                 view4.setTypeface(face);
-               // view44.setText(t);
+                // view44.setText(t);
                 break;
             case 5:
                 view5.setText(d);
                 view5.setTypeface(face);
-               // view55.setText(t);
+                // view55.setText(t);
                 break;
             case 6:
                 view6.setText(d);
                 view6.setTypeface(face);
-               // view66.setText(t);
+                // view66.setText(t);
                 break;
             //case 7: view7.setText(day);
             // break;}
@@ -1577,24 +1452,20 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     }
 
 
-    public void SetDes(String des, int index)
-    {
-        int actualID=Integer.parseInt(des);
-        int ID=actualID/100;
+    public void SetDes(String des, int index) {
+        int actualID = Integer.parseInt(des);
+        int ID = actualID / 100;
 
 
-
-        ImageView view1=(ImageView)findViewById(R.id.icon11);
-        ImageView view2=(ImageView)findViewById(R.id.icon12);
-        ImageView view3=(ImageView)findViewById(R.id.icon13);
-        ImageView view4=(ImageView)findViewById(R.id.icon14);
-        ImageView view5=(ImageView)findViewById(R.id.icon15);
-        ImageView view6=(ImageView)findViewById(R.id.icon16);
+        ImageView view1 = (ImageView) findViewById(R.id.icon11);
+        ImageView view2 = (ImageView) findViewById(R.id.icon12);
+        ImageView view3 = (ImageView) findViewById(R.id.icon13);
+        ImageView view4 = (ImageView) findViewById(R.id.icon14);
+        ImageView view5 = (ImageView) findViewById(R.id.icon15);
+        ImageView view6 = (ImageView) findViewById(R.id.icon16);
         //ImageView view7=(ImageView)findViewById(R.id.iconweather_sun);
-        if(index==0)
-        {
-            switch (ID)
-            {
+        if (index == 0) {
+            switch (ID) {
                 case 2://for thunderstorm
                     view1.setImageResource(R.drawable.thunderstorm);
 
@@ -1618,7 +1489,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 case 6: //for snow
 
                     view1.setImageResource(R.drawable.snow);
-                   //view11.setBackgroundResource(R.color.snow);
+                    //view11.setBackgroundResource(R.color.snow);
 
                     //linear.setBackgroundResource(R.drawable.snowat_night);
 
@@ -1631,8 +1502,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 8: //for clear and clouds
 
-                    if(actualID==800)
-                    {
+                    if (actualID == 800) {
                         //for clear
                         view1.setImageResource(R.drawable.clear);
                         //view11.setBackgroundResource(R.color.clear);
@@ -1640,8 +1510,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
-                    if(actualID==801 || actualID==802 || actualID==803)
-                    {
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
                         //for scattered clouds
                         view1.setImageResource(R.drawable.scattered_clouds);
                         //view11.setBackgroundResource(R.color.clouds);
@@ -1649,8 +1518,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                     }
-                    if(actualID==804)
-                    {
+                    if (actualID == 804) {
                         //for overcast
                         view1.setImageResource(R.drawable.overcast);
                         //view11.setBackgroundResource(R.color.overcast);
@@ -1660,15 +1528,13 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     break;
                 case 9://for extreme weather
-                    if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         view1.setImageResource(R.drawable.tornado);
-                    }
-                    else
-                    {
+                    } else {
                         view1.setImageResource(R.drawable.breeze);
                     }
-                   // view11.setBackgroundResource(R.color.extreme);
+                    // view11.setBackgroundResource(R.color.extreme);
 
                     //linear.setBackgroundResource(R.drawable.extreme_weather);
 
@@ -1677,11 +1543,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
 
             }
-        }
-        else if(index==1)
-        {
-            switch (ID)
-            {
+        } else if (index == 1) {
+            switch (ID) {
                 case 2://for thunderstorm
                     view2.setImageResource(R.drawable.thunderstorm);
                     //view22.setBackgroundResource(R.color.thunder);
@@ -1719,8 +1582,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 8: //for clear and clouds
 
-                    if(actualID==800)
-                    {
+                    if (actualID == 800) {
                         //for clear
                         view2.setImageResource(R.drawable.clear);
                         //view22.setBackgroundResource(R.color.clear);
@@ -1728,8 +1590,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
-                    if(actualID==801 || actualID==802 || actualID==803)
-                    {
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
                         //for scattered clouds
                         view2.setImageResource(R.drawable.scattered_clouds);
                         //view22.setBackgroundResource(R.color.clouds);
@@ -1737,8 +1598,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                     }
-                    if(actualID==804)
-                    {
+                    if (actualID == 804) {
                         //for overcast
                         view2.setImageResource(R.drawable.overcast);
                         //view22.setBackgroundResource(R.color.overcast);
@@ -1748,12 +1608,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     break;
                 case 9://for extreme weather
-                    if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         view2.setImageResource(R.drawable.tornado);
-                    }
-                    else
-                    {
+                    } else {
                         view2.setImageResource(R.drawable.breeze);
                     }                    //view22.setBackgroundResource(R.color.extreme);
 
@@ -1764,11 +1622,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
 
             }
-        }
-        else if(index==2)
-        {
-            switch (ID)
-            {
+        } else if (index == 2) {
+            switch (ID) {
                 case 2://for thunderstorm
                     view3.setImageResource(R.drawable.thunderstorm);
                     //view33.setBackgroundResource(R.color.thunder);
@@ -1793,7 +1648,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 case 6: //for snow
 
                     view3.setImageResource(R.drawable.snow);
-                   // view33.setBackgroundResource(R.color.snow);
+                    // view33.setBackgroundResource(R.color.snow);
 
                     //linear.setBackgroundResource(R.drawable.snowat_night);
 
@@ -1806,17 +1661,15 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 8: //for clear and clouds
 
-                    if(actualID==800)
-                    {
+                    if (actualID == 800) {
                         //for clear
                         view3.setImageResource(R.drawable.clear);
-                       // view33.setBackgroundResource(R.color.clear);
+                        // view33.setBackgroundResource(R.color.clear);
 
                         // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
-                    if(actualID==801 || actualID==802 || actualID==803)
-                    {
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
                         //for scattered clouds
                         view3.setImageResource(R.drawable.scattered_clouds);
                         //view33.setBackgroundResource(R.color.clouds);
@@ -1824,8 +1677,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                     }
-                    if(actualID==804)
-                    {
+                    if (actualID == 804) {
                         //for overcast
                         view3.setImageResource(R.drawable.overcast);
                         //view33.setBackgroundResource(R.color.overcast);
@@ -1835,12 +1687,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     break;
                 case 9://for extreme weather
-                    if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         view3.setImageResource(R.drawable.tornado);
-                    }
-                    else
-                    {
+                    } else {
                         view3.setImageResource(R.drawable.breeze);
                     }                   // view33.setBackgroundResource(R.color.extreme);
 
@@ -1851,11 +1701,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
 
             }
-        }
-        else if(index==3)
-        {
-            switch (ID)
-            {
+        } else if (index == 3) {
+            switch (ID) {
                 case 2://for thunderstorm
                     view4.setImageResource(R.drawable.thunderstorm);
                     //view44.setBackgroundResource(R.color.thunder);
@@ -1893,8 +1740,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 8: //for clear and clouds
 
-                    if(actualID==800)
-                    {
+                    if (actualID == 800) {
                         //for clear
                         view4.setImageResource(R.drawable.clear);
                         //view44.setBackgroundResource(R.color.clear);
@@ -1902,8 +1748,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
-                    if(actualID==801 || actualID==802 || actualID==803)
-                    {
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
                         //for scattered clouds
                         view4.setImageResource(R.drawable.scattered_clouds);
                         //view44.setBackgroundResource(R.color.clouds);
@@ -1911,8 +1756,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                     }
-                    if(actualID==804)
-                    {
+                    if (actualID == 804) {
                         //for overcast
                         view4.setImageResource(R.drawable.overcast);
                         //view44.setBackgroundResource(R.color.overcast);
@@ -1922,12 +1766,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     break;
                 case 9://for extreme weather
-                    if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         view4.setImageResource(R.drawable.tornado);
-                    }
-                    else
-                    {
+                    } else {
                         view4.setImageResource(R.drawable.breeze);
                     }                    //view44.setBackgroundResource(R.color.extreme);
 
@@ -1938,11 +1780,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
 
             }
-        }
-        else if(index==4)
-        {
-            switch (ID)
-            {
+        } else if (index == 4) {
+            switch (ID) {
                 case 2://for thunderstorm
                     view5.setImageResource(R.drawable.thunderstorm);
                     //view55.setBackgroundResource(R.color.thunder);
@@ -1952,7 +1791,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 3://for drizzle
                     view5.setImageResource(R.drawable.drizzle);
-                   // view55.setBackgroundResource(R.color.drizzle);
+                    // view55.setBackgroundResource(R.color.drizzle);
 
                     //linear.setBackgroundResource(R.drawable.drizzleat_day);
 
@@ -1980,8 +1819,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 8: //for clear and clouds
 
-                    if(actualID==800)
-                    {
+                    if (actualID == 800) {
                         //for clear
                         view5.setImageResource(R.drawable.clear);
                         //view55.setBackgroundResource(R.color.clear);
@@ -1989,8 +1827,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
-                    if(actualID==801 || actualID==802 || actualID==803)
-                    {
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
                         //for scattered clouds
                         view5.setImageResource(R.drawable.scattered_clouds);
                         //view55.setBackgroundResource(R.color.clouds);
@@ -1998,8 +1835,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                     }
-                    if(actualID==804)
-                    {
+                    if (actualID == 804) {
                         //for overcast
                         view5.setImageResource(R.drawable.overcast);
                         //view55.setBackgroundResource(R.color.overcast);
@@ -2009,12 +1845,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     }
                     break;
                 case 9://for extreme weather
-                    if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         view5.setImageResource(R.drawable.tornado);
-                    }
-                    else
-                    {
+                    } else {
                         view5.setImageResource(R.drawable.breeze);
                     }                    //view55.setBackgroundResource(R.color.extreme);
 
@@ -2025,11 +1859,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
 
             }
-        }
-        else
-        {
-            switch (ID)
-            {
+        } else {
+            switch (ID) {
                 case 2://for thunderstorm
                     view6.setImageResource(R.drawable.thunderstorm);
                     //view66.setBackgroundResource(R.color.thunder);
@@ -2039,7 +1870,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 3://for drizzle
                     view6.setImageResource(R.drawable.drizzle);
-                   //view66.setBackgroundResource(R.color.drizzle);
+                    //view66.setBackgroundResource(R.color.drizzle);
 
                     //linear.setBackgroundResource(R.drawable.drizzleat_day);
 
@@ -2067,8 +1898,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     break;
                 case 8: //for clear and clouds
 
-                    if(actualID==800)
-                    {
+                    if (actualID == 800) {
                         //for clear
                         view6.setImageResource(R.drawable.clear);
                         //view66.setBackgroundResource(R.color.clear);
@@ -2076,8 +1906,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         // linear.setBackgroundResource(R.drawable.at_day);
 
                     }
-                    if(actualID==801 || actualID==802 || actualID==803)
-                    {
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
                         //for scattered clouds
                         view6.setImageResource(R.drawable.scattered_clouds);
                         //view66.setBackgroundResource(R.color.clouds);
@@ -2085,23 +1914,20 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //linear.setBackgroundResource(R.drawable.scatteredat_day);
 
                     }
-                    if(actualID==804)
-                    {
+                    if (actualID == 804) {
                         //for overcast
                         view6.setImageResource(R.drawable.overcast);
-                       // view66.setBackgroundResource(R.color.overcast);
+                        // view66.setBackgroundResource(R.color.overcast);
 
                         //linear.setBackgroundResource(R.drawable.overcastat_day);
 
                     }
                     break;
                 case 9://for extreme weather
-                    if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         view6.setImageResource(R.drawable.tornado);
-                    }
-                    else
-                    {
+                    } else {
                         view6.setImageResource(R.drawable.breeze);
                     }                    //view66.setBackgroundResource(R.color.extreme);
 
@@ -2116,46 +1942,61 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     }
 
-    public void SetTemp(double min,double max, int index)
-    {
-        min=min-273;
-        max=max-273;
-        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
-        DecimalFormat df=new DecimalFormat("###.#");
-        String formatTempMin=df.format(min);
-        String formatTempMax=df.format(max);
-        formatTempMin=formatTempMin+"\u2103"+"/";
-        formatTempMax=formatTempMax+"\u2103";
-        String t=formatTempMin+formatTempMax;
-        TextView view1=(TextView)findViewById(R.id.temp11);
-        TextView view2=(TextView)findViewById(R.id.temp12);
-        TextView view3=(TextView)findViewById(R.id.temp13);
-        TextView view4=(TextView)findViewById(R.id.temp14);
-        TextView view5=(TextView)findViewById(R.id.temp15);
-        TextView view6=(TextView)findViewById(R.id.temp16);
-        switch (index)
+    public void SetTemp(double min, double max, int index) {
+        min = min - 273;
+        max = max - 273;
+        SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+        boolean tmp=s.getBoolean("checkBox",false);
+
+        String deg="\u2103";
+
+        if(!tmp)
         {
-            case 0: view1.setText(t);
+            min=(min*9/5+32);
+            max=(max*9/5+32);
+            deg="\u2109";
+        }
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
+        DecimalFormat df = new DecimalFormat("###.#");
+        String formatTempMin = df.format(min);
+        String formatTempMax = df.format(max);
+        formatTempMin = formatTempMin + " "+deg + "/";
+        formatTempMax = formatTempMax + " "+deg;
+        String t = formatTempMin + formatTempMax;
+        TextView view1 = (TextView) findViewById(R.id.temp11);
+        TextView view2 = (TextView) findViewById(R.id.temp12);
+        TextView view3 = (TextView) findViewById(R.id.temp13);
+        TextView view4 = (TextView) findViewById(R.id.temp14);
+        TextView view5 = (TextView) findViewById(R.id.temp15);
+        TextView view6 = (TextView) findViewById(R.id.temp16);
+        switch (index) {
+            case 0:
+                view1.setText(t);
                 view1.setTypeface(face);
-               // view11.setText(formatTempMax);
+                // view11.setText(formatTempMax);
                 break;
-            case 1: view2.setText(t);
+            case 1:
+                view2.setText(t);
                 view2.setTypeface(face);
                 //view22.setText(formatTempMax);
                 break;
-            case 2: view3.setText(t);
+            case 2:
+                view3.setText(t);
                 view3.setTypeface(face);
-               // view33.setText(formatTempMax);
+                // view33.setText(formatTempMax);
                 break;
-            case 3: view4.setText(t);
+            case 3:
+                view4.setText(t);
                 view4.setTypeface(face);
-               // view44.setText(formatTempMax);
+                // view44.setText(formatTempMax);
                 break;
-            case 4: view5.setText(t);
+            case 4:
+                view5.setText(t);
                 view5.setTypeface(face);
-               // view55.setText(formatTempMax);
+                // view55.setText(formatTempMax);
                 break;
-            case 5: view6.setText(t);
+            case 5:
+                view6.setText(t);
                 view6.setTypeface(face);
                 //view66.setText(formatTempMax);
                 break;
@@ -2166,31 +2007,45 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
 
 
-
     }
 
-    public void setHi(double high)
-    {
-        Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
-        double max=high-273;
-        DecimalFormat df=new DecimalFormat("###.#");
-        String formatTempMin=df.format(max);
-        TextView textView=(TextView)findViewById(R.id.hi);
-        textView.setText("Day "+formatTempMin+" \u2103"+"  ");
+    public void setHi(double high) {
+
+        SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+        boolean t=s.getBoolean("checkBox",false);
+        String deg="\u2103";//default is degree celcius
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+        double max = high - 273;
+        if(!t)
+        {
+            max=(max*9/5)+32;
+            deg="\u2109";//cahnge to fahrenheit
+        }
+
+        DecimalFormat df = new DecimalFormat("###.#");
+        String formatTempMin = df.format(max);
+        TextView textView = (TextView) findViewById(R.id.hi);
+        textView.setText("Day " + formatTempMin + deg + "  ");
         textView.setTypeface(face);
 
     }
 
-    public void setLo(double low)
-    {
-        Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
-        double min=low-273;
-        DecimalFormat df=new DecimalFormat("###.#");
-        String formatTempMin=df.format(min);
-        TextView textView=(TextView)findViewById(R.id.lo);
-        textView.setText("Night "+formatTempMin+" \u2103");
-        textView.setTypeface(face);
+    public void setLo(double low) {
 
+        SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
+        boolean t=s.getBoolean("checkBox",false);
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
+        double min = low - 273;
+        String deg="\u2103";//default is degree celcius
+        if(!t) {
+            min = (min * 9 / 5) + 32;
+            deg="\u2109";// cahnge to fahrenheit
+        }
+        DecimalFormat df = new DecimalFormat("###.#");
+        String formatTempMin = df.format(min);
+        TextView textView = (TextView) findViewById(R.id.lo);
+        textView.setText("Night " + formatTempMin + deg);
+        textView.setTypeface(face);
 
 
         if (swipeRefreshLayout.isEnabled()) {
@@ -2201,29 +2056,25 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
 
 
-
     }
 
-    public void sendNotification(String des, double t, String l, String w_id)
-    {
-        DESCRIPTION=des;
-         TEM=t;
-         LOC=l;
-         W_ID=w_id;
+    public void sendNotification(String des, double t, String l, String w_id) {
+        DESCRIPTION = des;
+        TEM = t;
+        LOC = l;
+        W_ID = w_id;
     }
 
 
-  public  void favorites(View view)
-  {
+    public void favorites(View view) {
         startActivity(new Intent(WeatherActivity.this, DisplayFav.class));
 
-  }
+    }
 
     @Override
     public void onLocationChanged(Location location) {
 
-        if(location!=null)
-        {
+        if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
             la = Double.toString(latitude);
@@ -2236,9 +2087,25 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     editor.apply(); */
 
 
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            this.fusedLocationProviderClient.requestLocationUpdates(locationRequest, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    onLocationChanged(locationResult.getLastLocation());
+                }
+            }, Looper.myLooper());
         }
-        else
-            Toast.makeText(this,"Error fetching location. Please swipe down to refresh.",Toast.LENGTH_LONG).show();
+
 
         //this.fusedLocationProviderClient.removeLocationUpdates(locationCallback);
 

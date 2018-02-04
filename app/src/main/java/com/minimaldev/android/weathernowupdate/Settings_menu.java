@@ -15,12 +15,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.text.DecimalFormat;
@@ -51,27 +48,20 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
         getSupportActionBar().setTitle("Settings");
 
 
-         des=getIntent().getStringExtra("DES");
+        LayoutInflater inflater=getLayoutInflater();
+        View layout=inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toast_layout));
+
+        /* des=getIntent().getStringExtra("DES");
          loc=getIntent().getStringExtra("LOC");
          temp=getIntent().getDoubleExtra("TEM",0.0);
          id=getIntent().getStringExtra("ID");
          if(des==null||loc==null)
          {
-             LayoutInflater inflater=getLayoutInflater();
-             View layout=inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toast_layout));
-             TextView text=(TextView)layout.findViewById(R.id.text_toast);
-             text.setText("Error! Check Location and Network settings");
 
-             Toast toast=new Toast(getApplicationContext());
-             toast.setGravity(Gravity.BOTTOM|Gravity.CENTER,0,80);
-             toast.setDuration(Toast.LENGTH_LONG);
-             toast.setView(layout);
-             toast.show();
-             finish();
          }
         else {
              checkValues(des, temp, loc, id);
-         }
+         } */
 
     }
 
