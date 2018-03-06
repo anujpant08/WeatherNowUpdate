@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -968,6 +969,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
 
 
+
+
     }
 
     /*public void des(String des)
@@ -1164,7 +1167,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             case 2://for thunderstorm
 
                 Glide.with(this)
-                        .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
+                        .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
                         //.load("")
                         //.error(R.drawable.background_)
                         .centerCrop()
@@ -1179,7 +1182,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             case 3://for drizzle
                 if (hour >= 6 && hour < 18)
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1202,7 +1205,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             case 5: //for rain
                 if (hour >= 6 && hour < 18)
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1239,7 +1242,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 if (hour >= 6 && hour < 18) {
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1250,7 +1253,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     llayout.setVisibility(View.INVISIBLE);
                 } else {
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1281,7 +1284,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         llayout.setVisibility(View.INVISIBLE);
                     } else if (hour >= 7 && hour < 17) {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("sunday", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("clearday", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1303,7 +1306,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         llayout.setVisibility(View.INVISIBLE);
                     } else {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("night", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("nightclr", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1322,7 +1325,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     //view11.setBackgroundResource(R.color.clouds);
                     if (hour >= 6 && hour < 18) {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("cloudy", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("cloudsss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1333,7 +1336,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         llayout.setVisibility(View.INVISIBLE);
                     } else
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("nightcloud", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("nightclouds", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1367,7 +1370,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             .centerCrop()
@@ -1380,7 +1383,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 } else {
                     if (hour >= 6 && hour < 18) {
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1391,7 +1394,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         llayout.setVisibility(View.INVISIBLE);
                     } else
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 .centerCrop()
@@ -1502,11 +1505,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     } else
                         this.fognight.playAnimation();
 
+
                 }
 
 
                 break;
 
+        }
+
+        Vibrator v=(Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        if (v != null) {
+            v.vibrate(20);
         }
     }
 
@@ -2664,6 +2673,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             this.WeatherActivity.SetTemperature(temperature,min,max);
                 this.WeatherActivity.SetLocation(locate,cntry);
                 this.WeatherActivity.setWeatherIcon(id);
+                this.WeatherActivity.llayout.setVisibility(View.INVISIBLE);
                 this.WeatherActivity.setanimation(id);
                 this.WeatherActivity.SetHumidity(humidity);
                 this.WeatherActivity.SetPressure(pressure);

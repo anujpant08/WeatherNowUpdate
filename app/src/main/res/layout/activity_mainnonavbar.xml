@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/backgroundWeather"
-        android:layout_width="1920dp"
-        android:layout_height="1080dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="fitCenter"
         />
 
@@ -163,20 +163,19 @@
                     android:id="@+id/imageday"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-
-                    android:scaleType="centerCrop"
+                    android:layout_gravity="center"
                     android:src="@drawable/sunclear" />
 
                     <TextView
                         android:id="@+id/hi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/imageday"
-                        android:text="Day"
                         android:layout_marginStart="6dp"
                         android:layout_marginEnd="6dp"
+                        android:text="High"
+                        android:layout_gravity="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="14sp">
+                        android:textSize="16sp">
 
                     </TextView>
 
@@ -185,6 +184,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:scaleType="centerCrop"
+                    android:layout_gravity="center"
                     android:src="@drawable/moonclear"
                     />
 
@@ -192,7 +192,7 @@
                         android:id="@+id/lo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_gravity="center"
                         android:text="Low"
                         android:layout_marginStart="6dp"
                         android:textColor="#FFFFFF"
@@ -230,7 +230,8 @@
                     android:id="@+id/progresslayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/temperature_text">
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/temperature_text">
 
                     <ProgressBar
                         android:id="@+id/progress"
@@ -256,8 +257,8 @@
                 <RelativeLayout
                     android:id="@+id/animation"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/temperature_text">
 
@@ -355,7 +356,8 @@
                         android:id="@+id/thunder_view"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:layout_centerInParent="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
                         android:scaleType="center"
                         app:lottie_autoPlay="true"
                         app:lottie_fileName="thunder.json"
@@ -426,7 +428,7 @@
 
             <HorizontalScrollView
                 android:id="@+id/scroll"
-                android:layout_margin="4dp"
+                android:layout_margin="8dp"
                 android:background="@drawable/shape"
                 android:overScrollMode="never"
                 android:layout_width="match_parent"
