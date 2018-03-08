@@ -80,7 +80,7 @@ public class ForecastDialogAsync extends AsyncTask<String,Void,String> {
 // parse out the forecast list from the JSON result
             JSONArray weather= jsonResult.getJSONArray("list");
             int l=weather.length();
-            for(i=0;i<6;i++)
+            for(i=0;i<=6;i++)
             {
                 JSONObject obj=weather.getJSONObject(i);
                 JSONObject tobj=obj.getJSONObject("temp");

@@ -3,20 +3,20 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/Magenta</item>
+        <item name="colorPrimaryDark">@color/Magenta</item>
+        <item name="colorAccent">@color/Magenta</item>
 
         <!--<item name="android:colorBackground">@color/colorBack</item>-->
     </style>
         <style name="CustomTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/Magenta</item>
+        <item name="colorPrimaryDark">@color/Magenta</item>
+        <item name="colorAccent">@color/Magenta</item>
     </style>
     <style name="PlacesTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/Magenta</item>
+        <item name="colorPrimaryDark">@color/Magenta</item>
         <item name="colorAccent">@color/thunder</item>
     </style>
 
@@ -26,9 +26,9 @@
 
     </style>
     <style name="SettingsTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">#fd5e53</item>
-        <item name="colorAccent">#fd5e53</item>
-        <item name="colorPrimaryDark">#fd5e53</item>
+        <item name="colorPrimary">@color/Magenta</item>
+        <item name="colorAccent">@color/Magenta</item>
+        <item name="colorPrimaryDark">@color/Magenta</item>
 
 
     </style>

@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,13 +27,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +62,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         String url="",loc="";
         TextView textView;
         String fullLocation;
-        LinearLayout linearLayout;
+        RelativeLayout linearLayout;
         Set<String> set=new HashSet<String>();
         int countfav=0;
         public  static  DisplayFav displayFav=new DisplayFav();
@@ -184,7 +180,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
 
 
-                linearLayout=(LinearLayout) findViewById(R.id.progressLayout);
+                linearLayout=(RelativeLayout) findViewById(R.id.progressLayout);
                 ProgressBar progressBar=(ProgressBar)findViewById(R.id.progressDialog);
                 //progressBar.setBackgroundColor(Color.WHITE);
                 //progressBar.setProgressTintList(ColorStateList.valueOf(Color.MAGENTA));
@@ -207,29 +203,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                // Widget_Async();
         }
 
-        public void visible(View view)
-        {
-
-                Animation animslide,slidedown;
-                ImageView img= (ImageView) this.findViewById(R.id.foree);
-                if(flag) {
-                        HorizontalScrollView sc = (HorizontalScrollView) findViewById(R.id.scroll);
-                        sc.setVisibility(View.GONE);
-                        img.setImageResource(R.drawable.ic_action_collapse);
-                        slidedown= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.swipedown);
-                        sc.startAnimation(slidedown);
-                        flag=false;
-                }
-                else
-                {
-                        HorizontalScrollView sc = (HorizontalScrollView) findViewById(R.id.scroll);
-                        sc.setVisibility(View.VISIBLE);
-                        img.setImageResource(R.drawable.ic_action_expand);
-                        animslide= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.swipeup);
-                        sc.startAnimation(animslide);
-                        flag=true;
-                }
-        }
 
         public boolean hasNavBar()
         {
@@ -265,14 +238,44 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 String add="http://api.timezonedb.com/v2/get-time-zone?key=WM0USFMFHGKX&format=json&by=position&lat="+la+"&lng="+lo;
                 Async_timezone task1=new Async_timezone(this,add);
                 task1.execute(add);
+            final Handler handler = new Handler();
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!shown) {
+                        Toast.makeText(Dialog_weather.this, "Network Error! Please try again.", Toast.LENGTH_LONG).show();
+
+                    }
+                }
+            }, 10000);
 
         }
+
+    public void SetWind(double wind) {
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+        TextView view = (TextView) this.findViewById(R.id.wind_text);
+        DecimalFormat df = new DecimalFormat("###");
+        String formatPres = df.format(wind);
+        view.setText("Wind " + formatPres + " Km/hr");
+        view.setTypeface(face);
+    }
+
+    public void SetHumidity(double hum) {
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+        TextView view = (TextView) this.findViewById(R.id.humid_text);
+        DecimalFormat df = new DecimalFormat("###");
+        String formatHum = df.format(hum);
+        view.setText("Humidity " + formatHum + "%");
+        view.setTypeface(face);
+
+    }
 
         public void time(String t)
         {
                // timet=t;
                 String timev;
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latoitalic.ttf");
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
                 tv=(TextView)findViewById(R.id.time_text);
                 ImageView sc=(ImageView)this.findViewById(R.id.back);
 
@@ -353,7 +356,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 }
 
                 //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
-                linearLayout=(LinearLayout) findViewById(R.id.progressLayout);
+                linearLayout=(RelativeLayout) findViewById(R.id.progressLayout);
                 //Async_weather task = new Async_weather(this, enc);
 
                 linearLayout.setVisibility(View.VISIBLE);
@@ -366,7 +369,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         {
             SharedPreferences s= PreferenceManager.getDefaultSharedPreferences(this);
             boolean t=s.getBoolean("checkBox",false);
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
                 TextView view=(TextView)this.findViewById(R.id.temp_text);
                 //TextView view1=(TextView)this.findViewById(R.id.hilow_text);
             //String deg="\u2103";
@@ -375,7 +378,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 temp=(temp*9/5)+32;
                // deg="\u2109";
             }
-                DecimalFormat df=new DecimalFormat("###.#");
+                DecimalFormat df=new DecimalFormat("###");
                 String formatTemp=df.format(temp);
                 String formatTemp1=df.format(min);
                 String formatTemp2=df.format(max);
@@ -444,10 +447,10 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                     max=(max*9/5)+32;
                     deg="\u2109";
                 }
-                DecimalFormat df=new DecimalFormat("###.#");
+                DecimalFormat df=new DecimalFormat("###");
                 String formatTempMin=df.format(max);
                 TextView textView=(TextView)findViewById(R.id.hi);
-                textView.setText("Day "+formatTempMin+deg+"  ");
+                textView.setText(formatTempMin+"\u00B0");
                 textView.setTypeface(face);
 
         }
@@ -464,10 +467,10 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 min=(min*9/5)+32;
                 deg="\u2109";
             }
-                DecimalFormat df=new DecimalFormat("###.#");
+                DecimalFormat df=new DecimalFormat("###");
                 String formatTempMin=df.format(min);
                 TextView textView=(TextView)findViewById(R.id.lo);
-                textView.setText("Night "+formatTempMin+deg);
+                textView.setText(formatTempMin+"\u00B0");
                 textView.setTypeface(face);
         }
 
@@ -494,10 +497,11 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 //ImageView imageView =(ImageView)findViewById(R.id.favorite);
                //ImageView imageView1 =(ImageView)findViewById(R.id.notfavorite);
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
                 fullLocation=name+", "+country;
+
                 TextView view= (TextView)this.findViewById(R.id.location_text);
-                view.setText(fullLocation);
+                view.setText(name);
                 view.setTypeface(face);
 
 
@@ -522,279 +526,257 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
 
                 ImageView sc = (ImageView) this.findViewById(R.id.back);
+                RelativeLayout llayout=(RelativeLayout)findViewById(R.id.progressLayout);
 
                 int actualID=Integer.parseInt(id);
                 int ID=actualID/100;
-                switch (ID)
-                {
-                        case 2://for thunderstorm
+            switch (ID) {
+                case 2://for thunderstorm
 
-                                Glide.with(this)
-                                        .load(this.getResources().getIdentifier("thunder","drawable",this.getPackageName()))
-                                        //.load("")
-                                        //.error(R.drawable.background_)
-                                        .centerCrop()
-                                        .dontTransform()
-                                        .crossFade()
-                                        .into(sc);
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
 
-                                linearLayout.setVisibility(View.INVISIBLE);
-                                //view11.setBackgroundResource(R.color.thunder);
+                    llayout.setVisibility(View.INVISIBLE);
+                    //view11.setBackgroundResource(R.color.thunder);
 
-                                break;
-                        case 3://for drizzle
-                                if(hour>=6 && hour <18)
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
-                                else
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
+                    break;
+                case 3://for drizzle
+                    if (hour >= 6 && hour < 18)
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+                    else
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
 
-                                linearLayout.setVisibility(View.INVISIBLE);
+                    llayout.setVisibility(View.INVISIBLE);
 
-                                break;
-                        case 5: //for rain
-                                if(hour>=6 && hour <18)
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("rainy","drawable",this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
-                                else
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("rainynight","drawable",this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
+                    break;
+                case 5: //for rain
+                    if (hour >= 6 && hour < 18)
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+                    else
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
 
-                                linearLayout.setVisibility(View.INVISIBLE);
-                                break;
-                        case 6: //for snow
+                    llayout.setVisibility(View.INVISIBLE);
+                    break;
+                case 6: //for snow
 
-                                Glide.with(this)
-                                        .load(this.getResources().getIdentifier("snowy","drawable",this.getPackageName()))
-                                        //.load("")
-                                        //.error(R.drawable.background_)
-                                        .centerCrop()
-                                        .dontTransform()
-                                        .crossFade()
-                                        .into(sc);
+                    Glide.with(this)
+                            .load(this.getResources().getIdentifier("snowy", "drawable", this.getPackageName()))
+                            //.load("")
+                            //.error(R.drawable.background_)
+                            .centerCrop()
+                            .dontTransform()
+                            .crossFade()
+                            .into(sc);
 
-                                linearLayout.setVisibility(View.INVISIBLE);
+                    llayout.setVisibility(View.INVISIBLE);
 
-                                break;
-                        case 7: //for fog
+                    break;
+                case 7: //for fog
 
-                                if(hour>=6 && hour <18)
-                                {
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("dayfog","drawable",this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
+                    if (hour >= 6 && hour < 18) {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
 
-                                        linearLayout.setVisibility(View.INVISIBLE);
-                                }
-                                else {
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
+                        llayout.setVisibility(View.INVISIBLE);
+                    } else {
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
 
-                                        linearLayout.setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                        case 8: //for clear and clouds
+                        llayout.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case 8: //for clear and clouds
 
-                                if(actualID==800)
-                                {
-                                        //System.out.println(hour);
-                                        //for clear
-                                        //  view1.setImageResource(R.drawable.clear);
-                                        //view11.setBackgroundResource(R.color.clear);
-                                        if(hour>=5 && hour<7) {
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
+                    if (actualID == 800) {
+                        //System.out.println(hour);
+                        //for clear
+                        //  view1.setImageResource(R.drawable.clear);
+                        //view11.setBackgroundResource(R.color.clear);
+                        if (hour >= 5 && hour < 7) {
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
 
-                                                linearLayout.setVisibility(View.INVISIBLE);
-                                        }
-                                        else if(hour>=7 && hour<17) {
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("sunday", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
+                            llayout.setVisibility(View.INVISIBLE);
+                        } else if (hour >= 7 && hour < 17) {
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("clearday", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
 
-                                                linearLayout.setVisibility(View.INVISIBLE);
-                                        }
-                                        else if(hour>=17 && hour<19)
-                                        {
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("sunset","drawable",this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
+                            llayout.setVisibility(View.INVISIBLE);
+                        } else if (hour >= 17 && hour < 19) {
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("sunset", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
 
-                                                linearLayout.setVisibility(View.INVISIBLE);
-                                        }
+                            llayout.setVisibility(View.INVISIBLE);
+                        } else {
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("nightclr", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
+
+                            llayout.setVisibility(View.INVISIBLE);
+                        }
+                        // linear.setBackgroundResource(R.drawable.at_day);
+
+                    }
+                    if (actualID == 801 || actualID == 802 || actualID == 803) {
+                        //for scattered clouds
+                        //view1.setImageResource(R.drawable.scattered_clouds);
+                        //view11.setBackgroundResource(R.color.clouds);
+                        if (hour >= 6 && hour < 18) {
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("cloudsss", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
+
+                            llayout.setVisibility(View.INVISIBLE);
+                        } else
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("nightclouds", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                        //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                    }
+                    if (actualID == 804) {
+                        //for overcast
+                        //view1.setImageResource(R.drawable.overcast);
+                        //view11.setBackgroundResource(R.color.overcast);
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                        //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                    }
+                    break;
+                case 9://for extreme weather
+                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                        Glide.with(this)
+                                .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
+                                //.load("")
+                                //.error(R.drawable.background_)
+                                .centerCrop()
+                                .dontTransform()
+                                .crossFade()
+                                .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                        //view1.setImageResource(R.drawable.tornado);
+                    } else {
+                        if (hour >= 6 && hour < 18) {
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
+
+                            llayout.setVisibility(View.INVISIBLE);
+                        } else
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+                                    .centerCrop()
+                                    .dontTransform()
+                                    .crossFade()
+                                    .into(sc);
+
+                        llayout.setVisibility(View.INVISIBLE);
+                        // view1.setImageResource(R.drawable.breeze);
+                    }
 
 
+                    break;
 
-                                        else {
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("night", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
-
-                                                linearLayout.setVisibility(View.INVISIBLE);
-                                        }
-                                        // linear.setBackgroundResource(R.drawable.at_day);
-
-                                }
-                                if(actualID==801 || actualID==802 || actualID==803)
-                                {
-                                        //for scattered clouds
-                                        //view1.setImageResource(R.drawable.scattered_clouds);
-                                        //view11.setBackgroundResource(R.color.clouds);
-                                        if(hour>=6 && hour <18)
-                                        {
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("cloudy", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
-
-                                                linearLayout.setVisibility(View.INVISIBLE);
-                                        }
-                                        else
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("nightcloud", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
-
-                                        linearLayout.setVisibility(View.INVISIBLE);
-                                        //linear.setBackgroundResource(R.drawable.scatteredat_day);
-
-                                }
-                                if(actualID==804)
-                                {
-                                        //for overcast
-                                        //view1.setImageResource(R.drawable.overcast);
-                                        //view11.setBackgroundResource(R.color.overcast);
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
-
-                                        linearLayout.setVisibility(View.INVISIBLE);
-                                        //linear.setBackgroundResource(R.drawable.overcastat_day);
-
-                                }
-                                break;
-                        case 9://for extreme weather
-                                if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
-
-                                        Glide.with(this)
-                                                .load(this.getResources().getIdentifier("thunder", "drawable", this.getPackageName()))
-                                                //.load("")
-                                                //.error(R.drawable.background_)
-                                                .centerCrop()
-                                                .dontTransform()
-                                                .crossFade()
-                                                .into(sc);
-
-                                        linearLayout.setVisibility(View.INVISIBLE);
-                                        //view1.setImageResource(R.drawable.tornado);
-                                }
-                                else
-                                {
-                                        if(hour>=6 && hour <18)
-                                        {
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("dayfog", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
-
-                                                linearLayout.setVisibility(View.INVISIBLE);
-                                        }
-                                        else
-                                                Glide.with(this)
-                                                        .load(this.getResources().getIdentifier("nightfog", "drawable", this.getPackageName()))
-                                                        //.load("")
-                                                        //.error(R.drawable.background_)
-                                                        .centerCrop()
-                                                        .dontTransform()
-                                                        .crossFade()
-                                                        .into(sc);
-
-                                        linearLayout.setVisibility(View.INVISIBLE);
-                                        // view1.setImageResource(R.drawable.breeze);
-                                }
-                                // view11.setBackgroundResource(R.color.extreme);
-
-                                //linear.setBackgroundResource(R.drawable.extreme_weather);
-
-                                //linear.setBackgroundResource(R.drawable.);
-
-                                break;
-
-                }
+            }
 
 
 
@@ -932,6 +914,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 TextView view4 = (TextView) findViewById(R.id.day14);
                 TextView view5 = (TextView) findViewById(R.id.day15);
                 TextView view6 = (TextView) findViewById(R.id.day16);
+                TextView view7 = (TextView) findViewById(R.id.day17);
                 //TextView view7=(TextView)findViewById(R.id.temptext_sun);
                 switch (dayNo) {
                         case 1:
@@ -964,6 +947,11 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 view6.setTypeface(face);
                                 // view66.setText(t);
                                 break;
+                        case 7:
+                            view7.setText(d);
+                            view7.setTypeface(face);
+                            // view66.setText(t);
+                            break;
                         //case 7: view7.setText(day);
                         // break;}
                 }
@@ -981,6 +969,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 ImageView view4=(ImageView)findViewById(R.id.icon14);
                 ImageView view5=(ImageView)findViewById(R.id.icon15);
                 ImageView view6=(ImageView)findViewById(R.id.icon16);
+                ImageView view7=(ImageView)findViewById(R.id.icon17);
                 //ImageView view7=(ImageView)findViewById(R.id.iconweather_sun);
                 if(index==0)
                 {
@@ -1415,7 +1404,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                         }
                 }
-                else
+                else if(index==5)
                 {
                         switch (ID)
                         {
@@ -1502,6 +1491,93 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                         }
                 }
+                else
+                {
+                    switch (ID)
+                    {
+                        case 2://for thunderstorm
+                            view7.setImageResource(R.drawable.thunderstorm);
+                            //view66.setBackgroundResource(R.color.thunder);
+
+                            //linear.setBackgroundResource(R.drawable.thunder);
+
+                            break;
+                        case 3://for drizzle
+                            view7.setImageResource(R.drawable.drizzle);
+                            //view66.setBackgroundResource(R.color.drizzle);
+
+                            //linear.setBackgroundResource(R.drawable.drizzleat_day);
+
+                            break;
+                        case 5: //for rain
+                            view7.setImageResource(R.drawable.rain);
+                            //view66.setBackgroundResource(R.color.rain);
+
+                            //linear.setBackgroundResource(R.drawable.rainat_night);
+
+                            break;
+                        case 6: //for snowy
+
+                            view7.setImageResource(R.drawable.snow);
+                            //view66.setBackgroundResource(R.color.snowy);
+
+                            //linear.setBackgroundResource(R.drawable.snowat_night);
+
+                            break;
+                        case 7: //for foggy
+                            view7.setImageResource(R.drawable.fog);
+                            //view66.setBackgroundResource(R.color.foggy);
+
+                            //linear.setBackgroundResource(R.drawable.fogat_day);
+                            break;
+                        case 8: //for sunnyday and clouds
+
+                            if(actualID==800)
+                            {
+                                //for sunnyday
+                                view7.setImageResource(R.drawable.clear);
+                                //view66.setBackgroundResource(R.color.sunnyday);
+
+                                // linear.setBackgroundResource(R.drawable.clearat_day);
+
+                            }
+                            if(actualID==801 || actualID==802 || actualID==803)
+                            {
+                                //for scattered clouds
+                                view7.setImageResource(R.drawable.scattered_clouds);
+                                //view66.setBackgroundResource(R.color.clouds);
+
+                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                            }
+                            if(actualID==804)
+                            {
+                                //for overcasttype
+                                view7.setImageResource(R.drawable.overcast);
+                                // view66.setBackgroundResource(R.color.overcasttype);
+
+                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                            }
+                            break;
+                        case 9://for extreme weather
+                            if(actualID == 900 || actualID == 901|| actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                view7.setImageResource(R.drawable.tornado);
+                            }
+                            else
+                            {
+                                view7.setImageResource(R.drawable.breeze);
+                            }                                                           //view66.setBackgroundResource(R.color.extreme);
+
+                            //linear.setBackgroundResource(R.drawable.extreme_weather);
+
+                            //linear.setBackgroundResource(R.drawable.);
+
+                            break;
+
+                    }
+                }
 
         }
 
@@ -1521,19 +1597,17 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 max=(max*9/5+32);
                 deg="\u2109";
             }
+                min=(min+max)/2;
+                DecimalFormat df=new DecimalFormat("###");
+                String t=df.format(min)+" "+deg;
 
-                DecimalFormat df=new DecimalFormat("###.#");
-                String formatTempMin=df.format(min);
-                String formatTempMax=df.format(max);
-                formatTempMin=formatTempMin+" "+deg+"/";
-                formatTempMax=formatTempMax+" "+deg;
-                String t=formatTempMin+formatTempMax;
                 TextView view1=(TextView)findViewById(R.id.temp11);
                 TextView view2=(TextView)findViewById(R.id.temp12);
                 TextView view3=(TextView)findViewById(R.id.temp13);
                 TextView view4=(TextView)findViewById(R.id.temp14);
                 TextView view5=(TextView)findViewById(R.id.temp15);
                 TextView view6=(TextView)findViewById(R.id.temp16);
+                TextView view7=(TextView)findViewById(R.id.temp17);
                 switch (index)
                 {
                         case 0: view1.setText(t);
@@ -1560,6 +1634,10 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 view6.setTypeface(face);
                                 //view66.setText(formatTempMax);
                                 break;
+                        case 6: view7.setText(t);
+                                view7.setTypeface(face);
+                        //view66.setText(formatTempMax);
+                                break;
                         //case 6: view7.setText(formatTemp/);
                         //  break;
 
@@ -1576,8 +1654,14 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 //this.addfav();
 
-                //Toast.makeText(this, fullLocation+" added to favorites !",Toast.LENGTH_SHORT).show();
-                snackbar=Snackbar.make(findViewById(R.id.coordialog),"Added to Favourites",Snackbar.LENGTH_LONG);
+            Intent intent = new Intent(Dialog_weather.this, DisplayFav.class);
+            intent.putExtra("LOCATION_NAME", fullLocation);
+            intent.putExtra("COUNTER_VALUE", countfav);
+
+            startActivity(intent);
+            countfav++;
+                Toast.makeText(this, fullLocation+" added to favorites !",Toast.LENGTH_SHORT).show();
+                /*snackbar=Snackbar.make(findViewById(R.id.coordialog),"Added to Favourites",Snackbar.LENGTH_LONG);
                 snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
                 snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.thunder));
                 snackbar.setAction("View", new View.OnClickListener() {
@@ -1585,12 +1669,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         public void onClick(View v) {
 
 
-                                Intent intent = new Intent(Dialog_weather.this, DisplayFav.class);
-                                intent.putExtra("LOCATION_NAME", fullLocation);
-                                intent.putExtra("COUNTER_VALUE", countfav);
 
-                                startActivity(intent);
-                                countfav++;
                                 //finish();
 
                         }
@@ -1601,7 +1680,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
                 textView.setTextSize(14);
 
-                snackbar.show();
+                snackbar.show(); */
         }
 
 
@@ -1719,6 +1798,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 // parse out the humidity from the JSON result
                                 double humidity = jsonResult.getJSONObject("main").getDouble("humidity");
 
+                                double wind=jsonResult.getJSONObject("wind").getDouble("speed");
+
 // parse out the description from the JSON result
                                 String description = jsonResult.getJSONArray("weather").getJSONObject(0).getString("description");
 //parse out weather id
@@ -1740,13 +1821,14 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
 
 // set all the fields in the activity from the parsed JSON
+
                                 this.DialogWeather.SetDescription(description);
                                 this.DialogWeather.SetTemperature(temperature,min,max);
-                                //this.DialogWeather.SetPressure(pressure);
-                                //this.DialogWeather.SetHumidity(humidity);
+                                this.DialogWeather.SetWind(wind);
+                                this.DialogWeather.SetHumidity(humidity);
                                 this.DialogWeather.SetLocation(locate,cntry);
-                                this.DialogWeather.SetTime(id);
-                                this.DialogWeather.setcor(lat,lon, id);
+                            this.DialogWeather.SetTime(id);
+                            this.DialogWeather.setcor(lat,lon, id);
                                 //this.DialogWeather.setWeatherIcon(id);
                                 //this.DialogWeather.time(dateTime);
 

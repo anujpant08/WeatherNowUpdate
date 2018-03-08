@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:padding="15dp"
         android:text="Sample"
-        android:textColor="#fd5e53"
+        android:textColor="@color/Magenta"
         android:textSize="20dp" />
 
     <!--<ImageView

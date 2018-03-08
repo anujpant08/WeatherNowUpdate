@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/relativeBack"
-    android:background="#000000"
+    android:background="@drawable/gradientplaceholder"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
@@ -95,7 +95,7 @@
                         android:layout_marginTop="30dp"
                         android:gravity="center"
                         android:scaleType="fitXY"
-                        android:text="WeatherNow"
+                        android:text="Home"
                         android:textColor="#ffffff"
                         android:textSize="18sp" />
 
@@ -204,22 +204,39 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/city_text"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="80dp"
+                        android:id="@+id/locicontext"
                         android:gravity="center_horizontal"
-                        android:text="Chennai"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="80dp">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="6dp"
+                            android:src="@drawable/ic_action_place"/>
+
+                        <TextView
+                        android:id="@+id/city_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Earth"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp" />
+
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/temperature_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/city_text"
+                        android:layout_below="@id/locicontext"
                         android:layout_marginTop="8dp"
                         android:text="62"
                         android:textColor="#FFFFFF"
@@ -372,7 +389,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@id/animation"
-                        android:text="Condition"
+                        android:text="Loading weather..."
                         android:gravity="center_horizontal"
                         android:textColor="#FFFFFF"
                         android:textSize="26sp" />

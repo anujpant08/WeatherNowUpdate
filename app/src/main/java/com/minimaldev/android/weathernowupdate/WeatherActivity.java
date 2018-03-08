@@ -149,6 +149,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     double TEM;
     LottieAnimationView animationView, moonView, cloudy, cloudymoon, fogday, fognight, snowday, snownight, thunder, rainy, overcast;
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +171,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         }
 
+       work();
+
+    }
+
+    public void work()
+    {
         boolean enabled = locationEnabled();
 
         sharedPreferences=this.getSharedPreferences("location",Context.MODE_PRIVATE);
@@ -177,157 +184,251 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         System.out.println((sharedPreferences.contains("lat") && sharedPreferences.contains("lon")));
 
 
-            lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-            shown = false;
-            snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
-            snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
-            snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
-            snackbarboth = Snackbar.make(findViewById(R.id.coormain), "Location and Network not available", Snackbar.LENGTH_LONG);
-            snackrefresh = Snackbar.make(findViewById(R.id.coormain), "Refreshing", Snackbar.LENGTH_LONG);
+        lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        shown = false;
+        snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
+        snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
+        snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
+        snackbarboth = Snackbar.make(findViewById(R.id.coormain), "Location and Network not available", Snackbar.LENGTH_LONG);
+        snackrefresh = Snackbar.make(findViewById(R.id.coormain), "Refreshing", Snackbar.LENGTH_LONG);
 
-            //snackrefresh.setDuration((int) TimeUnit.MINUTES.toMillis(1/4));
+        //snackrefresh.setDuration((int) TimeUnit.MINUTES.toMillis(1/4));
 
-            snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
-            snackbarnetwork.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
-            snackbarboth.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
+        snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
+        snackbarnetwork.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
+        snackbarboth.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
 
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
-            snackbarnetwork.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
-            snackbarboth.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
-            snackrefresh.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
-
-
-            TextView textView;
-            textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
-            textView.setTextSize(14);
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
+        snackbarnetwork.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
+        snackbarboth.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
+        snackrefresh.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
 
 
-            textView = (TextView) snackbarnetwork.getView().findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
-            textView.setTextSize(14);
+        TextView textView;
+        textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextSize(14);
 
 
-            textView = (TextView) snackbarboth.getView().findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
-            textView.setTextSize(14);
+        textView = (TextView) snackbarnetwork.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextSize(14);
 
 
-            textView = (TextView) snackrefresh.getView().findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
-            textView.setTextSize(14);
+        textView = (TextView) snackbarboth.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextSize(14);
 
 
-            snackbar.setAction("Enable", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-
-                }
-            });
-
-            snackbarnetwork.setAction("Check", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-
-            snackbarboth.setAction("Check", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                    Intent intentnew = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                    startActivity(intentnew);
-                }
-            });
+        textView = (TextView) snackrefresh.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextSize(14);
 
 
+        snackbar.setAction("Enable", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+
+            }
+        });
+
+        snackbarnetwork.setAction("Check", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
+        snackbarboth.setAction("Check", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                Intent intentnew = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                startActivity(intentnew);
+            }
+        });
 
 
 
-            animationView = (LottieAnimationView) findViewById(R.id.animation_view);
-            moonView = (LottieAnimationView) findViewById(R.id.moon_view);
-            cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
-            cloudymoon = (LottieAnimationView) findViewById(R.id.cloudmoon_view);
-            fogday = (LottieAnimationView) findViewById(R.id.fogday_view);
-            fognight = (LottieAnimationView) findViewById(R.id.fognight_view);
-            overcast = (LottieAnimationView) findViewById(R.id.overcast_view);
-            rainy = (LottieAnimationView) findViewById(R.id.rainy_view);
-            snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
-            snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
-            thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
-
-            animationView.setImageAssetsFolder("images/");
-            animationView.setAnimation("sun.json");
-            animationView.loop(false);
-
-            moonView.setImageAssetsFolder("moon/");
-            moonView.setAnimation("moon.json");
-            moonView.loop(false);
-
-            cloudy.setImageAssetsFolder("cloudy/");
-            cloudy.setAnimation("cloudy.json");
-            cloudy.loop(false);
-
-            cloudymoon.setImageAssetsFolder("cloudymoon/");
-            cloudymoon.setAnimation("cloudymoon.json");
-            cloudymoon.loop(false);
-
-            fogday.setImageAssetsFolder("fogday/");
-            fogday.setAnimation("fogday.json");
-            fogday.loop(false);
-
-            fognight.setImageAssetsFolder("fognight/");
-            fognight.setAnimation("fognight.json");
-            fognight.loop(false);
-
-            overcast.setImageAssetsFolder("overcast/");
-            overcast.setAnimation("overcast.json");
-            overcast.loop(false);
-
-            cloudy.setImageAssetsFolder("cloudy/");
-            cloudy.setAnimation("cloudy.json");
-            cloudy.loop(false);
-
-            cloudymoon.setImageAssetsFolder("cloudymoon/");
-            cloudymoon.setAnimation("cloudymoon.json");
-            cloudymoon.loop(false);
-
-            rainy.setImageAssetsFolder("rainy/");
-            rainy.setAnimation("rainy.json");
-            rainy.loop(false);
-
-            snowday.setImageAssetsFolder("snowday/");
-            snowday.setAnimation("snowday.json");
-            snowday.loop(false);
-
-            snownight.setImageAssetsFolder("snownight/");
-            snownight.setAnimation("snownight.json");
-            snownight.loop(false);
-
-            thunder.setImageAssetsFolder("thunder/");
-            thunder.setAnimation("thunder.json");
-            thunder.loop(false);
 
 
-            llayout = (RelativeLayout) findViewById(R.id.progresslayout);
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
-            llayout.setVisibility(View.VISIBLE);
+        animationView = (LottieAnimationView) findViewById(R.id.animation_view);
+        moonView = (LottieAnimationView) findViewById(R.id.moon_view);
+        cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
+        cloudymoon = (LottieAnimationView) findViewById(R.id.cloudmoon_view);
+        fogday = (LottieAnimationView) findViewById(R.id.fogday_view);
+        fognight = (LottieAnimationView) findViewById(R.id.fognight_view);
+        overcast = (LottieAnimationView) findViewById(R.id.overcast_view);
+        rainy = (LottieAnimationView) findViewById(R.id.rainy_view);
+        snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
+        snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
+        thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
 
-            //dialog=new ProgressDialog(this);
+        animationView.setImageAssetsFolder("images/");
+        animationView.setAnimation("sun.json");
+        animationView.loop(false);
 
-            setDefaultValues(this, R.xml.settings, false);
+        moonView.setImageAssetsFolder("moon/");
+        moonView.setAnimation("moon.json");
+        moonView.loop(false);
+
+        cloudy.setImageAssetsFolder("cloudy/");
+        cloudy.setAnimation("cloudy.json");
+        cloudy.loop(false);
+
+        cloudymoon.setImageAssetsFolder("cloudymoon/");
+        cloudymoon.setAnimation("cloudymoon.json");
+        cloudymoon.loop(false);
+
+        fogday.setImageAssetsFolder("fogday/");
+        fogday.setAnimation("fogday.json");
+        fogday.loop(false);
+
+        fognight.setImageAssetsFolder("fognight/");
+        fognight.setAnimation("fognight.json");
+        fognight.loop(false);
+
+        overcast.setImageAssetsFolder("overcast/");
+        overcast.setAnimation("overcast.json");
+        overcast.loop(false);
+
+        cloudy.setImageAssetsFolder("cloudy/");
+        cloudy.setAnimation("cloudy.json");
+        cloudy.loop(false);
+
+        cloudymoon.setImageAssetsFolder("cloudymoon/");
+        cloudymoon.setAnimation("cloudymoon.json");
+        cloudymoon.loop(false);
+
+        rainy.setImageAssetsFolder("rainy/");
+        rainy.setAnimation("rainy.json");
+        rainy.loop(false);
+
+        snowday.setImageAssetsFolder("snowday/");
+        snowday.setAnimation("snowday.json");
+        snowday.loop(false);
+
+        snownight.setImageAssetsFolder("snownight/");
+        snownight.setAnimation("snownight.json");
+        snownight.loop(false);
+
+        thunder.setImageAssetsFolder("thunder/");
+        thunder.setAnimation("thunder.json");
+        thunder.loop(false);
+
+
+        llayout = (RelativeLayout) findViewById(R.id.progresslayout);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
+        llayout.setVisibility(View.VISIBLE);
+
+        //dialog=new ProgressDialog(this);
+
+        setDefaultValues(this, R.xml.settings, false);
 
         if(!sharedPreferences.contains("lat") || !sharedPreferences.contains("lon"))
         {
 
+
+            if (!enabled) {
+
+                snackbar.show();
+            } else if (!isNetworkAvailable()) {
+                snackbarnetwork.show();
+            } else
+                showweather();
+            swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
+            swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
+            swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+            swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
+
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    //buildGoogleApiClient();
+                    //createLocationRequest();
+                    if (!isNetworkAvailable() && !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        snackbar.show();
+                        swipeRefreshLayout.setRefreshing(false);
+                    } else {
+                        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !isNetworkAvailable()) {
+
+                            snackbarboth.show();
+                            swipeRefreshLayout.setRefreshing(false);
+
+                        } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+                            snackbar.show();
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else if (!isNetworkAvailable()) {
+                            snackbarnetwork.show();
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            //snackrefresh.show();
+                            if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            showweather();
+                            final Handler handler = new Handler();
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!shown) {
+                                        Toast.makeText(WeatherActivity.this, "Network Error! Please swipe down to Refresh.", Toast.LENGTH_LONG).show();
+                                        swipeRefreshLayout.setRefreshing(false);
+                                    }
+                                }
+                            }, 10000);
+
+
+                        }
+
+
+                    }
+
+                    //
+
+
+                }
+
+            });
+
+
+            //hasNavBar();
+
+
+            //this.dialog.setTitle("Please wait");
+            //this.dialog.setMessage("Fetching beautiful weather...");
+            //this.dialog.show();
+            //this.dialog.setCanceledOnTouchOutside(false);
+
+
+            //RetrieveWeather(LAT, LON);
+
+        }
+        else
+        {
+            SharedPreferences sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
+            final String ll = sp.getString("lat", "");
+            final String lon = sp.getString("lon", "");
+
+            System.out.println("At elseif part "+ll+" "+lon);
+            if (ll.length() == 0 || lon.length() == 0)
+            {
 
                 if (!enabled) {
 
@@ -357,7 +458,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                             } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                                snackbar.show();
+                                //snackbar.show();
+                                RetrieveWeather(ll,lon,"a");
+                                RetrieveForecast(ll,lon);
                                 swipeRefreshLayout.setRefreshing(false);
                             } else if (!isNetworkAvailable()) {
                                 snackbarnetwork.show();
@@ -374,7 +477,81 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
-                                showweather();
+                                RetrieveWeather(ll,lon,"a");
+                                RetrieveForecast(ll,lon);
+                                final Handler handler = new Handler();
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!shown) {
+                                            Toast.makeText(WeatherActivity.this, "Network Error! Please swipe down to Refresh.", Toast.LENGTH_LONG).show();
+                                            swipeRefreshLayout.setRefreshing(false);
+                                        }
+                                    }
+                                }, 10000);
+
+
+                            }
+
+
+                        }
+
+                        //
+
+
+                    }
+
+                });
+            }
+            else
+            {
+                SharedPreferences spp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
+                final String lll = spp.getString("lat", "");
+                final String lonn = spp.getString("lon", "");
+                swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
+                swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
+                swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+                swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
+
+                swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        //buildGoogleApiClient();
+                        //createLocationRequest();
+                        if (!isNetworkAvailable() && !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            snackbar.show();
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !isNetworkAvailable()) {
+
+                                snackbarboth.show();
+                                swipeRefreshLayout.setRefreshing(false);
+
+                            } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+                                //snackbar.show();
+
+                                RetrieveWeather(lll,lonn,"a");
+                                RetrieveForecast(lll,lonn);
+                                swipeRefreshLayout.setRefreshing(false);
+                            } else if (!isNetworkAvailable()) {
+                                snackbarnetwork.show();
+                                swipeRefreshLayout.setRefreshing(false);
+                            } else {
+                                //snackrefresh.show();
+                                if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                RetrieveWeather(lll,lonn,"a");
+                                RetrieveForecast(lll,lonn);
                                 final Handler handler = new Handler();
 
                                 handler.postDelayed(new Runnable() {
@@ -400,182 +577,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 });
 
-
-                //hasNavBar();
-
-
-                //this.dialog.setTitle("Please wait");
-                //this.dialog.setMessage("Fetching beautiful weather...");
-                //this.dialog.show();
-                //this.dialog.setCanceledOnTouchOutside(false);
-
-
-                //RetrieveWeather(LAT, LON);
-
+                System.out.println("At else part"+lll+" "+lonn);
+                RetrieveWeather(lll,lonn,"a");
+                RetrieveForecast(lll,lonn);
             }
-            else
-            {
-                SharedPreferences sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
-                final String ll = sp.getString("lat", "");
-                final String lon = sp.getString("lon", "");
-
-                System.out.println("At elseif part "+ll+" "+lon);
-                if (ll.length() == 0 || lon.length() == 0)
-                {
-
-                    if (!enabled) {
-
-                        snackbar.show();
-                    } else if (!isNetworkAvailable()) {
-                        snackbarnetwork.show();
-                    } else
-                        showweather();
-                    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
-                    swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
-                    swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-                    swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
-
-                    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            //buildGoogleApiClient();
-                            //createLocationRequest();
-                            if (!isNetworkAvailable() && !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                                snackbar.show();
-                                swipeRefreshLayout.setRefreshing(false);
-                            } else {
-                                if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !isNetworkAvailable()) {
-
-                                    snackbarboth.show();
-                                    swipeRefreshLayout.setRefreshing(false);
-
-                                } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-                                    //snackbar.show();
-                                    RetrieveWeather(ll,lon,"a");
-                                    RetrieveForecast(ll,lon);
-                                    swipeRefreshLayout.setRefreshing(false);
-                                } else if (!isNetworkAvailable()) {
-                                    snackbarnetwork.show();
-                                    swipeRefreshLayout.setRefreshing(false);
-                                } else {
-                                    //snackrefresh.show();
-                                    if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        // here to request the missing permissions, and then overriding
-                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                        //                                          int[] grantResults)
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                        return;
-                                    }
-                                    RetrieveWeather(ll,lon,"a");
-                                    RetrieveForecast(ll,lon);
-                                    final Handler handler = new Handler();
-
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (!shown) {
-                                                Toast.makeText(WeatherActivity.this, "Network Error! Please swipe down to Refresh.", Toast.LENGTH_LONG).show();
-                                                swipeRefreshLayout.setRefreshing(false);
-                                            }
-                                        }
-                                    }, 10000);
-
-
-                                }
-
-
-                            }
-
-                            //
-
-
-                        }
-
-                    });
-                }
-                else
-                {
-                    SharedPreferences spp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
-                    final String lll = spp.getString("lat", "");
-                    final String lonn = spp.getString("lon", "");
-                    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
-                    swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
-                    swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-                    swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
-
-                    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            //buildGoogleApiClient();
-                            //createLocationRequest();
-                            if (!isNetworkAvailable() && !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                                snackbar.show();
-                                swipeRefreshLayout.setRefreshing(false);
-                            } else {
-                                if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !isNetworkAvailable()) {
-
-                                    snackbarboth.show();
-                                    swipeRefreshLayout.setRefreshing(false);
-
-                                } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-                                    //snackbar.show();
-
-                                    RetrieveWeather(lll,lonn,"a");
-                                    RetrieveForecast(lll,lonn);
-                                    swipeRefreshLayout.setRefreshing(false);
-                                } else if (!isNetworkAvailable()) {
-                                    snackbarnetwork.show();
-                                    swipeRefreshLayout.setRefreshing(false);
-                                } else {
-                                    //snackrefresh.show();
-                                    if (ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        // here to request the missing permissions, and then overriding
-                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                        //                                          int[] grantResults)
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                        return;
-                                    }
-                                    RetrieveWeather(lll,lonn,"a");
-                                    RetrieveForecast(lll,lonn);
-                                    final Handler handler = new Handler();
-
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (!shown) {
-                                                Toast.makeText(WeatherActivity.this, "Network Error! Please swipe down to Refresh.", Toast.LENGTH_LONG).show();
-                                                swipeRefreshLayout.setRefreshing(false);
-                                            }
-                                        }
-                                    }, 10000);
-
-
-                                }
-
-
-                            }
-
-                            //
-
-
-                        }
-
-                    });
-
-                    System.out.println("At else part"+lll+" "+lonn);
-                    RetrieveWeather(lll,lonn,"a");
-                    RetrieveForecast(lll,lonn);
-                }
-            }
-
+        }
     }
 
 
@@ -1163,7 +1169,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         int actualID = Integer.parseInt(id);
         int ID = actualID / 100;
-        switch (ID) {
+        switch (ID)
+        {
             case 2://for thunderstorm
 
                 Glide.with(this)
