@@ -22,5 +22,8 @@
     <string name="pref_user_profile">User Profile</string>
     <string name="notification_setting">Notification Settings</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

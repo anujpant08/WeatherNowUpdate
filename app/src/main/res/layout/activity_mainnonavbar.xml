@@ -4,6 +4,7 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:blurkit="http://schemas.android.com/tools"
     android:id="@+id/relativeBack"
     android:background="@drawable/gradientplaceholder"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -443,14 +444,16 @@
 
         </ScrollView>
 
+
+
             <HorizontalScrollView
                 android:id="@+id/scroll"
                 android:layout_margin="8dp"
-                android:background="@drawable/shape"
                 android:overScrollMode="never"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:background="@drawable/shape"
                 android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
                 android:scrollbars="none">
 
                 <RelativeLayout
@@ -779,6 +782,7 @@
 
                 </RelativeLayout>
             </HorizontalScrollView>
+
 
         </RelativeLayout>
 

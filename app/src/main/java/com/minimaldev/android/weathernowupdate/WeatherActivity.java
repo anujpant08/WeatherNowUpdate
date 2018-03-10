@@ -6,6 +6,9 @@ DEVELOPED WITH LOVE BY MINIMALDEV
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -32,6 +36,8 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
@@ -102,7 +108,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private boolean mRequestingLocationUpdates = false;
     private LocationRequest mLocationRequest;
     private Context context;
+
     RelativeLayout llayout;
+    final String channelid="com.minimaldev.android.weathernowupdate";
     Snackbar snackbar, snackbarnetwork, snackbarboth, snackrefresh;
     String la, lo, enc;
     boolean shown;
@@ -114,6 +122,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private float downX, downY, upX, upY;
     private Activity activity;
     private ActionBar actionBar;
+    String notiloc="";
+    String tempformat="";
+    String notidesc="";
     ArrayList<String> arrayList = new ArrayList<String>();
     private GestureDetectorCompat gestureDetectorCompat;
     public boolean flag = false;
@@ -125,6 +136,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
+    NotificationManager notificationManager;
     int count = 0;
     int indexed = 0;
     SharedPreferences sharedPreferences;
@@ -178,6 +190,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     public void work()
     {
         boolean enabled = locationEnabled();
+
 
         sharedPreferences=this.getSharedPreferences("location",Context.MODE_PRIVATE);
 
@@ -974,15 +987,16 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
 
+        //String tkn = FirebaseInstanceId.getInstance().getToken();
+        //Toast.makeText(WeatherActivity.this, "Current token ["+tkn+"]",Toast.LENGTH_LONG).show();
+        //PendingIntent pendingIntent=PendingIntent.getActivity(context,0,new Intent(context,WeatherActivity.class),PendingIntent.FLAG_CANCEL_CURRENT);
+        //save=intent.getStringExtra("quote");
 
 
 
     }
 
-    /*public void des(String des)
-    {
-        description=des;
-    }*/
+
 
     public void SetDescription(String des) {
 
@@ -1068,6 +1082,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         des = des.substring(1, des.length());
         des = c + des;
         des = " " + des;
+        notidesc=des;
         view.setText(des);
         view.setTypeface(face);
         // settings_des(des);
@@ -1114,7 +1129,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         String formatTemp = df.format(temp);
         //String formatTemp1 = df.format(min);
         //String formatTemp2 = df.format(max);
-        view.setText(formatTemp + "\u00B0");
+        tempformat=formatTemp+"\u00B0";
+        view.setText(tempformat);
         //view1.setText("Hi:"+formatTemp2+" Lo:"+formatTemp1);
         view.setTypeface(face);
         //view1.setTypeface(face);
@@ -1153,6 +1169,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     public void SetLocation(String name, String country) {
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
         String fullLocation = name;
+        notiloc=name;
         TextView view = (TextView) this.findViewById(R.id.city_text);
         view.setText(fullLocation);
         view.setTypeface(face);
@@ -2687,6 +2704,40 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 this.WeatherActivity.SetWind(wind);
             this.WeatherActivity.sendNotification(description,temperature,locate,id);
                 //WeatherActivity.this.lm.removeUpdates(locationListener);
+
+                Intent intent=new Intent(WeatherActivity.this,WeatherActivity.class);
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pendingIntent=PendingIntent.getActivity(WeatherActivity.this,0,intent,0);
+
+                NotificationCompat.Builder builder1=new NotificationCompat.Builder(WeatherActivity.this,WeatherActivity.this.channelid)
+                        .setSmallIcon(R.drawable.sunny)
+                        .setContentTitle(notiloc)
+                        .setAutoCancel(true)
+                        .setShowWhen(false)
+                        .setContentIntent(pendingIntent)
+                        .setSound(null)
+                        .setContentText(tempformat+" "+notidesc)
+                        .setColor(Color.parseColor("#e24357"))
+                        .setPriority(NotificationCompat.PRIORITY_LOW);
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
+                {
+                    NotificationChannel notificationChannel=new NotificationChannel(WeatherActivity.this.channelid,"Current Weather", NotificationManager.IMPORTANCE_LOW);
+                    NotificationManager manager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                    manager.createNotificationChannel(notificationChannel);
+                    notificationChannel.setDescription("Current weather");
+                    notificationChannel.setSound(null,null);
+                    //NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(this);
+
+                    manager.notify(0,builder1.build());
+                    // System.out.println("Here");
+                }
+                else
+                {
+                    NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(WeatherActivity.this);
+                    notificationManagerCompat.notify(0,builder1.build());
+                    // System.out.println("Not Here");
+                }
 
             }
             catch (JSONException e) {
