@@ -37,7 +37,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
@@ -2734,8 +2733,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 }
                 else
                 {
-                    NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(WeatherActivity.this);
-                    notificationManagerCompat.notify(0,builder1.build());
+                    //NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(WeatherActivity.this);
+                    NotificationManager manager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                    if (manager != null) {
+                        manager.notify(0,builder1.build());
+                    }
+                    //notificationManagerCompat.notify(0,builder1.build());
                     // System.out.println("Not Here");
                 }
 
