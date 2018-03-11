@@ -5,10 +5,12 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seatgeek.placesautocomplete.DetailsCallback;
@@ -43,6 +45,27 @@ public class Places extends AppCompatActivity {
         Point point=new Point();
         getWindowManager().getDefaultDisplay().getSize(point);
         placesAutocompleteTextView.setDropDownWidth(point.x);
+
+        placesAutocompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if(!v.getText().toString().equals("")) {
+                    URL_place = "http://api.openweathermap.org/data/2.5/weather?q=" + v.getText().toString() + "&appid=bcc6f8e44743e316e5120301ff1a5ad4";
+                    Intent intent = new Intent(Places.this, Dialog_weather.class);
+                    intent.putExtra("URL", URL_place);
+                    intent.putExtra("loc_desc", v.getText().toString());
+                    startActivity(intent);
+                    finish();
+                    return true;
+                }
+                else
+                {
+                    Toast.makeText(Places.this,"Enter a valid location",Toast.LENGTH_LONG).show();
+                }
+                return  false;
+            }
+        });
 
         placesAutocompleteTextView.setOnPlaceSelectedListener(new OnPlaceSelectedListener() {
             @Override

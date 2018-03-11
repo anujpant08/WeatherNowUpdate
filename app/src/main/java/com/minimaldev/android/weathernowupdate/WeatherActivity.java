@@ -190,14 +190,15 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     {
         boolean enabled = locationEnabled();
 
+        lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
 
-        sharedPreferences=this.getSharedPreferences("location",Context.MODE_PRIVATE);
+        sharedPreferences=WeatherActivity.this.getSharedPreferences("location",Context.MODE_PRIVATE);
 
         System.out.println((sharedPreferences.contains("lat") && sharedPreferences.contains("lon")));
 
 
-        lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
         shown = false;
+
         snackbar = Snackbar.make(findViewById(R.id.coormain), "Location not enabled", Snackbar.LENGTH_LONG);
         snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
         snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
@@ -267,10 +268,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
         });
 
-
-
-
-
         animationView = (LottieAnimationView) findViewById(R.id.animation_view);
         moonView = (LottieAnimationView) findViewById(R.id.moon_view);
         cloudy = (LottieAnimationView) findViewById(R.id.cloud_view);
@@ -282,6 +279,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         snowday = (LottieAnimationView) findViewById(R.id.snowday_view);
         snownight = (LottieAnimationView) findViewById(R.id.snownight_view);
         thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
+
+
 
         animationView.setImageAssetsFolder("images/");
         animationView.setAnimation("sun.json");
@@ -335,18 +334,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         thunder.setAnimation("thunder.json");
         thunder.loop(false);
 
-
         llayout = (RelativeLayout) findViewById(R.id.progresslayout);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
         llayout.setVisibility(View.VISIBLE);
 
-        //dialog=new ProgressDialog(this);
+        setDefaultValues(WeatherActivity.this, R.xml.settings, false);
 
-        setDefaultValues(this, R.xml.settings, false);
+
 
         if(!sharedPreferences.contains("lat") || !sharedPreferences.contains("lon"))
         {
-            Toast.makeText(this,"Fetching location for the first time might take some time. Be patient :)",Toast.LENGTH_LONG).show();
+            Toast.makeText(WeatherActivity.this,"Fetching location for the first time might take some time. Be patient :)",Toast.LENGTH_LONG).show();
 
             if (!enabled) {
 
@@ -355,6 +353,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 snackbarnetwork.show();
             } else
                 showweather();
+
             swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
             swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
             swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
@@ -435,7 +434,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         else
         {
 
-            SharedPreferences sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
+            SharedPreferences sp = WeatherActivity.this.getSharedPreferences("location", Context.MODE_PRIVATE);
             final String ll = sp.getString("lat", "");
             final String lon = sp.getString("lon", "");
 
@@ -450,6 +449,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     snackbarnetwork.show();
                 } else
                     showweather();
+
                 swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
                 swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
                 swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
@@ -519,12 +519,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
             else
             {
-                if (!enabled) {
 
-                    snackbar.show();
-                } else if (!isNetworkAvailable()) {
-                    snackbarnetwork.show();
-                }
 
                 SharedPreferences spp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
                 final String lll = spp.getString("lat", "");
@@ -600,8 +595,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 System.out.println("At else part"+lll+" "+lonn);
                 RetrieveWeather(lll,lonn,"a");
                 RetrieveForecast(lll,lonn);
+
             }
         }
+
+
     }
 
 
@@ -2727,8 +2725,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         .setContentText(notiloc)
                         .setAutoCancel(true)
                         .setShowWhen(false)
-                        .addAction(R.drawable.sunny,"GO TO APP",pendingIntent)
-                        .addAction(R.drawable.favorite,"FAVORITES", pi)
+                        .addAction(0,"GO TO APP",pendingIntent)
+                        .addAction(0,"FAVORITES", pi)
                         //.setContentIntent(pendingIntent)
                         .setSound(null)
                         .setContentText(tempformat+" "+notidesc)
@@ -2767,6 +2765,20 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         private double ConvertTemperatureToFarenheit(double temperature) {
             return (temperature - 273);
         }
+
+    }
+
+    public class Working extends AsyncTask<Void,Void,Integer>
+    {
+
+
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+
+            return null;
+        }
+
 
     }
 

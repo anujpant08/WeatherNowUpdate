@@ -61,7 +61,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
         String url="",loc="";
         TextView textView;
-        String fullLocation;
+        String fullLocation,fullnot;
         RelativeLayout linearLayout;
         Set<String> set=new HashSet<String>();
         int countfav=0;
@@ -499,6 +499,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                //ImageView imageView1 =(ImageView)findViewById(R.id.notfavorite);
                 Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
                 fullLocation=name+", "+country;
+                fullnot=name;
 
                 TextView view= (TextView)this.findViewById(R.id.location_text);
                 view.setText(name);
@@ -900,6 +901,17 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 }
         }
 
+        public void search(View view)
+        {
+            Intent intent=new Intent(Dialog_weather.this, Places.class);
+            startActivity(intent);
+            finish();
+        }
+
+        public void backpress(View view)
+        {
+            finish();
+        }
 
         public void SetDay(String day, int dayNo)
 
@@ -1655,12 +1667,12 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 //this.addfav();
 
             Intent intent = new Intent(Dialog_weather.this, DisplayFav.class);
-            intent.putExtra("LOCATION_NAME", fullLocation);
+            intent.putExtra("LOCATION_NAME",fullnot );
             intent.putExtra("COUNTER_VALUE", countfav);
 
             startActivity(intent);
             countfav++;
-                Toast.makeText(this, fullLocation+" added to favorites !",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, fullnot+" added to favorites !",Toast.LENGTH_SHORT).show();
                 /*snackbar=Snackbar.make(findViewById(R.id.coordialog),"Added to Favourites",Snackbar.LENGTH_LONG);
                 snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
                 snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.thunder));
@@ -1690,7 +1702,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
                 String prev=preferences.getString("label","");
                 if(!TextUtils.isEmpty(prev))
-                 list.add(fullLocation);
+                 list.add(fullnot);
                  this.adapter.notifyDataSetChanged();
 
 
@@ -1815,10 +1827,6 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 //Date date=new Date(dy*1000L);
                                 //SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HHMM");
                                 //String fdate=simpleDateFormat.format(date);
-
-
-
-
 
 // set all the fields in the activity from the parsed JSON
 
