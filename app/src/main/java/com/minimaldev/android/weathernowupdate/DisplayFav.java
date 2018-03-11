@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -77,6 +78,15 @@ public  class DisplayFav extends AppCompatActivity {
     public void  perform() {
         setContentView(R.layout.fav_display);
 
+        FloatingActionButton floatingActionButton=(FloatingActionButton)findViewById(R.id.floating);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(DisplayFav.this,Places.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         //getSupportActionBar().setElevation(0);
 
         snackbar = Snackbar.make(findViewById(R.id.coor), "Item removed", Snackbar.LENGTH_LONG);

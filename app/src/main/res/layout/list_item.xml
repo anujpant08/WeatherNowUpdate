@@ -15,7 +15,7 @@
         android:padding="15dp"
         android:text="Sample"
         android:textColor="@color/Magenta"
-        android:textSize="20dp" />
+        android:textSize="18sp" />
 
     <!--<ImageView
         android:id="@+id/imageView"

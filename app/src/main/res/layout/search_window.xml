@@ -12,39 +12,53 @@
         android:layout_height="56dp"
         android:background="@color/Magenta">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="72dp"
-            android:layout_marginStart="72dp"
-            android:text="Search"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:layout_marginTop="12dp"/>
+
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:id="@+id/backsearch"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/ic_action_back"
             android:onClick="goback"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Search"
+            android:layout_toEndOf="@id/backsearch"
+            android:textColor="#FFFFFF"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"
+            android:layout_marginTop="12dp"/>
+
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="12dp">
 
     <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_below="@id/toolbar"
         android:id="@+id/placesauto"
+        android:inputType="textAutoComplete"
         android:textColor="@color/Magenta"
+        app:pacv_clearEnabled="true"
         app:pacv_resultType="no_type"
         app:pacv_adapterClass="com.minimaldev.android.weathernowupdate.AutoCompleteTextViewAdapter"
         app:pacv_googleMapsApiKey="AIzaSyBuL39Vx4boQ7u4xOa2G4b8_mbYr_jh4aE">
 
         <!--style="@style/Widget.AutoCompleteTextView.Styled" -->
     </com.seatgeek.placesautocomplete.PlacesAutocompleteTextView>
+    </RelativeLayout>
 
 </RelativeLayout>

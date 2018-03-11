@@ -5,6 +5,7 @@
        <CheckBoxPreference
             android:defaultValue="true"
             android:key="checkBox"
+            android:textColor="#000000"
             android:title="Temperature"
             android:summary="Show temperature in Celcius">
         </CheckBoxPreference>
@@ -12,6 +13,7 @@
 
         <Preference
             android:key="about_us"
+            android:textColor="#000000"
             android:summary="minimaldev4playstore@gmail.com"
             android:title="Feedback">
 
@@ -28,7 +30,8 @@
 
         <Preference
             android:key="rate_us"
-            android:title="Rate Us">
+            android:title="Rate Us"
+            android:textColor="#000000">
 
                 <intent
                         android:action="android.intent.action.VIEW"
@@ -43,6 +46,7 @@
             android:key="about_us"
             android:summary="Developed with love by MinimalDev\nVersion: 3.0"
             android:title="About"
+            android:textColor="#000000"
             android:clickable="false"
             android:selectable="false">
 

@@ -206,9 +206,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         //snackrefresh.setDuration((int) TimeUnit.MINUTES.toMillis(1/4));
 
-        snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
-        snackbarnetwork.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
-        snackbarboth.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
+        snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        snackbarnetwork.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        snackbarboth.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
 
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
         snackbarnetwork.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
@@ -218,22 +218,22 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         TextView textView;
         textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
         textView.setTextSize(14);
 
 
         textView = (TextView) snackbarnetwork.getView().findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
         textView.setTextSize(14);
 
 
         textView = (TextView) snackbarboth.getView().findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
         textView.setTextSize(14);
 
 
         textView = (TextView) snackrefresh.getView().findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
+        textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
         textView.setTextSize(14);
 
 
@@ -346,7 +346,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         if(!sharedPreferences.contains("lat") || !sharedPreferences.contains("lon"))
         {
-
+            Toast.makeText(this,"Fetching location for the first time might take some time. Be patient :)",Toast.LENGTH_LONG).show();
 
             if (!enabled) {
 
@@ -434,6 +434,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
         else
         {
+
             SharedPreferences sp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
             final String ll = sp.getString("lat", "");
             final String lon = sp.getString("lon", "");
@@ -518,6 +519,13 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
             else
             {
+                if (!enabled) {
+
+                    snackbar.show();
+                } else if (!isNetworkAvailable()) {
+                    snackbarnetwork.show();
+                }
+
                 SharedPreferences spp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
                 final String lll = spp.getString("lat", "");
                 final String lonn = spp.getString("lon", "");
@@ -2475,6 +2483,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
         DecimalFormat df = new DecimalFormat("###");
         String formatTempMin = df.format(min);
+        //nighttemp=formatTempMin;
         TextView textView = (TextView) findViewById(R.id.lo);
         textView.setText(formatTempMin + "\u00B0");
         textView.setTypeface(face);
@@ -2678,7 +2687,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             wind=(wind/1000)*3600;
             min= ConvertTemperatureToFarenheit(min);
             max= ConvertTemperatureToFarenheit(max);
-
+                DecimalFormat df = new DecimalFormat("###");
+                String t=df.format(max);
 // parse out the description from the JSON result
             String description = jsonResult.getJSONArray("weather").getJSONObject(0).getString("description");
 //parse out weather id
@@ -2709,12 +2719,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 PendingIntent pendingIntent=PendingIntent.getActivity(WeatherActivity.this,0,intent,0);
 
+                PendingIntent pi=PendingIntent.getActivity(WeatherActivity.this,0,new Intent(WeatherActivity.this,DisplayFav.class),0);
+
                 NotificationCompat.Builder builder1=new NotificationCompat.Builder(WeatherActivity.this,WeatherActivity.this.channelid)
                         .setSmallIcon(R.drawable.sunny)
                         .setContentTitle(notiloc)
+                        .setContentText(notiloc)
                         .setAutoCancel(true)
                         .setShowWhen(false)
-                        .setContentIntent(pendingIntent)
+                        .addAction(R.drawable.sunny,"GO TO APP",pendingIntent)
+                        .addAction(R.drawable.favorite,"FAVORITES", pi)
+                        //.setContentIntent(pendingIntent)
                         .setSound(null)
                         .setContentText(tempformat+" "+notidesc)
                         .setColor(Color.parseColor("#e24357"))
@@ -2725,6 +2740,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     NotificationManager manager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
                     manager.createNotificationChannel(notificationChannel);
                     notificationChannel.setDescription("Current weather");
+                    notificationChannel.setShowBadge(false);
                     notificationChannel.setSound(null,null);
                     //NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(this);
 

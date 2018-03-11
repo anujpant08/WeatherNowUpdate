@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/Magenta</item>
         <item name="colorPrimaryDark">@color/Magenta</item>
@@ -9,29 +9,30 @@
 
         <!--<item name="android:colorBackground">@color/colorBack</item>-->
     </style>
-        <style name="CustomTheme" parent="Theme.AppCompat.NoActionBar">
+        <style name="CustomTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/Magenta</item>
         <item name="colorPrimaryDark">@color/Magenta</item>
         <item name="colorAccent">@color/Magenta</item>
     </style>
-    <style name="PlacesTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="PlacesTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/Magenta</item>
         <item name="colorPrimaryDark">@color/Magenta</item>
-        <item name="colorAccent">@color/thunder</item>
+        <item name="colorAccent">@color/Magenta</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowActionBarOverlay">@null</item>
 
     </style>
-    <style name="SettingsTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/Magenta</item>
         <item name="colorAccent">@color/Magenta</item>
         <item name="colorPrimaryDark">@color/Magenta</item>
 
 
     </style>
+
 
     <style
         parent="PACV.Widget.PlacesAutoCompleteTextView"
@@ -43,13 +44,14 @@
     </style>
 
     <style
-        parent="Theme.AppCompat"
+        parent="Theme.AppCompat.Light"
         name="SettingsActivity">
 
-        <item name="android:background">#FF303030</item>
+        <item name="android:title">Settings</item>
         <item name="android:textAppearance">@color/Magenta</item>
         <item name="colorAccent">@color/Magenta</item>
         <item name="colorPrimary">@color/Magenta</item>
+        <item name="colorPrimaryDark">@color/Magenta</item>
 
     </style>
 

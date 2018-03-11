@@ -44,8 +44,8 @@ public class Settings_menu extends AppCompatActivity implements SharedPreference
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        getSupportActionBar().setElevation(0);
         getSupportActionBar().setTitle("Settings");
+
 
 
         LayoutInflater inflater=getLayoutInflater();
