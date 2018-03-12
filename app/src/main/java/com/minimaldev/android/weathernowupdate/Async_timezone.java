@@ -46,7 +46,7 @@ public class Async_timezone extends AsyncTask<String,Void,String> {
         String response="";
         try {
             HttpURLConnection con = (HttpURLConnection) ( new URL(new_url)).openConnection();
-            con.setRequestMethod("POST");
+            con.setRequestMethod("GET");
             con.setDoInput(true);
             con.setDoOutput(true);
             con.connect();
