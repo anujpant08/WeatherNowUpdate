@@ -25,6 +25,11 @@
         android:background="@drawable/gradient"
         android:scaleType="centerCrop"/>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dialogrefersh">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -58,12 +63,11 @@
 
                 <ImageView
                     android:id="@+id/backp"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentTop="true"
-
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="32dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
                     android:onClick="backpress"
@@ -72,14 +76,12 @@
                 <TextView
                     android:id="@+id/wnlogo"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/backp"
                     android:layout_alignParentTop="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="30dp"
-                    android:gravity="center_vertical"
                     android:text="WeatherNow"
                     android:textColor="#ffffff"
                     android:textSize="18sp" />
@@ -742,12 +744,6 @@
 
                 </RelativeLayout>
 
-                <android.support.design.widget.CoordinatorLayout
-                    android:id="@+id/coormain"
-                    android:layout_centerHorizontal="true"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_below="@id/rv7" />
 
 
             </RelativeLayout>
@@ -760,6 +756,17 @@
 
 
     </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coormain"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true" />
+
 
 
 

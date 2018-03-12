@@ -30,10 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/backbtn"
             android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:text="Favorites"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_marginTop="12dp"/>
 
     </RelativeLayout>
@@ -63,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/layoutfav"
-        android:text="Add more beautiful destinations around the world!"
+        android:text="Swipe left to remove a location from favorites."
         android:gravity="center"
         android:layout_marginTop="16dp"
         android:padding="10dp"

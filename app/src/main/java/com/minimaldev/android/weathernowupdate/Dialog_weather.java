@@ -1,11 +1,14 @@
 package com.minimaldev.android.weathernowupdate;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,9 +16,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -42,7 +48,10 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -71,7 +80,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         public static ArrayList<String> list =new ArrayList<String>();
         String tim,wid;
         String enc;
-        Snackbar snackbar;
+        SwipeRefreshLayout swipeRefreshLayout;
+        Snackbar snackbarnetwork;
         String arr[]=new String[1000];
         String cor_url;
         boolean shown;
@@ -113,7 +123,29 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         setContentView(R.layout.dialog_mainnonavbar);
                 }
 
-                animationView= (LottieAnimationView) findViewById(R.id.animation_view);
+            FileInputStream fileInputStream;
+            try {
+                fileInputStream = openFileInput("WN_FAVPLACES");
+
+
+                String text;
+                BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream));
+
+                while ((text = br.readLine()) != null) {
+                    if (text.equals(loc)) {
+                        ImageView imageView=(ImageView)findViewById(R.id.favorite);
+                        imageView.setImageResource(R.drawable.favor);
+                    }
+                }
+            }
+
+             catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            animationView= (LottieAnimationView) findViewById(R.id.animation_view);
                 moonView = (LottieAnimationView) findViewById(R.id.moon_view);
                 cloudy=(LottieAnimationView) findViewById(R.id.cloud_view);
                 cloudymoon=(LottieAnimationView) findViewById(R.id.cloudmoon_view);
@@ -177,7 +209,18 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 thunder.setAnimation("thunder.json");
                 thunder.loop(false);
 
+            snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
 
+            snackbarnetwork.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.thunder));
+
+            snackbarnetwork.setAction("Check", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                    startActivity(intent);
+                }
+            });
 
 
                 linearLayout=(RelativeLayout) findViewById(R.id.progressLayout);
@@ -185,6 +228,61 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 //progressBar.setBackgroundColor(Color.WHITE);
                 //progressBar.setProgressTintList(ColorStateList.valueOf(Color.MAGENTA));
                 linearLayout.setVisibility(View.VISIBLE);
+
+            swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.dialogrefersh);
+            swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
+            swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+            swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
+
+
+
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    //buildGoogleApiClient();
+                    //createLocationRequest();
+                    if (!isNetworkAvailable())
+                    {
+                        snackbarnetwork.show();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    else
+                        {
+                            //snackrefresh.show();
+                            if (ActivityCompat.checkSelfPermission(Dialog_weather.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Dialog_weather.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            RetrieveWeather(url);
+                            RetrieveForecast(loc);
+                            final Handler handler = new Handler();
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!shown) {
+                                        Toast.makeText(Dialog_weather.this, "Network Error! Please swipe down to Refresh.", Toast.LENGTH_LONG).show();
+                                        swipeRefreshLayout.setRefreshing(false);
+                                    }
+                                }
+                            }, 10000);
+
+
+                        }
+
+
+                    }
+
+                    //
+
+
+                });
 
                 RetrieveWeather(url);
                 RetrieveForecast(loc);
@@ -231,6 +329,12 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 return hasSoftwareKeys;
         }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
         public void setcor(String la, String lo, String id)
         {
                 lat=Double.parseDouble(la);
@@ -271,6 +375,23 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    @Override
+    protected  void onStop()
+    {
+        super.onStop();
+        if (swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.setRefreshing(false);
+
+    }
         public void time(String t)
         {
                // timet=t;
@@ -293,6 +414,13 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 setanimation(weatherid, hour);
 
                 linearLayout.setVisibility(View.INVISIBLE);
+
+            if (swipeRefreshLayout.isEnabled()) {
+                //snackrefresh.dismiss();
+                //swipeRefreshLayout.setRefreshing(false);
+                //swipeRefreshLayout.setEnabled(false);
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
                 //Toast.makeText(this,tim, Toast.LENGTH_SHORT).show();
         }
@@ -329,7 +457,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
         public void SetDescription(String des)
         {
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latomedium.ttf");
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/latobold.ttf");
                 TextView view=(TextView)this.findViewById(R.id.condition);
                 char c=des.charAt(0);
                 c=Character.toUpperCase(c);
@@ -356,10 +484,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 }
 
                 //String  url = "https://pixabay.com/api/?key=" + apikey + "&q=" + enc + "&image_type=photo&category=nature&order=popular&per_page=200";
-                linearLayout=(RelativeLayout) findViewById(R.id.progressLayout);
-                //Async_weather task = new Async_weather(this, enc);
 
-                linearLayout.setVisibility(View.VISIBLE);
                 //task.execute(enc);
 
 
