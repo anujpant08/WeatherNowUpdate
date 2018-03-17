@@ -44,7 +44,7 @@
 
         <Preference
             android:key="about_us"
-            android:summary="Developed with love by MinimalDev\nVersion: 3.0"
+            android:summary="Developed with love by MinimalDev\nVersion: 3.0.1"
             android:title="About"
             android:textColor="#000000"
             android:clickable="false"

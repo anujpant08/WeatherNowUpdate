@@ -1,6 +1,6 @@
 package com.minimaldev.android.weathernowupdate;
 /*
-********WeatherNow********
+********WeatherNow 12-16*********
 DEVELOPED WITH LOVE BY MINIMALDEV
  */
 
@@ -45,6 +45,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -2727,7 +2728,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         .setShowWhen(false)
                         .addAction(0,"GO TO APP",pendingIntent)
                         .addAction(0,"FAVORITES", pi)
-                        //.setContentIntent(pendingIntent)
+                        .setContentIntent(pendingIntent)
                         .setSound(null)
                         .setContentText(tempformat+" "+notidesc)
                         .setColor(Color.parseColor("#e24357"))
