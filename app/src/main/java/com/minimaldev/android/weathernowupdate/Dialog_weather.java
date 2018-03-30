@@ -663,9 +663,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                             .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
-                            .centerCrop()
-                            .dontTransform()
-                            .crossFade()
+                            
                             .into(sc);
 
                     llayout.setVisibility(View.INVISIBLE);
@@ -678,18 +676,14 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+                                
                                 .into(sc);
                     else
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
                                 .into(sc);
 
                     llayout.setVisibility(View.INVISIBLE);
@@ -701,18 +695,15 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
+
                                 .into(sc);
                     else
                         Glide.with(this)
                                 .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
                                 .into(sc);
 
                     llayout.setVisibility(View.INVISIBLE);
@@ -723,9 +714,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                             .load(this.getResources().getIdentifier("snowy", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
-                            .centerCrop()
-                            .dontTransform()
-                            .crossFade()
+
                             .into(sc);
 
                     llayout.setVisibility(View.INVISIBLE);
@@ -738,9 +727,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
@@ -749,9 +736,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
@@ -769,9 +754,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                             llayout.setVisibility(View.INVISIBLE);
@@ -780,9 +763,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("clearday", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                             llayout.setVisibility(View.INVISIBLE);
@@ -791,9 +772,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("sunset", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                             llayout.setVisibility(View.INVISIBLE);
@@ -802,9 +781,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("nightclr", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                             llayout.setVisibility(View.INVISIBLE);
@@ -821,9 +798,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("cloudsss", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                             llayout.setVisibility(View.INVISIBLE);
@@ -832,9 +807,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("nightclouds", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
@@ -849,9 +822,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
@@ -866,9 +837,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
-                                .centerCrop()
-                                .dontTransform()
-                                .crossFade()
+
                                 .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
@@ -879,9 +848,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                             llayout.setVisibility(View.INVISIBLE);
@@ -890,9 +857,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                     .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
-                                    .centerCrop()
-                                    .dontTransform()
-                                    .crossFade()
+
                                     .into(sc);
 
                         llayout.setVisibility(View.INVISIBLE);
@@ -943,7 +908,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                         this.snowday.playAnimation();
                                 }
                                 else
-                                        this.snownight.playAnimation();
+                                        this.snowday.playAnimation();
                                 //view1.setImageResource(R.drawable.snowy);
                                 //view11.setBackgroundResource(R.color.snowy);
 
