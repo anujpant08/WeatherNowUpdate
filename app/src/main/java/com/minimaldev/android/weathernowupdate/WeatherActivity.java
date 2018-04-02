@@ -332,7 +332,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         snownight.loop(false);
 
         thunder.setImageAssetsFolder("thunder/");
-        thunder.setAnimation("thunder.json");
+        thunder.setAnimation("thundering.json");
         thunder.loop(false);
 
         llayout = (RelativeLayout) findViewById(R.id.progresslayout);
@@ -1438,10 +1438,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 break;
             case 6: //for snow
 
-                if (hour >= 6 && hour < 18) {
-                    this.snowday.playAnimation();
-                } else
-                    this.snowday.playAnimation();
+                this.snowday.playAnimation();
 
 
                 break;

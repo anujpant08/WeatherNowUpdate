@@ -374,11 +374,9 @@
                             android:id="@+id/thunder_view"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:scaleType="center"
+                            android:layout_centerInParent="true"
                             app:lottie_autoPlay="true"
-                            app:lottie_fileName="thunder.json"
+                            app:lottie_fileName="thundering.json"
                             app:lottie_loop="false" />
 
 

@@ -206,7 +206,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 snownight.loop(false);
 
                 thunder.setImageAssetsFolder("thunder/");
-                thunder.setAnimation("thunder.json");
+                thunder.setAnimation("thundering.json");
                 thunder.loop(false);
 
             snackbarnetwork = Snackbar.make(findViewById(R.id.coormain), "Network not available", Snackbar.LENGTH_LONG);
@@ -903,12 +903,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 break;
                         case 6: //for snowy
 
-                                if(hr >=6 && hr <18)
-                                {
-                                        this.snowday.playAnimation();
-                                }
-                                else
-                                        this.snowday.playAnimation();
+                                this.snowday.playAnimation();
                                 //view1.setImageResource(R.drawable.snowy);
                                 //view11.setBackgroundResource(R.color.snowy);
 

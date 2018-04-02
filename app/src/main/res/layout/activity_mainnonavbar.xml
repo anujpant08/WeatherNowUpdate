@@ -158,8 +158,7 @@
                     android:orientation="horizontal"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@id/temperature_text"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginTop="4dp">
                 <ImageView
                     android:id="@+id/imageday"
                     android:layout_width="16dp"
@@ -277,9 +276,9 @@
                     android:id="@+id/animation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/temperature_text">
+                    android:layout_below="@+id/highlowid">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/animation_view"
@@ -375,11 +374,9 @@
                         android:id="@+id/thunder_view"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="center"
+                        android:layout_centerInParent="true"
                         app:lottie_autoPlay="true"
-                        app:lottie_fileName="thunder.json"
+                        app:lottie_fileName="thundering.json"
                         app:lottie_loop="false" />
 
 
