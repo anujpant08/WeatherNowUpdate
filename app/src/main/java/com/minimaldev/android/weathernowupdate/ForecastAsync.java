@@ -125,7 +125,7 @@ public class ForecastAsync extends AsyncTask<String, Void, String> {
             //double night=Double.parseDouble(n);
             this.WeatherActivity.setHi(high);
             this.WeatherActivity.setLo(low);
-
+            WeatherActivity.shown=true;
 
 
 // set all the fields in the activity from the parsed JSON

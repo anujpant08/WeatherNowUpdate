@@ -45,7 +45,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -60,6 +59,8 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -110,7 +111,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private Context context;
 
     RelativeLayout llayout;
-    final String channelid="com.minimaldev.android.weathernowupdate";
+    final String channelid = "com.minimaldev.android.weathernowupdate";
     Snackbar snackbar, snackbarnetwork, snackbarboth, snackrefresh;
     String la, lo, enc;
     boolean shown;
@@ -122,14 +123,16 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
     private float downX, downY, upX, upY;
     private Activity activity;
     private ActionBar actionBar;
-    String notiloc="";
-    String tempformat="";
-    String notidesc="";
+    String notiloc = "";
+    String tempformat = "";
+    String notidesc = "";
+    int locationflag=0;
     ArrayList<String> arrayList = new ArrayList<String>();
     private GestureDetectorCompat gestureDetectorCompat;
     public boolean flag = false;
     SwipeRefreshLayout swipeRefreshLayout;
     BufferedReader bufferedReader;
+    HorizontalScrollView horizontalScrollView;
     private static final String TAG = WeatherActivity.class.getSimpleName();
     int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
     private static final int RESULT_SETTINGS = 1;
@@ -183,17 +186,18 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         }
 
-       work();
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.scroll);
+        horizontalScrollView.setVisibility(View.INVISIBLE);
+        work();
 
     }
 
-    public void work()
-    {
+    public void work() {
         boolean enabled = locationEnabled();
 
         lm = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
 
-        sharedPreferences=WeatherActivity.this.getSharedPreferences("location",Context.MODE_PRIVATE);
+        sharedPreferences = WeatherActivity.this.getSharedPreferences("location", Context.MODE_PRIVATE);
 
         System.out.println((sharedPreferences.contains("lat") && sharedPreferences.contains("lon")));
 
@@ -282,7 +286,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         thunder = (LottieAnimationView) findViewById(R.id.thunder_view);
 
 
-
         animationView.setImageAssetsFolder("images/");
         animationView.setAnimation("sun.json");
         animationView.loop(false);
@@ -342,10 +345,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         setDefaultValues(WeatherActivity.this, R.xml.settings, false);
 
 
-
-        if(!sharedPreferences.contains("lat") || !sharedPreferences.contains("lon"))
-        {
-            Toast.makeText(WeatherActivity.this,"Fetching location for the first time might take some time. Be patient :)",Toast.LENGTH_LONG).show();
+        if (!sharedPreferences.contains("lat") || !sharedPreferences.contains("lon")) {
+            Toast.makeText(WeatherActivity.this, "Fetching location for the first time might take some time. Be patient :)", Toast.LENGTH_LONG).show();
 
             if (!enabled) {
 
@@ -431,17 +432,16 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
             //RetrieveWeather(LAT, LON);
 
-        }
-        else
-        {
+        } else {
 
             SharedPreferences sp = WeatherActivity.this.getSharedPreferences("location", Context.MODE_PRIVATE);
             final String ll = sp.getString("lat", "");
             final String lon = sp.getString("lon", "");
 
-            System.out.println("At elseif part "+ll+" "+lon);
+            System.out.println("At elseif part " + ll + " " + lon);
             if (ll.length() == 0 || lon.length() == 0)
             {
+                System.out.println("At if part");
 
                 if (!enabled) {
 
@@ -473,8 +473,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                             } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
                                 //snackbar.show();
-                                RetrieveWeather(ll,lon,"a");
-                                RetrieveForecast(ll,lon);
+
+                                RetrieveWeather(ll, lon, "a");
+                                RetrieveForecast(ll, lon);
                                 swipeRefreshLayout.setRefreshing(false);
                             } else if (!isNetworkAvailable()) {
                                 snackbarnetwork.show();
@@ -491,8 +492,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
-                                RetrieveWeather(ll,lon,"a");
-                                RetrieveForecast(ll,lon);
+                                showweather();
+                                //RetrieveWeather(ll, lon, "a");
+                                //RetrieveForecast(ll, lon);
                                 final Handler handler = new Handler();
 
                                 handler.postDelayed(new Runnable() {
@@ -519,8 +521,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 });
             }
             else
-            {
 
+             {
 
                 SharedPreferences spp = this.getSharedPreferences("location", Context.MODE_PRIVATE);
                 final String lll = spp.getString("lat", "");
@@ -529,6 +531,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
                 swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
                 swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
+
+                 RetrieveWeather(lll, lonn, "a");
+                 RetrieveForecast(lll, lonn);
 
                 swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -548,8 +553,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                                 //snackbar.show();
 
-                                RetrieveWeather(lll,lonn,"a");
-                                RetrieveForecast(lll,lonn);
+                                RetrieveWeather(lll, lonn, "a");
+                                RetrieveForecast(lll, lonn);
                                 swipeRefreshLayout.setRefreshing(false);
                             } else if (!isNetworkAvailable()) {
                                 snackbarnetwork.show();
@@ -566,8 +571,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
-                                RetrieveWeather(lll,lonn,"a");
-                                RetrieveForecast(lll,lonn);
+                                showweather();
+                                //RetrieveWeather(lll, lonn, "a");
+                                //RetrieveForecast(lll, lonn);
                                 final Handler handler = new Handler();
 
                                 handler.postDelayed(new Runnable() {
@@ -593,11 +599,13 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 });
 
-                System.out.println("At else part"+lll+" "+lonn);
-                RetrieveWeather(lll,lonn,"a");
-                RetrieveForecast(lll,lonn);
+                System.out.println("At else part" + lll + " " + lonn);
 
-            }
+                //RetrieveWeather(lll, lonn, "a");
+                //RetrieveForecast(lll, lonn);
+                //shown=true;
+
+              }
         }
 
 
@@ -621,6 +629,23 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+
+
+        //fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+       // sharedPreferences=this.getSharedPreferences("location",Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor=sharedPreferences.edit();
+
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -635,9 +660,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         }
 
 
-        //fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-       // sharedPreferences=this.getSharedPreferences("location",Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor=sharedPreferences.edit();
+
 
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
@@ -656,13 +679,21 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     RetrieveWeather(la, lo, "a");
                     RetrieveForecast(la, lo);
 
+                    locationflag=1;
                     shown = true;
                 }
                 else
                 {
-                    editor.remove("lat");
-                    editor.remove("lon");
-                    editor.apply();
+                    SharedPreferences spp=getSharedPreferences("location", Context.MODE_PRIVATE);
+                    final String lll = spp.getString("lat", "");
+                    final String lonn = spp.getString("lon", "");
+                    if(lll.equals("") || lonn.equals("")) {
+                        editor.remove("lat");
+                        editor.remove("lon");
+                        editor.apply();
+                    }
+
+                    locationflag=0;
                 }
 
             }
@@ -678,34 +709,49 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             }
         });
 
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                        la = Double.toString(latitude);
-                        lo = Double.toString(longitude);
+        if(locationflag!=1) {
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    for (Location location : locationResult.getLocations()) {
+                        if (location != null) {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                            la = Double.toString(latitude);
+                            lo = Double.toString(longitude);
 
-                        editor.putString("lat",la);
-                        editor.putString("lon",lo);
-                        editor.apply();
+                            editor.putString("lat", la);
+                            editor.putString("lon", lo);
+                            editor.apply();
 
-                        RetrieveWeather(la, lo, "a");
-                        RetrieveForecast(la, lo);
+                            RetrieveWeather(la, lo, "a");
+                            RetrieveForecast(la, lo);
 
-                        shown = true;
-                    } else
-                    {
-                        Toast.makeText(WeatherActivity.this, "Error fetching location. Please swipe down to refresh.", Toast.LENGTH_LONG).show();
-                        editor.remove("lat");
-                        editor.remove("lon");
-                        editor.apply();
+                            shown = true;
+                        } else {
+                            Toast.makeText(WeatherActivity.this, "Error fetching location. Please swipe down to refresh.", Toast.LENGTH_LONG).show();
+                            editor.remove("lat");
+                            locationflag=0;
+                            editor.remove("lon");
+                            editor.apply();
+                        }
                     }
                 }
+            };
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
-        };
+        }
+
 
         //lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
@@ -965,33 +1011,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         ForecastAsync task = new ForecastAsync(this, url);
         task.execute(url);
 
-        locationRequest = new LocationRequest();
-        locationRequest.setNumUpdates(1);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(120000);
-        //locationRequest.setFastestInterval(2000);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(locationRequest);
-
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-        settingsClient.checkLocationSettings(locationSettingsRequest);
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                    }
-                }
-            }
-        };
-
+        if(fusedLocationProviderClient!=null)
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
+
 
         //String tkn = FirebaseInstanceId.getInstance().getToken();
         //Toast.makeText(WeatherActivity.this, "Current token ["+tkn+"]",Toast.LENGTH_LONG).show();
@@ -1506,10 +1529,18 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         }
 
+        horizontalScrollView.setVisibility(View.VISIBLE);
+        TranslateAnimation animation=new TranslateAnimation(0,0,horizontalScrollView.getHeight()+200,0);
+        animation.setDuration(200);
+        animation.setFillAfter(true);
+        horizontalScrollView.startAnimation(animation);
+
         Vibrator v=(Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
         if (v != null) {
             v.vibrate(20);
         }
+
+
     }
 
     public void backsearch(View view)
@@ -2482,15 +2513,16 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
             longitude = location.getLongitude();
             la = Double.toString(latitude);
             lo = Double.toString(longitude);
-
-                    /*sharedPreferences=this.getSharedPreferences("location",MODE_PRIVATE);
+            System.out.println("*************location cahnged**************");
+                    sharedPreferences=this.getSharedPreferences("location",MODE_PRIVATE);
                     SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("lati",la);
-                    editor.putString("long",lo);
-                    editor.apply(); */
+                    editor.putString("lat",la);
+                    editor.putString("lon",lo);
+                    editor.apply();
 
 
-        } else {
+        }
+        else {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
