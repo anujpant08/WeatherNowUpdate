@@ -33,7 +33,9 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -70,6 +72,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
         String url="",loc="";
         TextView textView;
+        HorizontalScrollView horizontalScrollView;
         String fullLocation,fullnot;
         RelativeLayout linearLayout;
         Set<String> set=new HashSet<String>();
@@ -122,6 +125,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 {
                         setContentView(R.layout.dialog_mainnonavbar);
                 }
+
+            horizontalScrollView = (HorizontalScrollView) findViewById(R.id.scroll);
+            horizontalScrollView.setVisibility(View.INVISIBLE);
 
             FileInputStream fileInputStream;
             try {
@@ -984,6 +990,13 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 break;
 
                 }
+
+
+            horizontalScrollView.setVisibility(View.VISIBLE);
+            TranslateAnimation animation=new TranslateAnimation(0,0,horizontalScrollView.getHeight()+200,0);
+            animation.setDuration(200);
+            animation.setFillAfter(true);
+            horizontalScrollView.startAnimation(animation);
         }
 
         public void search(View view)

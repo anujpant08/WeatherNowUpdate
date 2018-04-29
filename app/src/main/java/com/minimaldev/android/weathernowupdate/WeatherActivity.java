@@ -186,6 +186,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         }
 
+
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.scroll);
         horizontalScrollView.setVisibility(View.INVISIBLE);
         work();
@@ -1566,6 +1567,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         animation.setDuration(200);
         animation.setFillAfter(true);
         horizontalScrollView.startAnimation(animation);
+
 
         Vibrator v=(Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
         if (v != null) {

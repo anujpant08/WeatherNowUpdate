@@ -10,6 +10,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+
+
     <ImageView
         android:id="@+id/backgroundWeather"
         android:layout_width="match_parent"
