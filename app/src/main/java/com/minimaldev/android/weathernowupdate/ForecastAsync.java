@@ -126,7 +126,8 @@ public class ForecastAsync extends AsyncTask<String, Void, String> {
             this.WeatherActivity.setHi(high);
             this.WeatherActivity.setLo(low);
             WeatherActivity.shown=true;
-
+            if(WeatherActivity.swipeRefreshLayout.isRefreshing())
+                WeatherActivity.swipeRefreshLayout.setRefreshing(false);
 
 // set all the fields in the activity from the parsed JSON
 

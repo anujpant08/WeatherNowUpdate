@@ -394,6 +394,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                 // for ActivityCompat#requestPermissions for more details.
                                 return;
                             }
+                            resetanim();
                             showweather();
                             final Handler handler = new Handler();
 
@@ -448,8 +449,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     snackbar.show();
                 } else if (!isNetworkAvailable()) {
                     snackbarnetwork.show();
-                } else
+                } else {
+                    resetanim();
                     showweather();
+                }
 
                 swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshswipe);
                 swipeRefreshLayout.setColorSchemeResources(R.color.Magenta);
@@ -473,10 +476,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                             } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
                                 //snackbar.show();
-
+                                resetanim();
                                 RetrieveWeather(ll, lon, "a");
                                 RetrieveForecast(ll, lon);
-                                swipeRefreshLayout.setRefreshing(false);
+
                             } else if (!isNetworkAvailable()) {
                                 snackbarnetwork.show();
                                 swipeRefreshLayout.setRefreshing(false);
@@ -492,6 +495,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
+                                resetanim();
                                 showweather();
                                 //RetrieveWeather(ll, lon, "a");
                                 //RetrieveForecast(ll, lon);
@@ -532,6 +536,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
                 swipeRefreshLayout.setProgressViewOffset(false, 100, 200);
 
+                 resetanim();
                  RetrieveWeather(lll, lonn, "a");
                  RetrieveForecast(lll, lonn);
 
@@ -541,21 +546,16 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         //buildGoogleApiClient();
                         //createLocationRequest();
                         if (!isNetworkAvailable() && !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            snackbar.show();
+                            snackbarboth.show();
                             swipeRefreshLayout.setRefreshing(false);
                         } else {
-                            if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && !isNetworkAvailable()) {
-
-                                snackbarboth.show();
-                                swipeRefreshLayout.setRefreshing(false);
-
-                            } else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
                                 //snackbar.show();
-
+                                resetanim();
                                 RetrieveWeather(lll, lonn, "a");
                                 RetrieveForecast(lll, lonn);
-                                swipeRefreshLayout.setRefreshing(false);
+                                //swipeRefreshLayout.setRefreshing(false);
                             } else if (!isNetworkAvailable()) {
                                 snackbarnetwork.show();
                                 swipeRefreshLayout.setRefreshing(false);
@@ -571,6 +571,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                                     // for ActivityCompat#requestPermissions for more details.
                                     return;
                                 }
+                                resetanim();
                                 showweather();
                                 //RetrieveWeather(lll, lonn, "a");
                                 //RetrieveForecast(lll, lonn);
@@ -930,6 +931,37 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+    }
+
+    public void resetanim()
+    {
+
+        animationView.setProgress(0);
+
+        moonView.setProgress(0);
+
+        cloudy.setProgress(0);
+
+        cloudymoon.setProgress(0);
+
+        fogday.setProgress(0);
+
+        fognight.setProgress(0);
+
+        overcast.setProgress(0);
+
+        cloudy.setProgress(0);
+
+        cloudymoon.setProgress(0);
+
+        rainy.setProgress(0);
+
+        snowday.setProgress(0);
+
+        snownight.setProgress(0);
+
+        thunder.setProgress(0);
+
     }
 
     public void onConnected(Bundle arg0) {
