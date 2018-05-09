@@ -810,7 +810,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                             llayout.setVisibility(View.INVISIBLE);
                         } else
                             Glide.with(this)
-                                    .load(this.getResources().getIdentifier("nightclouds", "drawable", this.getPackageName()))
+                                    .load(this.getResources().getIdentifier("nightclds", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
 
@@ -1758,39 +1758,26 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         }
 
 
-        public void favit(View view) {
+        public void favit(View view) throws IOException {
 
                 //setContentView(R.layout.fav_display);
 
                 //this.addfav();
 
-            Intent intent = new Intent(Dialog_weather.this, DisplayFav.class);
-            intent.putExtra("LOCATION_NAME",fullnot );
-            intent.putExtra("COUNTER_VALUE", countfav);
 
-            startActivity(intent);
-            countfav++;
-                Toast.makeText(this, fullnot+" added to favorites !",Toast.LENGTH_SHORT).show();
-                /*snackbar=Snackbar.make(findViewById(R.id.coordialog),"Added to Favourites",Snackbar.LENGTH_LONG);
-                snackbar.setActionTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.clear));
-                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.thunder));
-                snackbar.setAction("View", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+            ImageView imageView=(ImageView)findViewById(R.id.favorite);
 
+                imageView.setImageResource(R.drawable.favor);
+
+                Intent intent = new Intent(Dialog_weather.this, DisplayFav.class);
+                intent.putExtra("LOCATION_NAME", fullnot);
+                intent.putExtra("COUNTER_VALUE", countfav);
+
+                startActivity(intent);
+                countfav++;
+                Toast.makeText(this, fullnot + " added to favorites !", Toast.LENGTH_SHORT).show();
 
 
-                                //finish();
-
-                        }
-                });
-
-
-                textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.Magenta));
-                textView.setTextSize(14);
-
-                snackbar.show(); */
         }
 
 
@@ -1866,6 +1853,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 con.disconnect();
                         }
                         catch (Exception e) {
+                            response="no";
                                 e.printStackTrace();
                         }
                         return  response;
@@ -1879,18 +1867,21 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                         String test=result;
 
-                        if(test==null)
+                        if(test=="no")
                         {
-                                Toast.makeText(this.DialogWeather,"Error fetching weather",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this.DialogWeather,"Ughh....There was a problem loading data!",Toast.LENGTH_SHORT).show();
+                                finish();
                         }
+                        else
+                            {
 
-                        try {
+                            try {
 // parse the json result returned from the service
                                 JSONObject jsonResult = new JSONObject(test);
 //parse out the co-ordinates of location
-                                JSONObject coord= jsonResult.getJSONObject("coord");
-                                lat= coord.getString("lat");
-                                lon= coord.getString("lon");
+                                JSONObject coord = jsonResult.getJSONObject("coord");
+                                lat = coord.getString("lat");
+                                lon = coord.getString("lon");
 
 // parse out the temperature from the JSON result
                                 double temperature = jsonResult.getJSONObject("main").getDouble("temp");
@@ -1899,26 +1890,26 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 // parse out the pressure from the JSON Result
                                 double pressure = jsonResult.getJSONObject("main").getDouble("pressure");
 
-                                double min=jsonResult.getJSONObject("main").getDouble("temp_min");
-                                double max=jsonResult.getJSONObject("main").getDouble("temp_max");
+                                double min = jsonResult.getJSONObject("main").getDouble("temp_min");
+                                double max = jsonResult.getJSONObject("main").getDouble("temp_max");
 
-                                min= ConvertTemperatureToFarenheit(min);
-                                max= ConvertTemperatureToFarenheit(max);
+                                min = ConvertTemperatureToFarenheit(min);
+                                max = ConvertTemperatureToFarenheit(max);
 
 // parse out the humidity from the JSON result
                                 double humidity = jsonResult.getJSONObject("main").getDouble("humidity");
 
-                                double wind=jsonResult.getJSONObject("wind").getDouble("speed");
+                                double wind = jsonResult.getJSONObject("wind").getDouble("speed");
 
 // parse out the description from the JSON result
                                 String description = jsonResult.getJSONArray("weather").getJSONObject(0).getString("description");
 //parse out weather id
-                                String id=jsonResult.getJSONArray("weather").getJSONObject(0).getString("id");
+                                String id = jsonResult.getJSONArray("weather").getJSONObject(0).getString("id");
 
                                 //parse out city name
-                                String locate=jsonResult.getString("name");
+                                String locate = jsonResult.getString("name");
                                 //parse out country
-                                String cntry=jsonResult.getJSONObject("sys").getString("country");
+                                String cntry = jsonResult.getJSONObject("sys").getString("country");
                                 //get date and time
                                 //String dateTime=jsonResult.getString("dt");
                                 //long dy=Long.parseLong(dateTime);
@@ -1929,25 +1920,25 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 // set all the fields in the activity from the parsed JSON
 
                                 this.DialogWeather.SetDescription(description);
-                                this.DialogWeather.SetTemperature(temperature,min,max);
+                                this.DialogWeather.SetTemperature(temperature, min, max);
                                 this.DialogWeather.SetWind(wind);
                                 this.DialogWeather.SetHumidity(humidity);
-                                this.DialogWeather.SetLocation(locate,cntry);
-                            this.DialogWeather.SetTime(id);
-                            this.DialogWeather.setcor(lat,lon, id);
+                                this.DialogWeather.SetLocation(locate, cntry);
+                                this.DialogWeather.SetTime(id);
+                                this.DialogWeather.setcor(lat, lon, id);
                                 //this.DialogWeather.setWeatherIcon(id);
                                 //this.DialogWeather.time(dateTime);
 
-                                DialogWeather.weatherid=id;
+                                DialogWeather.weatherid = id;
 
                                 //this.DialogWeather.setanimation(id);
 
 
-
-                        }
-                        catch (JSONException e) {
+                            } catch (JSONException e) {
                                 e.printStackTrace();
+                            }
                         }
+
 
                 }
                 private double ConvertTemperatureToFarenheit(double temperature) {

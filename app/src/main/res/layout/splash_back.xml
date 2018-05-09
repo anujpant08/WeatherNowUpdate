@@ -31,30 +31,9 @@
 
 
 
-    <TextView
-        android:id="@+id/weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="WeatherNow"
 
-        android:layout_centerHorizontal="true"
 
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        android:layout_marginTop="120dp"
-        android:gravity="center"/>
 
-    <TextView
-        android:id="@+id/devname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Weather made beautiful."
-        android:layout_marginBottom="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/weather"
-        android:textColor="#b9b9b9"
-        android:textSize="14sp"
-        android:gravity="center"/>
 
 
 

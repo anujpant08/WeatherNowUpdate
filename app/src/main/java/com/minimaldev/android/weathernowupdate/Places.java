@@ -61,7 +61,7 @@ public class Places extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(Places.this,"Enter a valid location",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Places.this,"That place doesn't even exist!",Toast.LENGTH_LONG).show();
                 }
                 return  false;
             }
@@ -71,7 +71,7 @@ public class Places extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
 
-                Toast.makeText(Places.this,"Loading location...",Toast.LENGTH_LONG).show();
+                //Toast.makeText(Places.this,"Loading location...",Toast.LENGTH_LONG).show();
 
                 placesAutocompleteTextView.getDetailsFor(place, new DetailsCallback() {
                     @Override
@@ -90,15 +90,23 @@ public class Places extends AppCompatActivity {
                     @Override
                     public void onFailure(Throwable throwable) {
 
+
                         System.out.println("Here at failure");
-                        int ind=placesAutocompleteTextView.getText().toString().indexOf(',');
-                        String l=placesAutocompleteTextView.getText().toString().substring(0,ind);
-                        URL_place= "http://api.openweathermap.org/data/2.5/weather?q="+l+"&appid=bcc6f8e44743e316e5120301ff1a5ad4";
-                        Intent intent = new Intent(Places.this, Dialog_weather.class);
-                        intent.putExtra("URL", URL_place);
-                        intent.putExtra("loc_desc",l);
-                        startActivity(intent);
-                        finish();
+                        if(!placesAutocompleteTextView.getText().toString().contains(","))
+                        {
+                            Toast.makeText(Places.this,"Please enter a valid location separated by a comma ','",Toast.LENGTH_LONG).show();
+                        }
+                        else
+                            {
+                            int ind = placesAutocompleteTextView.getText().toString().indexOf(',');
+                            String l = placesAutocompleteTextView.getText().toString().substring(0, ind);
+                            URL_place = "http://api.openweathermap.org/data/2.5/weather?q=" + l + "&appid=bcc6f8e44743e316e5120301ff1a5ad4";
+                            Intent intent = new Intent(Places.this, Dialog_weather.class);
+                            intent.putExtra("URL", URL_place);
+                            intent.putExtra("loc_desc", l);
+                            startActivity(intent);
+                            finish();
+                            }
 
 
                     }
