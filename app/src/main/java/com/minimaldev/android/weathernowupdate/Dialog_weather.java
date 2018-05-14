@@ -368,7 +368,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         DecimalFormat df = new DecimalFormat("###");
         String formatPres = df.format(wind);
         view.setText("Wind " + formatPres + " Km/hr");
-        view.setTypeface(face);
+        //view.setTypeface(face);
     }
 
     public void SetHumidity(double hum) {
@@ -377,7 +377,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         DecimalFormat df = new DecimalFormat("###");
         String formatHum = df.format(hum);
         view.setText("Humidity " + formatHum + "%");
-        view.setTypeface(face);
+        //view.setTypeface(face);
 
     }
 
@@ -412,7 +412,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 hour=Integer.parseInt(tim);
                 tv.setText("Time: "+timev);
-                tv.setTypeface(face);
+                //tv.setTypeface(face);
                 int actualID=Integer.parseInt(wid);
                 int ID=actualID/100;
 
@@ -470,7 +470,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 des=des.substring(1,des.length());
                 des=c+des;
                 view.setText(des);
-                view.setTypeface(face);
+                //view.setTypeface(face);
 
                 int pos=des.lastIndexOf(' ');
             if(pos!=-1)
@@ -515,7 +515,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 String formatTemp2=df.format(max);
                 view.setText(formatTemp+"\u00B0");
                // view1.setText("Hi:"+formatTemp2+" Lo:"+formatTemp1);
-                view.setTypeface(face);
+                //view.setTypeface(face);
 
                 //view1.setTypeface(face);
         }
@@ -582,7 +582,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 String formatTempMin=df.format(max);
                 TextView textView=(TextView)findViewById(R.id.hi);
                 textView.setText(formatTempMin+"\u00B0");
-                textView.setTypeface(face);
+                //textView.setTypeface(face);
 
         }
 
@@ -602,14 +602,14 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 String formatTempMin=df.format(min);
                 TextView textView=(TextView)findViewById(R.id.lo);
                 textView.setText(formatTempMin+"\u00B0");
-                textView.setTypeface(face);
+                //textView.setTypeface(face);
         }
 
 
         public void shareIt(File file)
         {
                 Intent shareing=new Intent(Intent.ACTION_SEND);
-                shareing.setType("image/*");
+                //shareing.setType("image/*");
                 Uri uri= FileProvider.getUriForFile(getApplicationContext(), this.getApplicationContext().getPackageName()+".provider",file);
                 //Uri uri=Uri.parse("file://"+imagePath);
                 String text="Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
@@ -634,7 +634,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 TextView view= (TextView)this.findViewById(R.id.location_text);
                 view.setText(name);
-                view.setTypeface(face);
+                //view.setTypeface(face);
 
 
 
@@ -666,7 +666,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 case 2://for thunderstorm
 
                     Glide.with(this)
-                            .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
                             //.load("")
                             //.error(R.drawable.background_)
                             
@@ -679,7 +679,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 case 3://for drizzle
                     if (hour >= 6 && hour < 18)
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 
@@ -698,7 +698,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 case 5: //for rain
                     if (hour >= 6 && hour < 18)
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
 
@@ -801,7 +801,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         //view11.setBackgroundResource(R.color.clouds);
                         if (hour >= 6 && hour < 18) {
                             Glide.with(this)
-                                    .load(this.getResources().getIdentifier("cloudsss", "drawable", this.getPackageName()))
+                                    .load(this.getResources().getIdentifier("clds", "drawable", this.getPackageName()))
                                     //.load("")
                                     //.error(R.drawable.background_)
 
@@ -840,7 +840,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                     if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
 
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
 
@@ -1029,37 +1029,37 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 switch (dayNo) {
                         case 1:
                                 view1.setText(d);
-                                view1.setTypeface(face);
+                                //view1.setTypeface(face);
                                 //view11.setText(t);
                                 break;
                         case 2:
                                 view2.setText(d);
-                                view2.setTypeface(face);
+                                //view2.setTypeface(face);
                                 //view22.setText(t);
                                 break;
                         case 3:
                                 view3.setText(d);
-                                view3.setTypeface(face);
+                                //view3.setTypeface(face);
                                 // view33.setText(t);
                                 break;
                         case 4:
                                 view4.setText(d);
-                                view4.setTypeface(face);
+                                //view4.setTypeface(face);
                                 // view44.setText(t);
                                 break;
                         case 5:
                                 view5.setText(d);
-                                view5.setTypeface(face);
+                                //view5.setTypeface(face);
                                 // view55.setText(t);
                                 break;
                         case 6:
                                 view6.setText(d);
-                                view6.setTypeface(face);
+                                //view6.setTypeface(face);
                                 // view66.setText(t);
                                 break;
                         case 7:
                             view7.setText(d);
-                            view7.setTypeface(face);
+                            //view7.setTypeface(face);
                             // view66.setText(t);
                             break;
                         //case 7: view7.setText(day);
@@ -1721,31 +1721,31 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 switch (index)
                 {
                         case 0: view1.setText(t);
-                                view1.setTypeface(face);
+                                //view1.setTypeface(face);
                                 // view11.setText(formatTempMax);
                                 break;
                         case 1: view2.setText(t);
-                                view2.setTypeface(face);
+                                //view2.setTypeface(face);
                                 //view22.setText(formatTempMax);
                                 break;
                         case 2: view3.setText(t);
-                                view3.setTypeface(face);
+                                //view3.setTypeface(face);
                                 // view33.setText(formatTempMax);
                                 break;
                         case 3: view4.setText(t);
-                                view4.setTypeface(face);
+                                //view4.setTypeface(face);
                                 // view44.setText(formatTempMax);
                                 break;
                         case 4: view5.setText(t);
-                                view5.setTypeface(face);
+                                //view5.setTypeface(face);
                                 // view55.setText(formatTempMax);
                                 break;
                         case 5: view6.setText(t);
-                                view6.setTypeface(face);
+                                //view6.setTypeface(face);
                                 //view66.setText(formatTempMax);
                                 break;
                         case 6: view7.setText(t);
-                                view7.setTypeface(face);
+                                //view7.setTypeface(face);
                         //view66.setText(formatTempMax);
                                 break;
                         //case 6: view7.setText(formatTemp/);

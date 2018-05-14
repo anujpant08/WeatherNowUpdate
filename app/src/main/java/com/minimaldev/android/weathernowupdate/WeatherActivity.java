@@ -1866,7 +1866,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText(des);
 
-        view.setTypeface(face);
+        //view.setTypeface(face);
 
         // settings_des(des);
 
@@ -1948,7 +1948,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         //view1.setText("Hi:"+formatTemp2+" Lo:"+formatTemp1);
 
-        view.setTypeface(face);
+        //view.setTypeface(face);
 
         //view1.setTypeface(face);
 
@@ -1987,7 +1987,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText("Wind " + formatPres + " Km/hr");
 
-        view.setTypeface(face);
+       // view.setTypeface(face);
 
     }
 
@@ -2004,7 +2004,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText("Humidity " + formatHum + "%");
 
-        view.setTypeface(face);
+        //view.setTypeface(face);
 
 
     }
@@ -2022,7 +2022,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText(fullLocation);
 
-        view.setTypeface(face);
+        //view.setTypeface(face);
 
         //settings_menu.setLoc(name);
 
@@ -2054,7 +2054,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 Glide.with(this)
 
-                        .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
+                        .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
 
                         //.load("")
 
@@ -2082,7 +2082,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     Glide.with(this)
 
-                            .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
 
                             //.load("")
 
@@ -2116,7 +2116,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     Glide.with(this)
 
-                            .load(this.getResources().getIdentifier("rains", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
 
                             //.load("")
 
@@ -2298,7 +2298,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                         Glide.with(this)
 
-                                .load(this.getResources().getIdentifier("cloudsss", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("clds", "drawable", this.getPackageName()))
 
                                 //.load("")
 
@@ -2367,7 +2367,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     Glide.with(this)
 
-                            .load(this.getResources().getIdentifier("lightning", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
 
                             //.load("")
 
@@ -4129,7 +4129,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view1.setText(t);
 
-                view1.setTypeface(face);
+                //view1.setTypeface(face);
 
                 // view11.setText(formatTempMax);
 
@@ -4139,7 +4139,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view2.setText(t);
 
-                view2.setTypeface(face);
+                //view2.setTypeface(face);
 
                 //view22.setText(formatTempMax);
 
@@ -4149,7 +4149,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view3.setText(t);
 
-                view3.setTypeface(face);
+                //view3.setTypeface(face);
 
                 // view33.setText(formatTempMax);
 
@@ -4159,7 +4159,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view4.setText(t);
 
-                view4.setTypeface(face);
+                //view4.setTypeface(face);
 
                 // view44.setText(formatTempMax);
 
@@ -4169,7 +4169,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view5.setText(t);
 
-                view5.setTypeface(face);
+                //view5.setTypeface(face);
 
                 // view55.setText(formatTempMax);
 
@@ -4179,7 +4179,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view6.setText(t);
 
-                view6.setTypeface(face);
+                //view6.setTypeface(face);
 
                 //view66.setText(formatTempMax);
 
@@ -4190,7 +4190,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 view7.setText(t);
 
-                view7.setTypeface(face);
+                //view7.setTypeface(face);
 
                 //view66.setText(formatTempMax);
 
@@ -4239,7 +4239,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         textView.setText(formatTempMin + "\u00B0");
 
-        textView.setTypeface(face);
+        //textView.setTypeface(face);
 
 
     }
@@ -4276,7 +4276,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         textView.setText(formatTempMin + "\u00B0");
 
-        textView.setTypeface(face);
+        //textView.setTypeface(face);
 
 
         if (swipeRefreshLayout.isEnabled()) {

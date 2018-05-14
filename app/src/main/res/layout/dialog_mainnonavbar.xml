@@ -133,10 +133,11 @@
                         android:id="@+id/hi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginEnd="6dp"
-                        android:text="High"
                         android:layout_gravity="center"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/hind"
+                        android:text="High"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp">
 
@@ -156,8 +157,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Low"
                         android:layout_marginStart="6dp"
+                        android:fontFamily="@font/hind"
+                        android:text="Low"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp">
 
@@ -179,19 +181,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/hind"
                         android:text="Earth"
                         android:textColor="#FFFFFF"
                         android:textSize="22sp" />
 
                     <TextView
+                        android:id="@+id/time_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/time_text"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/hind"
                         android:text="Time's good"
                         android:textColor="#ffffff"
-                        android:layout_marginTop="8dp"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
 
 
@@ -202,9 +206,10 @@
                     android:id="@+id/temp_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:layout_below="@id/locicontext"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="@font/hind_semibold"
                     android:text="62"
                     android:textColor="#FFFFFF"
                     android:textSize="62sp">
@@ -231,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/progressDialog"
                         android:layout_marginTop="20dp"
-                        android:text="Fetching weather"
+                        android:text="Loading"
                         android:textAlignment="center"
                         android:textColor="#f5f5f5"
                         android:textSize="15sp" />
@@ -354,8 +359,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/animation"
-                    android:text="Loading weather..."
+                    android:fontFamily="@font/hind"
                     android:gravity="center_horizontal"
+                    android:text="Please wait"
                     android:textColor="#FFFFFF"
                     android:textSize="26sp" />
 
@@ -379,8 +385,9 @@
                         android:id="@+id/humid_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Humidity"
                         android:layout_marginEnd="10dp"
+                        android:fontFamily="@font/hind"
+                        android:text="Humidity"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp">
 
@@ -398,6 +405,7 @@
                         android:id="@+id/wind_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:fontFamily="@font/hind"
                         android:text="Wind"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
@@ -453,6 +461,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon11"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
@@ -464,6 +473,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
@@ -498,6 +508,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon12"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
@@ -509,6 +520,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
@@ -544,6 +556,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon13"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
@@ -555,6 +568,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
@@ -589,6 +603,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon14"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
@@ -600,6 +615,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
@@ -634,6 +650,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon15"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
@@ -645,6 +662,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
@@ -680,6 +698,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon16"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
@@ -691,6 +710,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
@@ -725,6 +745,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/icon17"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/hind"
                         android:textColor="#ffffff"
                         android:textSize="12sp" />
 
