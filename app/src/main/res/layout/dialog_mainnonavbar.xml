@@ -122,46 +122,56 @@
                     android:layout_below="@id/temp_text"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="8dp">
-                    <ImageView
+                    <!--<ImageView
                         android:id="@+id/imageday"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/sunclear" />
+                        android:src="@drawable/sunclear" />-->
 
                     <TextView
                         android:id="@+id/hi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginEnd="6dp"
                         android:layout_marginStart="6dp"
-                        android:fontFamily="@font/hind"
+                        android:fontFamily="@font/hind_semibold"
                         android:text="High"
                         android:textColor="#FFFFFF"
-                        android:textSize="16sp">
+                        android:textSize="18sp">
 
                     </TextView>
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/slsh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/hind_semibold"
+                        android:text="/"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp">
+
+                    </TextView>
+
+                    <!--<ImageView
                         android:id="@+id/imagenight"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:scaleType="centerCrop"
                         android:layout_gravity="center"
                         android:src="@drawable/moonclear"
-                        />
+                        />-->
 
                     <TextView
                         android:id="@+id/lo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="6dp"
-                        android:fontFamily="@font/hind"
+                        android:fontFamily="@font/hind_semibold"
                         android:text="Low"
                         android:textColor="#FFFFFF"
-                        android:textSize="14sp">
+                        android:textSize="18sp">
 
                     </TextView>
 
@@ -249,6 +259,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:paddingTop="10dp"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/temp_text">
 
