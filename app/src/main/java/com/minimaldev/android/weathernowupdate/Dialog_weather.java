@@ -367,17 +367,46 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         TextView view = (TextView) this.findViewById(R.id.wind_text);
         DecimalFormat df = new DecimalFormat("###");
         String formatPres = df.format(wind);
-        view.setText("Wind " + formatPres + " Km/hr");
+        view.setText(formatPres + " Km/hr");
         //view.setTypeface(face);
+    }
+
+    public void SetPressure(double pres) {
+
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+
+        TextView view = (TextView) this.findViewById(R.id.humidity_text2);
+
+        DecimalFormat df = new DecimalFormat("###.##");
+
+        String formatPres = df.format(pres);
+
+        view.setText(formatPres + " hPa");
+
+        //view.setTypeface(face);
+
     }
 
     public void SetHumidity(double hum) {
         Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
-        TextView view = (TextView) this.findViewById(R.id.humid_text);
+        TextView view = (TextView) this.findViewById(R.id.humidity_text);
         DecimalFormat df = new DecimalFormat("###");
         String formatHum = df.format(hum);
-        view.setText("Humidity " + formatHum + "%");
+        view.setText(formatHum + "%");
         //view.setTypeface(face);
+
+    }
+
+    public void SetCloud(String  c) {
+
+        //Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+
+        TextView view = (TextView) this.findViewById(R.id.wind_text2);
+
+
+        view.setText(c + "%");
+
+        // view.setTypeface(face);
 
     }
 
@@ -609,15 +638,15 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
         public void shareIt(File file)
         {
                 Intent shareing=new Intent(Intent.ACTION_SEND);
-                //shareing.setType("image/*");
+                shareing.setType("image/*");
                 Uri uri= FileProvider.getUriForFile(getApplicationContext(), this.getApplicationContext().getPackageName()+".provider",file);
                 //Uri uri=Uri.parse("file://"+imagePath);
-                String text="Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
+                String text="Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernowupdate ";
                 shareing.putExtra(Intent.EXTRA_SUBJECT,"Check out WeatherNow by MinimalDev");
                 shareing.putExtra(Intent.EXTRA_TEXT, text);
                 shareing.putExtra(Intent.EXTRA_STREAM, uri);
 
-                startActivity(Intent.createChooser(shareing,"Share weather via"));
+                startActivity(Intent.createChooser(shareing,"Share via"));
         }
 
 
@@ -1910,6 +1939,8 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 String locate = jsonResult.getString("name");
                                 //parse out country
                                 String cntry = jsonResult.getJSONObject("sys").getString("country");
+
+                                String rain=jsonResult.getJSONObject("clouds").getString("all");
                                 //get date and time
                                 //String dateTime=jsonResult.getString("dt");
                                 //long dy=Long.parseLong(dateTime);
@@ -1922,7 +1953,9 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                                 this.DialogWeather.SetDescription(description);
                                 this.DialogWeather.SetTemperature(temperature, min, max);
                                 this.DialogWeather.SetWind(wind);
+                                this.DialogWeather.SetPressure(pressure);
                                 this.DialogWeather.SetHumidity(humidity);
+                                this.DialogWeather.SetCloud(rain);
                                 this.DialogWeather.SetLocation(locate, cntry);
                                 this.DialogWeather.SetTime(id);
                                 this.DialogWeather.setcor(lat, lon, id);

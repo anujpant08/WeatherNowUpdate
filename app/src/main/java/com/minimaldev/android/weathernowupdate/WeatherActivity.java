@@ -1960,17 +1960,17 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
     public void SetPressure(double pres) {
 
-       /* Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
 
-        TextView view = (TextView) this.findViewById(R.id.pressure_text);
+        TextView view = (TextView) this.findViewById(R.id.humidity_text2);
 
         DecimalFormat df = new DecimalFormat("###.##");
 
         String formatPres = df.format(pres);
 
-        view.setText("Pressure " + formatPres + " hPa");
+        view.setText(formatPres + " hPa");
 
-        view.setTypeface(face); */
+        //view.setTypeface(face);
 
     }
 
@@ -1985,9 +1985,22 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         String formatPres = df.format(wind);
 
-        view.setText("Wind " + formatPres + " Km/hr");
+        view.setText(formatPres + " Km/hr");
 
        // view.setTypeface(face);
+
+    }
+
+    public void SetCloud(String  c) {
+
+        Typeface face = Typeface.createFromAsset(getAssets(), "fonts/latoregular.ttf");
+
+        TextView view = (TextView) this.findViewById(R.id.wind_text2);
+
+
+        view.setText(c + "%");
+
+        // view.setTypeface(face);
 
     }
 
@@ -2002,7 +2015,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         String formatHum = df.format(hum);
 
-        view.setText("Humidity " + formatHum + "%");
+        view.setText(formatHum + "%");
 
         //view.setTypeface(face);
 
@@ -2954,7 +2967,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         //Uri uri = Uri.parse("file://" + imagePath);
 
-        String text = "Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernow ";
+        String text = "Check out the current weather at my place! By WeatherNow - https://play.google.com/store/apps/details?id=com.minimaldev.android.weathernowupdate ";
 
         shareing.putExtra(Intent.EXTRA_SUBJECT, "Check out WeatherNow by MinimalDev");
 
@@ -4628,6 +4641,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                 String cntry = jsonResult.getJSONObject("sys").getString("country");
 
+                String rain=jsonResult.getJSONObject("clouds").getString("all");
+                //double r=Double.parseDouble(rain);
+
 
 // set all the fields in the activity from the parsed JSON
 
@@ -4648,6 +4664,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 this.WeatherActivity.SetPressure(pressure);
 
                 this.WeatherActivity.SetWind(wind);
+
+                this.WeatherActivity.SetCloud(rain);
 
                 this.WeatherActivity.sendNotification(description, temperature, locate, id);
 
