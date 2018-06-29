@@ -118,13 +118,37 @@
                         android:src="@drawable/search" />
 
 
+                    <TextView
+                        android:id="@+id/temp_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/locicontext"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/hind_semibold"
+                        android:text="62"
+                        android:textColor="#FFFFFF"
+                        android:textSize="55sp">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/condition"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/hind"
+                        android:layout_below="@id/temp_text"
+                        android:gravity="center"
+                        android:text="Please wait"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp" />
                     <LinearLayout
                         android:id="@+id/highlowid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/temp_text"
+                        android:layout_below="@id/condition"
 
                         android:layout_marginBottom="8dp">
                         <!--<ImageView
@@ -187,16 +211,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/locicontext"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:orientation="horizontal"
                         android:layout_marginTop="80dp">
 
                         <TextView
                             android:id="@+id/location_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_gravity="center_vertical"
                             android:fontFamily="@font/hind"
+                            android:layout_marginEnd="8dp"
                             android:text="Earth"
                             android:textColor="#FFFFFF"
                             android:textSize="22sp" />
@@ -205,8 +231,7 @@
                             android:id="@+id/time_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
+                            android:layout_gravity="center_vertical"
                             android:fontFamily="@font/hind"
                             android:text="Time's good"
                             android:textColor="#ffffff"
@@ -217,19 +242,6 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/temp_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/locicontext"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/hind_semibold"
-                        android:text="62"
-                        android:textColor="#FFFFFF"
-                        android:textSize="62sp">
-
-                    </TextView>
 
                     <RelativeLayout
                         android:id="@+id/progressLayout"
@@ -263,10 +275,9 @@
                         android:id="@+id/animation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="10dp"
+                        android:paddingTop="8dp"
                         android:layout_alignParentStart="true"
-                        android:layout_below="@+id/temp_text">
+                        android:layout_below="@+id/highlowid">
 
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/animation_view"
@@ -370,208 +381,8 @@
 
                     </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/condition"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/hind"
-                        android:layout_below="@id/animation"
-                        android:gravity="center"
-                        android:text="Please wait"
-                        android:textColor="#FFFFFF"
-                        android:textSize="22sp" />
-
-                    <LinearLayout
-                        android:id="@+id/humidlinear"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:gravity="center_horizontal"
-                        android:layout_below="@id/condition"
-                        android:layout_marginTop="10dp">
-
-                        <RelativeLayout
-                            android:id="@+id/humidrel"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="32dp">
-
-                            <ImageView
-                                android:id="@+id/imagehumiditiy"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginEnd="6dp"
-                                android:layout_centerVertical="true"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/humidity" />
-
-                            <TextView
-                                android:id="@+id/humidity_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="14dp"
-                                android:layout_marginTop="6dp"
-                                android:layout_toEndOf="@id/imagehumiditiy"
-                                android:fontFamily="@font/hind"
-                                android:text="-- %"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp">
-
-                            </TextView>
-
-                            <TextView
-                                android:id="@+id/htext"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@id/humidity_text"
-                                android:layout_toEndOf="@id/imagehumiditiy"
-                                android:fontFamily="@font/hind"
-                                android:text="Humidity"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp">
-
-                            </TextView>
-
-                        </RelativeLayout>
 
 
-                        <RelativeLayout
-                            android:id="@+id/windrel"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical">
-
-                            <ImageView
-                                android:id="@+id/imagewind"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_centerVertical="true"
-                                android:layout_marginEnd="6dp"
-                                android:src="@drawable/wind" />
-
-                            <TextView
-                                android:id="@+id/wind_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="16dp"
-                                android:fontFamily="@font/hind"
-                                android:text="-- Km/hr"
-                                android:layout_marginTop="6dp"
-                                android:layout_toEndOf="@id/imagewind"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/hind"
-                                android:text="Wind Speed"
-                                android:layout_below="@id/wind_text"
-                                android:layout_toEndOf="@id/imagewind"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp" />
-
-                        </RelativeLayout>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/humidlinear2"
-                        android:weightSum="2"
-                        android:layout_height="40dp"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center_horizontal"
-                        android:layout_below="@id/humidlinear"
-                        android:layout_marginTop="12dp">
-
-                        <RelativeLayout
-                            android:id="@+id/humidrel2"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="32dp">
-
-                            <ImageView
-                                android:id="@+id/imagehumiditiy2"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginEnd="6dp"
-                                android:layout_centerVertical="true"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/baro" />
-
-                            <TextView
-                                android:id="@+id/humidity_text2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="14dp"
-                                android:layout_marginTop="6dp"
-                                android:layout_toEndOf="@id/imagehumiditiy2"
-                                android:fontFamily="@font/hind"
-                                android:text="-- %"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp">
-
-                            </TextView>
-
-                            <TextView
-                                android:id="@+id/htext2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@id/humidity_text2"
-                                android:layout_toEndOf="@id/imagehumiditiy2"
-                                android:fontFamily="@font/hind"
-                                android:text="Pressure"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp">
-
-                            </TextView>
-
-                        </RelativeLayout>
-
-
-                        <RelativeLayout
-                            android:id="@+id/windrel2"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical">
-
-                            <ImageView
-                                android:id="@+id/imagewind2"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginEnd="6dp"
-                                android:src="@drawable/cloudiness" />
-
-                            <TextView
-                                android:id="@+id/wind_text2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="16dp"
-                                android:fontFamily="@font/hind"
-                                android:text="-- Km/hr"
-                                android:layout_marginTop="6dp"
-                                android:layout_toEndOf="@id/imagewind2"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/hind"
-                                android:text="Cloudiness"
-                                android:layout_below="@id/wind_text2"
-                                android:layout_toEndOf="@id/imagewind2"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp" />
-
-                        </RelativeLayout>
-
-                    </LinearLayout>
 
 
                 </RelativeLayout>
@@ -930,6 +741,210 @@
 
                 </RelativeLayout>
             </HorizontalScrollView>
+
+            <RelativeLayout
+                android:id="@+id/cardhumid"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_above="@id/scroll"
+                android:background="@drawable/shape">
+
+
+                <LinearLayout
+                    android:id="@+id/humidlinear"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="18dp">
+
+                    <RelativeLayout
+                        android:id="@+id/humidrel"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="32dp">
+
+                        <ImageView
+                            android:id="@+id/imagehumiditiy"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_centerVertical="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/humidity" />
+
+                        <TextView
+                            android:id="@+id/humidity_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="14dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toEndOf="@id/imagehumiditiy"
+                            android:fontFamily="@font/hind"
+                            android:text="-- %"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/htext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/humidity_text"
+                            android:layout_toEndOf="@id/imagehumiditiy"
+                            android:fontFamily="@font/hind"
+                            android:text="Humidity"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp">
+
+                        </TextView>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/windrel"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/imagewind"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="6dp"
+                            android:src="@drawable/wind" />
+
+                        <TextView
+                            android:id="@+id/wind_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="16dp"
+                            android:fontFamily="@font/hind"
+                            android:text="-- Kmph"
+                            android:layout_marginTop="6dp"
+                            android:layout_toEndOf="@id/imagewind"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/hind"
+                            android:text="Wind Speed"
+                            android:layout_below="@id/wind_text"
+                            android:layout_toEndOf="@id/imagewind"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/humidlinear2"
+                    android:weightSum="2"
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_below="@id/humidlinear"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp">
+
+                    <RelativeLayout
+                        android:id="@+id/humidrel2"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="32dp">
+
+                        <ImageView
+                            android:id="@+id/imagehumiditiy2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_centerVertical="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/baro" />
+
+                        <TextView
+                            android:id="@+id/humidity_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="14dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toEndOf="@id/imagehumiditiy2"
+                            android:fontFamily="@font/hind"
+                            android:text="-- %"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/htext2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/humidity_text2"
+                            android:layout_toEndOf="@id/imagehumiditiy2"
+                            android:fontFamily="@font/hind"
+                            android:text="Pressure"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp">
+
+                        </TextView>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/windrel2"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/imagewind2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="6dp"
+                            android:src="@drawable/cloudiness" />
+
+                        <TextView
+                            android:id="@+id/wind_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="16dp"
+                            android:fontFamily="@font/hind"
+                            android:text="-- Km/hr"
+                            android:layout_marginTop="6dp"
+                            android:layout_toEndOf="@id/imagewind2"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/hind"
+                            android:text="Cloudiness"
+                            android:layout_below="@id/wind_text2"
+                            android:layout_toEndOf="@id/imagewind2"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
 
 
 

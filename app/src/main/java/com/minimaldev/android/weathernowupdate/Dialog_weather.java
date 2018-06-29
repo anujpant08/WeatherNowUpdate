@@ -37,6 +37,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -440,7 +441,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 tim=t.substring(11,13);
 
                 hour=Integer.parseInt(tim);
-                tv.setText("Time: "+timev);
+                tv.setText(" "+timev);
                 //tv.setTypeface(face);
                 int actualID=Integer.parseInt(wid);
                 int ID=actualID/100;
@@ -708,7 +709,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 case 3://for drizzle
                     if (hour >= 6 && hour < 18)
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
                                 
@@ -727,7 +728,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                 case 5: //for rain
                     if (hour >= 6 && hour < 18)
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
 
@@ -854,7 +855,7 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
                         //view1.setImageResource(R.drawable.overcast);
                         //view11.setBackgroundResource(R.color.overcast);
                         Glide.with(this)
-                                .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
+                                .load(this.getResources().getIdentifier("overcasttpp", "drawable", this.getPackageName()))
                                 //.load("")
                                 //.error(R.drawable.background_)
 
@@ -1022,8 +1023,30 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
 
             horizontalScrollView.setVisibility(View.VISIBLE);
+
+            LinearLayout l1=(LinearLayout)findViewById(R.id.locicontext);
+            RelativeLayout rl=(RelativeLayout)findViewById(R.id.cardhumid);
+            rl.setVisibility(View.VISIBLE);
+            l1.setVisibility(View.VISIBLE);
+
+            TranslateAnimation a = new TranslateAnimation(0, 0, l1.getHeight() - 1000, 0);
+
+            a.setDuration(500);
+
+            a.setFillAfter(true);
+
+            l1.startAnimation(a);
+
+            TranslateAnimation an = new TranslateAnimation(0, 0, rl.getHeight() + 1000, 0);
+
+            an.setDuration(500);
+
+            an.setFillAfter(true);
+
+            rl.startAnimation(an);
+
             TranslateAnimation animation=new TranslateAnimation(0,0,horizontalScrollView.getHeight()+200,0);
-            animation.setDuration(200);
+            animation.setDuration(500);
             animation.setFillAfter(true);
             horizontalScrollView.startAnimation(animation);
         }

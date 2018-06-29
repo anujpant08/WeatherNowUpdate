@@ -1985,7 +1985,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         String formatPres = df.format(wind);
 
-        view.setText(formatPres + " Km/hr");
+        view.setText(formatPres + " Kmph");
 
        // view.setTypeface(face);
 
@@ -2095,7 +2095,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     Glide.with(this)
 
-                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
 
                             //.load("")
 
@@ -2129,7 +2129,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     Glide.with(this)
 
-                            .load(this.getResources().getIdentifier("rainy", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
 
                             //.load("")
 
@@ -2354,7 +2354,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
                     Glide.with(this)
 
-                            .load(this.getResources().getIdentifier("overcasttype", "drawable", this.getPackageName()))
+                            .load(this.getResources().getIdentifier("overcasttpp", "drawable", this.getPackageName()))
 
                             //.load("")
 
@@ -2612,10 +2612,30 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
 
         horizontalScrollView.setVisibility(View.VISIBLE);
+        LinearLayout l1=(LinearLayout)findViewById(R.id.locicontext);
+        RelativeLayout rl=(RelativeLayout)findViewById(R.id.cardhumid);
+        rl.setVisibility(View.VISIBLE);
+        l1.setVisibility(View.VISIBLE);
+
+        TranslateAnimation a = new TranslateAnimation(0, 0, l1.getHeight() - 1000, 0);
+
+        a.setDuration(500);
+
+        a.setFillAfter(true);
+
+        l1.startAnimation(a);
+
+        TranslateAnimation an = new TranslateAnimation(0, 0, rl.getHeight() + 1000, 0);
+
+        an.setDuration(500);
+
+        an.setFillAfter(true);
+
+        rl.startAnimation(an);
 
         TranslateAnimation animation = new TranslateAnimation(0, 0, horizontalScrollView.getHeight() + 200, 0);
 
-        animation.setDuration(200);
+        animation.setDuration(500);
 
         animation.setFillAfter(true);
 
