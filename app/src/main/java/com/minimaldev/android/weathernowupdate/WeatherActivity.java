@@ -37,17 +37,6 @@ import android.os.Looper;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -85,6 +74,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.seatgeek.placesautocomplete.PlacesAutocompleteTextView;
 
 import org.json.JSONException;
@@ -102,6 +92,17 @@ import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import static android.preference.PreferenceManager.setDefaultValues;
 
@@ -324,28 +325,28 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         TextView textView;
 
-        textView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView = (TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
 
         textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
 
         textView.setTextSize(14);
 
 
-        textView = (TextView) snackbarnetwork.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView = (TextView) snackbarnetwork.getView().findViewById(com.google.android.material.R.id.snackbar_text);
 
         textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
 
         textView.setTextSize(14);
 
 
-        textView = (TextView) snackbarboth.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView = (TextView) snackbarboth.getView().findViewById(com.google.android.material.R.id.snackbar_text);
 
         textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
 
         textView.setTextSize(14);
 
 
-        textView = (TextView) snackrefresh.getView().findViewById(android.support.design.R.id.snackbar_text);
+        textView = (TextView) snackrefresh.getView().findViewById(com.google.android.material.R.id.snackbar_text);
 
         textView.setTextColor(ContextCompat.getColorStateList(getApplicationContext(), R.color.white));
 
@@ -1088,6 +1089,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     editor.putString("lat", la);
 
                     editor.putString("lon", lo);
+
+
 
                     editor.apply();
 
@@ -1866,6 +1869,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText(des);
 
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("des",des.substring(1,des.length())).apply();
+
         //view.setTypeface(face);
 
         // settings_des(des);
@@ -1931,10 +1937,13 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         //TextView view1 = (TextView) this.findViewById(R.id.hilowmain_text);
 
         DecimalFormat df = new DecimalFormat("###");
+        String deg_symbol="\u2103";
 
-        if (!t)
-
+        if (!t) {
             temp = (temp * 9 / 5) + 32;
+
+            deg_symbol="\u2109";
+        }
 
         String formatTemp = df.format(temp);
 
@@ -1945,6 +1954,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         tempformat = formatTemp + "\u00B0";
 
         view.setText(tempformat);
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("temp",formatTemp+deg_symbol).apply();
 
         //view1.setText("Hi:"+formatTemp2+" Lo:"+formatTemp1);
 
@@ -2000,6 +2012,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText(c + "%");
 
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("rain",c+'%').apply();
+
         // view.setTypeface(face);
 
     }
@@ -2035,6 +2050,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
 
         view.setText(fullLocation);
 
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("locate",name).apply();
+
         //view.setTypeface(face);
 
         //settings_menu.setLoc(name);
@@ -2057,6 +2075,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         int actualID = Integer.parseInt(id);
 
         int ID = actualID / 100;
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("id",ID).apply();
 
         switch (ID)
 
@@ -4662,6 +4683,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                 String cntry = jsonResult.getJSONObject("sys").getString("country");
 
                 String rain=jsonResult.getJSONObject("clouds").getString("all");
+
+
                 //double r=Double.parseDouble(rain);
 
 

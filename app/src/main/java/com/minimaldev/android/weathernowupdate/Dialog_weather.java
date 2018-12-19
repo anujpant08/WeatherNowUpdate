@@ -17,13 +17,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -692,218 +692,223 @@ public class Dialog_weather extends AppCompatActivity implements View.OnClickLis
 
                 int actualID=Integer.parseInt(id);
                 int ID=actualID/100;
-            switch (ID) {
-                case 2://for thunderstorm
 
-                    Glide.with(this)
-                            .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
-                            //.load("")
-                            //.error(R.drawable.background_)
-                            
-                            .into(sc);
-
-                    llayout.setVisibility(View.INVISIBLE);
-                    //view11.setBackgroundResource(R.color.thunder);
-
-                    break;
-                case 3://for drizzle
-                    if (hour >= 6 && hour < 18)
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
-                                
-                                .into(sc);
-                    else
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
-
-                                .into(sc);
-
-                    llayout.setVisibility(View.INVISIBLE);
-
-                    break;
-                case 5: //for rain
-                    if (hour >= 6 && hour < 18)
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
+                if(!Dialog_weather.this.isFinishing()) {
 
 
-                                .into(sc);
-                    else
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
+                    switch (ID) {
+                        case 2://for thunderstorm
 
-                                .into(sc);
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
 
-                    llayout.setVisibility(View.INVISIBLE);
-                    break;
-                case 6: //for snow
+                                    .into(sc);
 
-                    Glide.with(this)
-                            .load(this.getResources().getIdentifier("snowy", "drawable", this.getPackageName()))
-                            //.load("")
-                            //.error(R.drawable.background_)
+                            llayout.setVisibility(View.INVISIBLE);
+                            //view11.setBackgroundResource(R.color.thunder);
 
-                            .into(sc);
+                            break;
+                        case 3://for drizzle
+                            if (hour >= 6 && hour < 18)
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
 
-                    llayout.setVisibility(View.INVISIBLE);
+                                        .into(sc);
+                            else
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
 
-                    break;
-                case 7: //for fog
+                                        .into(sc);
 
-                    if (hour >= 6 && hour < 18) {
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
+                            llayout.setVisibility(View.INVISIBLE);
 
-                                .into(sc);
+                            break;
+                        case 5: //for rain
+                            if (hour >= 6 && hour < 18)
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("rainysss", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
 
-                        llayout.setVisibility(View.INVISIBLE);
-                    } else {
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
 
-                                .into(sc);
+                                        .into(sc);
+                            else
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("rainynight", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
 
-                        llayout.setVisibility(View.INVISIBLE);
+                                        .into(sc);
+
+                            llayout.setVisibility(View.INVISIBLE);
+                            break;
+                        case 6: //for snow
+
+                            Glide.with(this)
+                                    .load(this.getResources().getIdentifier("snowy", "drawable", this.getPackageName()))
+                                    //.load("")
+                                    //.error(R.drawable.background_)
+
+                                    .into(sc);
+
+                            llayout.setVisibility(View.INVISIBLE);
+
+                            break;
+                        case 7: //for fog
+
+                            if (hour >= 6 && hour < 18) {
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
+
+                                        .into(sc);
+
+                                llayout.setVisibility(View.INVISIBLE);
+                            } else {
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
+
+                                        .into(sc);
+
+                                llayout.setVisibility(View.INVISIBLE);
+                            }
+                            break;
+                        case 8: //for clear and clouds
+
+                            if (actualID == 800) {
+                                //System.out.println(hour);
+                                //for clear
+                                //  view1.setImageResource(R.drawable.clear);
+                                //view11.setBackgroundResource(R.color.clear);
+                                if (hour >= 5 && hour < 7) {
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                    llayout.setVisibility(View.INVISIBLE);
+                                } else if (hour >= 7 && hour < 17) {
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("clearday", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                    llayout.setVisibility(View.INVISIBLE);
+                                } else if (hour >= 17 && hour < 19) {
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("sunset", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                    llayout.setVisibility(View.INVISIBLE);
+                                } else {
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("nightclr", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                    llayout.setVisibility(View.INVISIBLE);
+                                }
+                                // linear.setBackgroundResource(R.drawable.at_day);
+
+                            }
+                            if (actualID == 801 || actualID == 802 || actualID == 803) {
+                                //for scattered clouds
+                                //view1.setImageResource(R.drawable.scattered_clouds);
+                                //view11.setBackgroundResource(R.color.clouds);
+                                if (hour >= 6 && hour < 18) {
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("clds", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                    llayout.setVisibility(View.INVISIBLE);
+                                } else
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("nightclds", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                llayout.setVisibility(View.INVISIBLE);
+                                //linear.setBackgroundResource(R.drawable.scatteredat_day);
+
+                            }
+                            if (actualID == 804) {
+                                //for overcast
+                                //view1.setImageResource(R.drawable.overcast);
+                                //view11.setBackgroundResource(R.color.overcast);
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("overcasttpp", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
+
+                                        .into(sc);
+
+                                llayout.setVisibility(View.INVISIBLE);
+                                //linear.setBackgroundResource(R.drawable.overcastat_day);
+
+                            }
+                            break;
+                        case 9://for extreme weather
+                            if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
+
+                                Glide.with(this)
+                                        .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
+                                        //.load("")
+                                        //.error(R.drawable.background_)
+
+                                        .into(sc);
+
+                                llayout.setVisibility(View.INVISIBLE);
+                                //view1.setImageResource(R.drawable.tornado);
+                            } else {
+                                if (hour >= 6 && hour < 18) {
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                    llayout.setVisibility(View.INVISIBLE);
+                                } else
+                                    Glide.with(this)
+                                            .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
+                                            //.load("")
+                                            //.error(R.drawable.background_)
+
+                                            .into(sc);
+
+                                llayout.setVisibility(View.INVISIBLE);
+                                // view1.setImageResource(R.drawable.breeze);
+                            }
+
+
+                            break;
+
                     }
-                    break;
-                case 8: //for clear and clouds
-
-                    if (actualID == 800) {
-                        //System.out.println(hour);
-                        //for clear
-                        //  view1.setImageResource(R.drawable.clear);
-                        //view11.setBackgroundResource(R.color.clear);
-                        if (hour >= 5 && hour < 7) {
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("sunrise", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                            llayout.setVisibility(View.INVISIBLE);
-                        } else if (hour >= 7 && hour < 17) {
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("clearday", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                            llayout.setVisibility(View.INVISIBLE);
-                        } else if (hour >= 17 && hour < 19) {
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("sunset", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                            llayout.setVisibility(View.INVISIBLE);
-                        } else {
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("nightclr", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                            llayout.setVisibility(View.INVISIBLE);
-                        }
-                        // linear.setBackgroundResource(R.drawable.at_day);
-
-                    }
-                    if (actualID == 801 || actualID == 802 || actualID == 803) {
-                        //for scattered clouds
-                        //view1.setImageResource(R.drawable.scattered_clouds);
-                        //view11.setBackgroundResource(R.color.clouds);
-                        if (hour >= 6 && hour < 18) {
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("clds", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                            llayout.setVisibility(View.INVISIBLE);
-                        } else
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("nightclds", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                        llayout.setVisibility(View.INVISIBLE);
-                        //linear.setBackgroundResource(R.drawable.scatteredat_day);
-
-                    }
-                    if (actualID == 804) {
-                        //for overcast
-                        //view1.setImageResource(R.drawable.overcast);
-                        //view11.setBackgroundResource(R.color.overcast);
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("overcasttpp", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
-
-                                .into(sc);
-
-                        llayout.setVisibility(View.INVISIBLE);
-                        //linear.setBackgroundResource(R.drawable.overcastat_day);
-
-                    }
-                    break;
-                case 9://for extreme weather
-                    if (actualID == 900 || actualID == 901 || actualID == 902 || actualID == 958 || actualID == 959 || actualID == 960 || actualID == 961 || actualID == 962) {
-
-                        Glide.with(this)
-                                .load(this.getResources().getIdentifier("thnd", "drawable", this.getPackageName()))
-                                //.load("")
-                                //.error(R.drawable.background_)
-
-                                .into(sc);
-
-                        llayout.setVisibility(View.INVISIBLE);
-                        //view1.setImageResource(R.drawable.tornado);
-                    } else {
-                        if (hour >= 6 && hour < 18) {
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                            llayout.setVisibility(View.INVISIBLE);
-                        } else
-                            Glide.with(this)
-                                    .load(this.getResources().getIdentifier("foggyss", "drawable", this.getPackageName()))
-                                    //.load("")
-                                    //.error(R.drawable.background_)
-
-                                    .into(sc);
-
-                        llayout.setVisibility(View.INVISIBLE);
-                        // view1.setImageResource(R.drawable.breeze);
-                    }
-
-
-                    break;
-
-            }
+                }
 
 
 
